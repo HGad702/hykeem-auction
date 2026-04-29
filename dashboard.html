@@ -1,0 +1,583 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<title>Hykeem G's Art — Dashboard</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@500;600&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<style>
+:root{
+  --white:#FFFFFF;--off:#F8F7F5;--warm:#F2F0ED;--border:#E8E5E0;--bd:#D4CFC8;
+  --text:#1A1814;--sec:#6B6760;--muted:#A8A49E;
+  --purple:#5B3FD4;--pl:#EEE9FF;--pm:#7B5FE8;
+  --coral:#E8522A;--cl:#FDF0EB;
+  --green:#2D7A4F;--gl:#EAF5EF;
+  --gold:#C4923A;--goldl:#FEF6EC;
+  --red:#D63B3B;--redl:#FEF2F2;
+  --blue:#1D6FD4;--bluel:#E6F1FB;
+  --shadow:0 1px 3px rgba(0,0,0,.06),0 1px 2px rgba(0,0,0,.04);
+  --shadow-md:0 4px 16px rgba(0,0,0,.08);
+  --shadow-lg:0 12px 40px rgba(0,0,0,.12);
+  --r:12px;--rs:8px;--rp:100px;
+}
+*{box-sizing:border-box;margin:0;padding:0;-webkit-font-smoothing:antialiased}
+body{font-family:'DM Sans',sans-serif;background:var(--off);color:var(--text);min-height:100vh}
+button{font-family:'DM Sans',sans-serif;cursor:pointer}
+input,select,textarea{font-family:'DM Sans',sans-serif}
+
+/* PIN SCREEN */
+.pin-screen{min-height:100vh;display:flex;align-items:center;justify-content:center;background:linear-gradient(135deg,#1A1814 0%,#2D1F6E 100%);padding:20px}
+.pin-card{background:var(--white);border-radius:20px;padding:32px 28px;width:100%;max-width:340px;text-align:center;box-shadow:var(--shadow-lg)}
+.pin-logo{font-family:'Playfair Display',serif;font-size:20px;font-weight:600;margin-bottom:4px}
+.pin-logo span{color:var(--purple)}
+.pin-sub{font-size:12px;color:var(--muted);margin-bottom:24px}
+.pin-dots{display:flex;justify-content:center;gap:12px;margin-bottom:24px}
+.pin-dot{width:14px;height:14px;border-radius:50%;border:2px solid var(--border);transition:all .15s}
+.pin-dot.filled{background:var(--purple);border-color:var(--purple)}
+.pin-dot.error{background:var(--red);border-color:var(--red)}
+.pin-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-bottom:12px}
+.pin-btn{background:var(--off);border:1px solid var(--border);border-radius:var(--rs);padding:16px;font-size:20px;font-weight:500;color:var(--text);transition:all .15s}
+.pin-btn:hover{background:var(--pl);border-color:var(--purple);color:var(--purple)}
+.pin-btn:active{transform:scale(.96)}
+.pin-clear{background:none;border:none;font-size:13px;color:var(--muted);padding:8px}
+.pin-error{font-size:12px;color:var(--red);margin-top:8px;height:18px}
+
+/* TOP NAV */
+.topnav{background:var(--white);border-bottom:1px solid var(--border);padding:0 16px;height:54px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:100;box-shadow:var(--shadow)}
+.nav-logo{font-family:'Playfair Display',serif;font-size:15px;font-weight:600}
+.nav-logo span{color:var(--purple)}
+.nav-right{display:flex;align-items:center;gap:8px}
+.nav-badge{font-size:10px;font-weight:600;padding:3px 9px;border-radius:var(--rp);background:var(--gl);color:var(--green);letter-spacing:.04em}
+.nav-logout{font-size:12px;color:var(--muted);background:none;border:none;padding:4px 8px}
+
+/* TAB BAR */
+.tabbar{background:var(--white);border-bottom:1px solid var(--border);display:flex;overflow-x:auto;-webkit-overflow-scrolling:touch}
+.tabbar::-webkit-scrollbar{display:none}
+.tabbtn{flex-shrink:0;padding:12px 16px;font-size:12px;font-weight:500;color:var(--muted);background:none;border:none;border-bottom:2px solid transparent;white-space:nowrap;transition:all .15s}
+.tabbtn.on{color:var(--purple);border-bottom-color:var(--purple)}
+
+/* STATS BAR */
+.stats-bar{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;padding:14px 14px 0}
+.stat-card{background:var(--white);border:1px solid var(--border);border-radius:var(--rs);padding:10px 12px;box-shadow:var(--shadow)}
+.stat-label{font-size:9px;color:var(--muted);letter-spacing:.07em;font-weight:600;text-transform:uppercase;margin-bottom:4px}
+.stat-val{font-size:18px;font-weight:600;color:var(--text)}
+.stat-val-purple{color:var(--purple)}
+.stat-val-green{color:var(--green)}
+.stat-val-gold{color:var(--gold)}
+.stat-sub{font-size:10px;color:var(--muted);margin-top:2px}
+
+/* SOURCE TRACKER */
+.source-card{background:var(--white);border:1px solid var(--border);border-radius:var(--r);padding:14px;margin:12px 14px 0;box-shadow:var(--shadow)}
+.source-title{font-size:10px;font-weight:600;color:var(--muted);letter-spacing:.08em;text-transform:uppercase;margin-bottom:10px}
+.source-row{display:flex;align-items:center;gap:10px;margin-bottom:8px}
+.source-row:last-child{margin-bottom:0}
+.source-label{font-size:12px;color:var(--sec);width:80px;flex-shrink:0}
+.source-bar-wrap{flex:1;height:8px;background:var(--warm);border-radius:4px;overflow:hidden}
+.source-bar{height:100%;border-radius:4px;transition:width .6s ease}
+.source-bar-qr{background:var(--purple)}
+.source-bar-web{background:var(--blue)}
+.source-bar-direct{background:var(--gold)}
+.source-count{font-size:11px;font-weight:600;color:var(--text);width:30px;text-align:right}
+
+/* AUCTION CARDS */
+.cards-wrap{padding:12px 14px;display:flex;flex-direction:column;gap:10px}
+.acard{background:var(--white);border:1px solid var(--border);border-left:4px solid var(--purple);border-radius:var(--r);padding:14px;box-shadow:var(--shadow)}
+.acard.closed{border-left-color:var(--bd);opacity:.7}
+.acard.reserve-met{border-left-color:var(--green)}
+.acard-top{display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:10px}
+.acard-title{font-family:'Playfair Display',serif;font-size:16px;font-weight:600;margin-bottom:2px}
+.acard-meta{font-size:11px;color:var(--muted)}
+.acard-timer{font-size:16px;font-weight:600;color:var(--red);font-variant-numeric:tabular-nums;text-align:right}
+.acard-timer.safe{color:var(--sec)}
+.acard-stats{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:10px}
+.acard-stat{background:var(--off);border-radius:var(--rs);padding:8px}
+.acard-stat-label{font-size:9px;color:var(--muted);letter-spacing:.06em;margin-bottom:3px}
+.acard-stat-val{font-size:15px;font-weight:600}
+.acard-stat-val-purple{color:var(--purple)}
+.acard-stat-val-green{color:var(--green)}
+.badges{display:flex;gap:5px;flex-wrap:wrap;margin-bottom:10px}
+.badge{font-size:10px;font-weight:600;padding:2px 8px;border-radius:var(--rp);letter-spacing:.04em}
+.badge-live{background:var(--gl);color:var(--green)}
+.badge-closed{background:var(--warm);color:var(--muted)}
+.badge-met{background:var(--gl);color:var(--green)}
+.badge-notmet{background:var(--redl);color:var(--red)}
+.badge-timed{background:var(--pl);color:var(--purple)}
+.badge-open{background:var(--goldl);color:var(--gold)}
+.badge-paid{background:var(--gl);color:var(--green)}
+.rbar{height:3px;background:var(--border);border-radius:2px;margin-bottom:10px;overflow:hidden}
+.rfill{height:100%;border-radius:2px;transition:width .4s}
+.rfill-met{background:var(--green)}
+.rfill-part{background:var(--purple)}
+.acard-bids{background:var(--off);border-radius:var(--rs);overflow:hidden;margin-bottom:10px}
+.bid-row{display:flex;justify-content:space-between;align-items:center;padding:6px 10px;border-bottom:1px solid var(--border);font-size:12px}
+.bid-row:last-child{border:none}
+.bid-tag{background:var(--pl);color:var(--purple);border-radius:var(--rp);padding:1px 7px;font-size:11px;font-weight:600}
+.bid-tag-past{background:var(--warm);color:var(--sec)}
+.bid-time{font-size:10px;color:var(--muted);margin-left:5px}
+.bid-amt{font-weight:600;color:var(--text)}
+.bid-amt-past{color:var(--muted)}
+.acard-actions{display:flex;gap:6px;flex-wrap:wrap}
+.btn{border-radius:var(--rs);padding:8px 12px;font-size:12px;font-weight:500;border:1px solid var(--border);background:var(--off);color:var(--text);transition:all .15s}
+.btn:hover{background:var(--warm)}
+.btn-purple{background:var(--purple);color:#fff;border-color:var(--purple)}
+.btn-purple:hover{background:var(--pm)}
+.btn-red{background:var(--red);color:#fff;border-color:var(--red)}
+.btn-red:hover{opacity:.9}
+.btn-green{background:var(--green);color:#fff;border-color:var(--green)}
+.btn-green:hover{opacity:.9}
+.btn-gold{background:var(--gold);color:#fff;border-color:var(--gold)}
+.btn-gold:hover{opacity:.9}
+.btn-sm{padding:6px 10px;font-size:11px}
+.btn-full{width:100%;text-align:center;padding:12px}
+
+/* WINNER CARD */
+.winner-card{background:var(--goldl);border:1.5px solid #F5D99A;border-radius:var(--r);padding:14px;margin-bottom:10px}
+.winner-title{font-size:11px;font-weight:600;color:var(--gold);letter-spacing:.07em;text-transform:uppercase;margin-bottom:8px}
+.winner-row{display:flex;justify-content:space-between;font-size:12px;padding:4px 0;border-bottom:1px solid #F5D99A}
+.winner-row:last-child{border:none}
+.winner-key{color:var(--sec)}
+.winner-val{font-weight:600;color:var(--text)}
+
+/* FORM / MODAL */
+.modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:200;display:flex;align-items:flex-end;justify-content:center}
+.modal{background:var(--white);border-radius:20px 20px 0 0;padding:20px;width:100%;max-width:600px;max-height:90vh;overflow-y:auto}
+.modal-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:16px}
+.modal-title{font-family:'Playfair Display',serif;font-size:18px;font-weight:600}
+.modal-close{background:var(--warm);border:none;border-radius:50%;width:32px;height:32px;font-size:16px;color:var(--sec);display:flex;align-items:center;justify-content:center}
+.field{margin-bottom:11px}
+.field-label{font-size:10px;font-weight:600;color:var(--sec);letter-spacing:.06em;text-transform:uppercase;display:block;margin-bottom:5px}
+.field-input{width:100%;background:var(--off);border:1.5px solid var(--border);border-radius:var(--rs);padding:10px 12px;font-size:14px;color:var(--text);outline:none;transition:border-color .15s}
+.field-input:focus{border-color:var(--purple);background:var(--white);box-shadow:0 0 0 3px rgba(91,63,212,.1)}
+.field-note{font-size:11px;color:var(--muted);margin-top:3px}
+.field-row{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.form-section{font-size:10px;font-weight:600;color:var(--muted);letter-spacing:.08em;text-transform:uppercase;padding:10px 0 6px;border-top:1px solid var(--border);margin-top:6px}
+.form-section:first-child{border-top:none;padding-top:0}
+
+/* ANNOUNCE MODAL */
+.announce-card{background:var(--gl);border:1.5px solid #A8DFC0;border-radius:var(--r);padding:16px;margin-bottom:14px;text-align:center}
+.announce-icon{font-size:32px;margin-bottom:8px}
+.announce-title{font-family:'Playfair Display',serif;font-size:18px;color:var(--green);margin-bottom:4px}
+.announce-body{font-size:13px;color:#3B7A55;line-height:1.55}
+
+/* EMPTY */
+.empty{text-align:center;padding:40px 20px;color:var(--muted);font-size:13px}
+
+/* GUIDES TAB */
+.guide-wrap{padding:14px}
+.guide-card{background:var(--white);border:1px solid var(--border);border-radius:var(--r);padding:16px;margin-bottom:12px;box-shadow:var(--shadow)}
+.guide-card-title{font-family:'Playfair Display',serif;font-size:16px;font-weight:600;margin-bottom:4px}
+.guide-card-sub{font-size:12px;color:var(--muted);margin-bottom:12px}
+.guide-step{display:flex;gap:10px;margin-bottom:10px}
+.guide-step-num{width:24px;height:24px;border-radius:50%;background:var(--purple);color:#fff;font-size:11px;font-weight:600;display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:1px}
+.guide-step-body{flex:1}
+.guide-step-title{font-size:13px;font-weight:600;margin-bottom:2px}
+.guide-step-desc{font-size:12px;color:var(--sec);line-height:1.5}
+.guide-note{background:var(--pl);border-radius:var(--rs);padding:10px 12px;font-size:12px;color:var(--purple);line-height:1.5;margin-top:8px}
+
+/* TOAST */
+.toast{position:fixed;bottom:24px;left:50%;transform:translateX(-50%) translateY(80px);background:var(--text);color:#fff;padding:12px 20px;border-radius:var(--rp);font-size:13px;font-weight:500;z-index:999;transition:transform .3s cubic-bezier(.34,1.56,.64,1);white-space:nowrap;box-shadow:var(--shadow-lg)}
+.toast.show{transform:translateX(-50%) translateY(0)}
+.toast-success{background:var(--green)}
+.toast-error{background:var(--red)}
+
+@media(min-width:768px){
+  .stats-bar{grid-template-columns:repeat(4,1fr);padding:16px 20px 0}
+  .cards-wrap{padding:14px 20px}
+  .acard-stats{grid-template-columns:repeat(4,1fr)}
+  .source-card{margin:12px 20px 0}
+  .guide-wrap{padding:16px 20px}
+}
+</style>
+</head>
+<body>
+<div id="app"></div>
+<div class="toast" id="toast"></div>
+<script>
+const SUPABASE_URL='https://iseyzvnapxqmmcfvwotu.supabase.co';
+const SUPABASE_ANON_KEY='eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImlzZXl6dm5hcHhxbW1jZnZ3b3R1Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzczOTI0MDgsImV4cCI6MjA5Mjk2ODQwOH0.5horDKmdPnEYVTEF6dC9Vk7g0HW7ayVR9VpWcw6HOs0';
+const PIN='2225';
+const sb=supabase.createClient(SUPABASE_URL,SUPABASE_ANON_KEY);
+
+let state={
+  auth:false,pin:'',pinError:'',
+  tab:'auctions',
+  pieces:[],bids:{},visitors:{qr:0,web:0,direct:0},
+  modal:null,editPiece:null,
+  form:{title:'',medium:'',dimensions:'',year:new Date().getFullYear(),description:'',starting_bid:'',reserve_price:'',buy_it_now_price:'',format:'timed',duration_minutes:60,ends_at:''},
+  announcing:null,
+  _tick:null,_channels:[],
+};
+
+// HELPERS
+const fmt=n=>'$'+Number(n).toLocaleString('en-US',{minimumFractionDigits:0});
+const timeAgo=ts=>{const d=Math.floor((Date.now()-new Date(ts))/1000);if(d<60)return d+'s ago';if(d<3600)return Math.floor(d/60)+'m ago';return Math.floor(d/3600)+'h ago';};
+const fmtCd=e=>{if(!e)return null;const d=Math.floor((new Date(e)-Date.now())/1000);if(d<=0)return'Ended';const h=Math.floor(d/3600),m=Math.floor((d%3600)/60),s=d%60;if(h>0)return h+'h '+m+'m';return m+'m '+String(s).padStart(2,'0')+'s';};
+const pct=(p)=>Math.min(100,Math.round(((p.current_bid||p.starting_bid)/p.reserve_price)*100));
+const met=(p)=>(p.current_bid||0)>=p.reserve_price;
+const initials=n=>n.trim().split(' ').map(w=>w[0]||'').join('').toUpperCase().slice(0,2);
+const toast=(msg,type='')=>{const t=document.getElementById('toast');t.textContent=msg;t.className='toast show'+(type?' toast-'+type:'');setTimeout(()=>t.className='toast',3000);};
+
+// PIN
+function pinPress(n){
+  if(state.pin.length>=4)return;
+  state.pin+=n; render();
+  if(state.pin.length===4){
+    setTimeout(()=>{
+      if(state.pin===PIN){state.auth=true;state.pin='';state.pinError='';init();}
+      else{state.pinError='Incorrect PIN. Try again.';state.pin='';render();setTimeout(()=>{state.pinError='';render();},1500);}
+    },120);
+  }
+}
+function pinClear(){state.pin=state.pin.slice(0,-1);render();}
+
+// DATA
+async function loadPieces(){
+  const{data,error}=await sb.from('pieces').select('*').order('created_at');
+  if(error){console.error(error);return;}
+  state.pieces=data||[];
+  for(const p of state.pieces) await loadBids(p.id);
+  render();
+}
+async function loadBids(pieceId){
+  const{data}=await sb.from('bids').select('*,bidders(name,phone,email)').eq('piece_id',pieceId).order('created_at',{ascending:false}).limit(5);
+  state.bids[pieceId]=data||[];
+}
+async function loadVisitors(){
+  // Track source from URL param when page loads — stored in localStorage for demo
+  const visits=JSON.parse(localStorage.getItem('hg_visits')||'{"qr":0,"web":0,"direct":0}');
+  state.visitors=visits;
+}
+function trackVisit(source){
+  const visits=JSON.parse(localStorage.getItem('hg_visits')||'{"qr":0,"web":0,"direct":0}');
+  visits[source]=(visits[source]||0)+1;
+  localStorage.setItem('hg_visits',JSON.stringify(visits));
+}
+
+// REALTIME
+function subscribeAll(){
+  state._channels.forEach(c=>sb.removeChannel(c));
+  state._channels=[];
+  const ch=sb.channel('dashboard-all')
+    .on('postgres_changes',{event:'*',schema:'public',table:'bids'},async(payload)=>{
+      if(payload.new?.piece_id){await loadBids(payload.new.piece_id);await loadPiece(payload.new.piece_id);render();}
+    })
+    .on('postgres_changes',{event:'*',schema:'public',table:'pieces'},async()=>{
+      await loadPieces();
+    }).subscribe();
+  state._channels.push(ch);
+}
+async function loadPiece(id){
+  const{data}=await sb.from('pieces').select('*').eq('id',id).single();
+  if(data){const i=state.pieces.findIndex(p=>p.id===id);if(i>-1)state.pieces[i]=data;else state.pieces.push(data);}
+}
+
+// ACTIONS
+async function openAuction(id){
+  const p=state.pieces.find(x=>x.id===id);
+  let upd={closed:false,starts_at:new Date().toISOString()};
+  if(p.format==='timed'&&p.duration_minutes){upd.ends_at=new Date(Date.now()+p.duration_minutes*60000).toISOString();}
+  await sb.from('pieces').update(upd).eq('id',id);
+  toast('Auction opened!','success'); await loadPieces();
+}
+async function closeAuction(id){
+  await sb.from('pieces').update({closed:true}).eq('id',id);
+  toast('Auction closed.'); await loadPieces();
+}
+async function closeAll(){
+  if(!confirm('Close ALL active auctions? This cannot be undone.'))return;
+  await sb.from('pieces').update({closed:true}).eq('closed',false);
+  toast('All auctions closed.'); await loadPieces();
+}
+async function deletePiece(id){
+  if(!confirm('Delete this piece and all its bids? This cannot be undone.'))return;
+  await sb.from('pieces').delete().eq('id',id);
+  toast('Piece deleted.'); await loadPieces();
+}
+async function markPaid(id){
+  await sb.from('pieces').update({winner_paid:true}).eq('id',id);
+  toast('Marked as paid ✓','success'); await loadPieces();
+}
+function openAnnounce(piece){state.announcing=piece;render();}
+function closeAnnounce(){state.announcing=null;render();}
+
+// ADD / EDIT FORM
+function openAdd(){
+  state.modal='add';
+  state.form={title:'',medium:'',dimensions:'',year:new Date().getFullYear(),description:'',starting_bid:'',reserve_price:'',buy_it_now_price:'',format:'timed',duration_minutes:60,ends_at:''};
+  render();
+}
+function openEdit(piece){
+  state.modal='edit'; state.editPiece=piece;
+  state.form={
+    title:piece.title||'',medium:piece.medium||'',dimensions:piece.dimensions||'',
+    year:piece.year||new Date().getFullYear(),description:piece.description||'',
+    starting_bid:piece.starting_bid||'',reserve_price:piece.reserve_price||'',
+    buy_it_now_price:piece.buy_it_now_price||'',format:piece.format||'timed',
+    duration_minutes:piece.duration_minutes||60,ends_at:piece.ends_at||''
+  };
+  render();
+}
+function closeModal(){state.modal=null;state.editPiece=null;render();}
+function setForm(k,v){state.form[k]=v;render();}
+
+async function savePiece(){
+  const f=state.form;
+  if(!f.title.trim()){toast('Title is required','error');return;}
+  if(!f.starting_bid||!f.reserve_price){toast('Starting bid and reserve required','error');return;}
+  const data={
+    title:f.title.trim(),medium:f.medium.trim(),dimensions:f.dimensions.trim(),
+    year:parseInt(f.year)||new Date().getFullYear(),description:f.description.trim(),
+    starting_bid:parseFloat(f.starting_bid),reserve_price:parseFloat(f.reserve_price),
+    buy_it_now_price:f.buy_it_now_price?parseFloat(f.buy_it_now_price):null,
+    format:f.format,duration_minutes:f.format==='timed'?parseInt(f.duration_minutes):null,
+    current_bid:null,bid_count:0,closed:true
+  };
+  if(state.modal==='edit'&&state.editPiece){
+    await sb.from('pieces').update(data).eq('id',state.editPiece.id);
+    toast('Piece updated!','success');
+  } else {
+    await sb.from('pieces').insert(data);
+    toast('Piece added!','success');
+  }
+  closeModal(); await loadPieces();
+}
+
+// RENDER PIN
+function renderPin(){
+  const dots=[0,1,2,3].map(i=>`<div class="pin-dot${i<state.pin.length?' filled':''}${state.pinError?' error':''}"></div>`).join('');
+  const nums=['1','2','3','4','5','6','7','8','9','','0','⌫'];
+  const btns=nums.map(n=>n===''?`<div></div>`:n==='⌫'?`<button class="pin-btn" onclick="pinClear()">${n}</button>`:`<button class="pin-btn" onclick="pinPress('${n}')">${n}</button>`).join('');
+  return`<div class="pin-screen"><div class="pin-card">
+    <div class="pin-logo">Hykeem G's <span>Art</span></div>
+    <div class="pin-sub">Artist Dashboard · Enter PIN</div>
+    <div class="pin-dots">${dots}</div>
+    <div class="pin-grid">${btns}</div>
+    <div class="pin-error">${state.pinError}</div>
+  </div></div>`;
+}
+
+// RENDER STATS
+function renderStats(){
+  const active=state.pieces.filter(p=>!p.closed).length;
+  const totalBids=state.pieces.reduce((a,p)=>a+(p.bid_count||0),0);
+  const totalVal=state.pieces.reduce((a,p)=>a+(p.current_bid||0),0);
+  const resMet=state.pieces.filter(p=>met(p)&&!p.closed).length;
+  const total=state.visitors.qr+state.visitors.web+state.visitors.direct||1;
+  const qrPct=Math.round((state.visitors.qr/total)*100);
+  const webPct=Math.round((state.visitors.web/total)*100);
+  const dirPct=Math.round((state.visitors.direct/total)*100);
+  return`
+  <div class="stats-bar">
+    <div class="stat-card"><div class="stat-label">Live auctions</div><div class="stat-val stat-val-purple">${active}</div><div class="stat-sub">of ${state.pieces.length} total</div></div>
+    <div class="stat-card"><div class="stat-label">Total bids</div><div class="stat-val">${totalBids}</div></div>
+    <div class="stat-card"><div class="stat-label">Bid value</div><div class="stat-val stat-val-gold">${fmt(totalVal)}</div></div>
+    <div class="stat-card"><div class="stat-label">Reserves met</div><div class="stat-val stat-val-green">${resMet}</div><div class="stat-sub">of ${active} live</div></div>
+  </div>
+  <div class="source-card">
+    <div class="source-title">Visitor source breakdown</div>
+    <div class="source-row"><div class="source-label">QR code scan</div><div class="source-bar-wrap"><div class="source-bar source-bar-qr" style="width:${qrPct}%"></div></div><div class="source-count">${state.visitors.qr}</div></div>
+    <div class="source-row"><div class="source-label">hykeemg.com</div><div class="source-bar-wrap"><div class="source-bar source-bar-web" style="width:${webPct}%"></div></div><div class="source-count">${state.visitors.web}</div></div>
+    <div class="source-row"><div class="source-label">Direct link</div><div class="source-bar-wrap"><div class="source-bar source-bar-direct" style="width:${dirPct}%"></div></div><div class="source-count">${state.visitors.direct}</div></div>
+  </div>`;
+}
+
+// RENDER AUCTION CARDS
+function renderAuctions(){
+  if(!state.pieces.length) return`<div class="empty">No pieces yet — tap "Add Piece" to get started.</div>`;
+  return state.pieces.map(p=>{
+    const bids=state.bids[p.id]||[];
+    const top=p.current_bid||p.starting_bid;
+    const isMet=met(p); const isPct=pct(p);
+    const timer=p.format==='timed'&&p.ends_at?fmtCd(p.ends_at):null;
+    const urgent=p.ends_at&&(new Date(p.ends_at)-Date.now())<900000;
+    const winner=bids[0];
+    const bidRows=bids.slice(0,4).map((b,i)=>`
+      <div class="bid-row">
+        <div style="display:flex;align-items:center;gap:6px">
+          <span class="${i===0?'bid-tag':'bid-tag-past'}">${b.bidders?initials(b.bidders.name):'??'}</span>
+          <span class="bid-time">${timeAgo(b.created_at)}</span>
+        </div>
+        <span class="${i===0?'bid-amt':'bid-amt-past'}">${fmt(b.amount)}</span>
+      </div>`).join('');
+    const winnerCard=p.closed&&winner?`
+      <div class="winner-card">
+        <div class="winner-title">🏆 Winner</div>
+        <div class="winner-row"><span class="winner-key">Name</span><span class="winner-val">${winner.bidders?.name||'—'}</span></div>
+        <div class="winner-row"><span class="winner-key">Phone</span><span class="winner-val">${winner.bidders?.phone||'—'}</span></div>
+        <div class="winner-row"><span class="winner-key">Email</span><span class="winner-val">${winner.bidders?.email||'—'}</span></div>
+        <div class="winner-row"><span class="winner-key">Winning bid</span><span class="winner-val">${fmt(top)}</span></div>
+        ${p.winner_paid?'<div class="winner-row"><span class="winner-key">Payment</span><span class="winner-val" style="color:var(--green)">✓ Paid</span></div>':''}
+      </div>`:'';
+    return`<div class="acard${p.closed?' closed':''}${isMet&&!p.closed?' reserve-met':''}">
+      <div class="acard-top">
+        <div><div class="acard-title">${p.title}</div><div class="acard-meta">${[p.medium,p.dimensions,p.year].filter(Boolean).join(' · ')}</div></div>
+        ${timer?`<div class="acard-timer${urgent?'':' safe'}" id="t-${p.id}">${timer}</div>`:'<div style="font-size:11px;color:var(--muted);text-align:right">${p.format==='open'?'Open':'Fixed end'}</div>'}
+      </div>
+      <div class="badges">
+        <span class="badge ${p.closed?'badge-closed':'badge-live'}">${p.closed?'CLOSED':'LIVE'}</span>
+        <span class="badge ${p.format==='timed'?'badge-timed':'badge-open'}">${p.format.toUpperCase()}</span>
+        <span class="badge ${isMet?'badge-met':'badge-notmet'}">${isMet?'RESERVE MET':'RESERVE NOT MET'}</span>
+        ${p.winner_paid?'<span class="badge badge-paid">PAID</span>':''}
+      </div>
+      <div class="acard-stats">
+        <div class="acard-stat"><div class="acard-stat-label">Current bid</div><div class="acard-stat-val acard-stat-val-purple">${fmt(top)}</div></div>
+        <div class="acard-stat"><div class="acard-stat-label">Bids</div><div class="acard-stat-val">${p.bid_count||0}</div></div>
+        <div class="acard-stat"><div class="acard-stat-label">Reserve</div><div class="acard-stat-val acard-stat-val-green">${isPct}%</div></div>
+      </div>
+      <div class="rbar"><div class="rfill ${isMet?'rfill-met':'rfill-part'}" style="width:${isPct}%"></div></div>
+      ${bids.length?`<div class="acard-bids">${bidRows}</div>`:''}
+      ${winnerCard}
+      <div class="acard-actions">
+        ${!p.closed?`<button class="btn btn-red btn-sm" onclick="closeAuction('${p.id}')">Close auction</button>`:`<button class="btn btn-green btn-sm" onclick="openAuction('${p.id}')">Reopen</button>`}
+        ${p.closed&&winner&&!p.winner_paid?`<button class="btn btn-gold btn-sm" onclick="markPaid('${p.id}')">Mark paid</button>`:''}
+        ${p.closed&&winner?`<button class="btn btn-purple btn-sm" onclick="openAnnounce(${JSON.stringify(p).replace(/"/g,'&quot;')})">Announce winner</button>`:''}
+        <button class="btn btn-sm" onclick="openEdit(${JSON.stringify(p).replace(/"/g,'&quot;')})">Edit</button>
+        <button class="btn btn-sm" style="color:var(--red)" onclick="deletePiece('${p.id}')">Delete</button>
+      </div>
+    </div>`;
+  }).join('');
+}
+
+// RENDER GUIDES
+function renderGuides(){
+  return`<div class="guide-wrap">
+    <div class="guide-card">
+      <div class="guide-card-title">Collector Guide</div>
+      <div class="guide-card-sub">How to participate — in person or virtually</div>
+      <div class="guide-step"><div class="guide-step-num">1</div><div class="guide-step-body"><div class="guide-step-title">Find a piece you love</div><div class="guide-step-desc">Walk the show and discover the artwork. Each piece has a placard next to it with a QR code, or browse all pieces at hykeemg.com/auction.</div></div></div>
+      <div class="guide-step"><div class="guide-step-num">2</div><div class="guide-step-body"><div class="guide-step-title">Scan the QR code or visit the link</div><div class="guide-step-desc">Open your phone camera and point it at the QR code on the placard. Tap the link that appears. Or visit hykeemg.com and tap the piece you want.</div></div></div>
+      <div class="guide-step"><div class="guide-step-num">3</div><div class="guide-step-body"><div class="guide-step-title">Enter your details</div><div class="guide-step-desc">Fill in your name, email, and phone number. This is how we contact you if you win. Check the box if you want a text when someone outbids you.</div></div></div>
+      <div class="guide-step"><div class="guide-step-num">4</div><div class="guide-step-body"><div class="guide-step-title">Place your bid</div><div class="guide-step-desc">Enter any amount at least $5 above the current bid. Tap "Place bid." You'll see your initials appear in the live feed instantly.</div></div></div>
+      <div class="guide-step"><div class="guide-step-num">5</div><div class="guide-step-body"><div class="guide-step-title">Watch and rebid</div><div class="guide-step-desc">If someone outbids you and you opted in, you'll get a text. Tap the link in the text to return and bid again. The auction is live until the artist closes it.</div></div></div>
+      <div class="guide-step"><div class="guide-step-num">6</div><div class="guide-step-body"><div class="guide-step-title">If you win</div><div class="guide-step-desc">You'll receive a text and email with payment instructions. You can pay online via secure link, in person at the show, or via Square invoice. Payment plans available — ask the artist.</div></div></div>
+      <div class="guide-note">Questions the night of the show? Find Hykeem directly — he's there all evening.</div>
+    </div>
+
+    <div class="guide-card">
+      <div class="guide-card-title">Auctioneer Guide</div>
+      <div class="guide-card-sub">How to run the auction — night of show checklist</div>
+      <div class="guide-step"><div class="guide-step-num">1</div><div class="guide-step-body"><div class="guide-step-title">Before the show — add all pieces</div><div class="guide-step-desc">Go to the Auctions tab and tap "Add Piece" for each artwork. Fill in title, medium, dimensions, starting bid, reserve price, Buy It Now price, and auction format. Save each piece — they'll be in "closed" state until you open them.</div></div></div>
+      <div class="guide-step"><div class="guide-step-num">2</div><div class="guide-step-body"><div class="guide-step-title">Generate and print QR codes</div><div class="guide-step-desc">For each piece, go to qr-code-generator.com and create a QR code linking to: hykeem-auction.vercel.app?piece=PIECE_ID&source=qr — print one per placard. Place next to the artwork before doors open.</div></div></div>
+      <div class="guide-step"><div class="guide-step-num">3</div><div class="guide-step-body"><div class="guide-step-title">Open the dashboard on your iPad</div><div class="guide-step-desc">Go to hykeem-auction.vercel.app/dashboard and enter PIN 2225. Share this URL with your helpers — everyone can view simultaneously. Keep the iPad visible throughout the night.</div></div></div>
+      <div class="guide-step"><div class="guide-step-num">4</div><div class="guide-step-body"><div class="guide-step-title">Open auctions when ready</div><div class="guide-step-desc">Tap "Open auction" on each piece card when you're ready for bidding to begin. For timed auctions, the countdown starts immediately. Stagger openings every 20–30 min to create excitement peaks.</div></div></div>
+      <div class="guide-step"><div class="guide-step-num">5</div><div class="guide-step-body"><div class="guide-step-title">Monitor throughout the night</div><div class="guide-step-desc">Watch bid counts, reserve progress bars, and timers. The dashboard updates live. When a reserve is met, the card border turns green. Announce high bids over the mic to drive floor energy.</div></div></div>
+      <div class="guide-step"><div class="guide-step-num">6</div><div class="guide-step-body"><div class="guide-step-title">Close auctions and announce winners</div><div class="guide-step-desc">Tap "Close auction" on each piece when done, or use "Close all" at end of night. Tap "Announce winner" to see the winner's full contact info. Tap "Mark paid" once payment is received.</div></div></div>
+      <div class="guide-note">Keep this dashboard open on your iPad all night. Bids update in real time — you never need to refresh.</div>
+    </div>
+  </div>`;
+}
+
+// RENDER FORM MODAL
+function renderModal(){
+  if(!state.modal) return'';
+  const f=state.form; const isEdit=state.modal==='edit';
+  return`<div class="modal-overlay" onclick="if(event.target===this)closeModal()">
+    <div class="modal">
+      <div class="modal-header">
+        <div class="modal-title">${isEdit?'Edit piece':'Add new piece'}</div>
+        <button class="modal-close" onclick="closeModal()">✕</button>
+      </div>
+      <div class="form-section">Artwork details</div>
+      <div class="field"><label class="field-label">Title *</label><input class="field-input" type="text" placeholder="e.g. Crimson Horizon No. 3" value="${f.title}" oninput="setForm('title',this.value)"></div>
+      <div class="field-row">
+        <div class="field"><label class="field-label">Medium</label><input class="field-input" type="text" placeholder="Oil on canvas" value="${f.medium}" oninput="setForm('medium',this.value)"></div>
+        <div class="field"><label class="field-label">Dimensions</label><input class="field-input" type="text" placeholder="48 × 60 in" value="${f.dimensions}" oninput="setForm('dimensions',this.value)"></div>
+      </div>
+      <div class="field"><label class="field-label">Year</label><input class="field-input" type="number" value="${f.year}" oninput="setForm('year',this.value)"></div>
+      <div class="field"><label class="field-label">Artist statement</label><textarea class="field-input" rows="3" placeholder="What is this piece about?" oninput="setForm('description',this.value)">${f.description}</textarea></div>
+      <div class="form-section">Pricing</div>
+      <div class="field-row">
+        <div class="field"><label class="field-label">Starting bid *</label><input class="field-input" type="number" placeholder="3500" value="${f.starting_bid}" oninput="setForm('starting_bid',this.value)"></div>
+        <div class="field"><label class="field-label">Reserve price *</label><input class="field-input" type="number" placeholder="5500" value="${f.reserve_price}" oninput="setForm('reserve_price',this.value)"></div>
+      </div>
+      <div class="field"><label class="field-label">Buy It Now price (optional)</label><input class="field-input" type="number" placeholder="12000" value="${f.buy_it_now_price}" oninput="setForm('buy_it_now_price',this.value)"></div>
+      <div class="form-section">Auction format</div>
+      <div class="field"><label class="field-label">Format</label>
+        <select class="field-input" onchange="setForm('format',this.value)">
+          <option value="timed" ${f.format==='timed'?'selected':''}>Timed — countdown clock</option>
+          <option value="open" ${f.format==='open'?'selected':''}>Open — you close manually</option>
+          <option value="fixed" ${f.format==='fixed'?'selected':''}>Fixed end — closes at show end</option>
+        </select>
+      </div>
+      ${f.format==='timed'?`<div class="field"><label class="field-label">Duration (minutes)</label><input class="field-input" type="number" placeholder="60" value="${f.duration_minutes}" oninput="setForm('duration_minutes',this.value)"><div class="field-note">Timer starts when you tap "Open auction"</div></div>`:''}
+      <div style="margin-top:16px;display:flex;gap:8px">
+        <button class="btn btn-purple btn-full" onclick="savePiece()">${isEdit?'Save changes':'Add piece'}</button>
+        <button class="btn btn-full" style="max-width:100px" onclick="closeModal()">Cancel</button>
+      </div>
+    </div>
+  </div>`;
+}
+
+// RENDER ANNOUNCE MODAL
+function renderAnnounce(){
+  if(!state.announcing) return'';
+  const p=state.announcing; const bids=state.bids[p.id]||[]; const w=bids[0];
+  if(!w) return'';
+  return`<div class="modal-overlay" onclick="if(event.target===this)closeAnnounce()">
+    <div class="modal">
+      <div class="modal-header"><div class="modal-title">Announce winner</div><button class="modal-close" onclick="closeAnnounce()">✕</button></div>
+      <div class="announce-card">
+        <div class="announce-icon">🏆</div>
+        <div class="announce-title">${p.title}</div>
+        <div class="announce-body">Winning bid of <strong>${fmt(w.amount)}</strong></div>
+      </div>
+      <div class="winner-card">
+        <div class="winner-title">Winner details</div>
+        <div class="winner-row"><span class="winner-key">Name</span><span class="winner-val">${w.bidders?.name||'—'}</span></div>
+        <div class="winner-row"><span class="winner-key">Phone</span><span class="winner-val">${w.bidders?.phone||'—'}</span></div>
+        <div class="winner-row"><span class="winner-key">Email</span><span class="winner-val">${w.bidders?.email||'—'}</span></div>
+        <div class="winner-row"><span class="winner-key">Winning bid</span><span class="winner-val">${fmt(w.amount)}</span></div>
+      </div>
+      <div style="font-size:13px;color:var(--sec);line-height:1.6;margin-bottom:14px">Contact this person directly to arrange payment and delivery. Mark as paid once received.</div>
+      <div style="display:flex;gap:8px">
+        <button class="btn btn-gold btn-full" onclick="markPaid('${p.id}');closeAnnounce()">Mark as paid</button>
+        <button class="btn btn-full" style="max-width:100px" onclick="closeAnnounce()">Close</button>
+      </div>
+    </div>
+  </div>`;
+}
+
+// MAIN RENDER
+function render(){
+  if(!state.auth){document.getElementById('app').innerHTML=renderPin();return;}
+  const tabs=['auctions','guides'];
+  const tabLabels={auctions:'Auctions',guides:'Guides'};
+  let content='';
+  if(state.tab==='auctions') content=renderStats()+`<div class="cards-wrap"><div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:4px"><div style="font-size:13px;font-weight:600">${state.pieces.length} piece${state.pieces.length!==1?'s':''}</div><div style="display:flex;gap:6px"><button class="btn btn-purple btn-sm" onclick="openAdd()">+ Add piece</button><button class="btn btn-red btn-sm" onclick="closeAll()">Close all</button></div></div>`+renderAuctions()+'</div>';
+  else if(state.tab==='guides') content=renderGuides();
+  document.getElementById('app').innerHTML=`
+    <nav class="topnav">
+      <span class="nav-logo">Hykeem G's <span>Art</span> · Dashboard</span>
+      <div class="nav-right"><span class="nav-badge">LIVE</span><button class="nav-logout" onclick="state.auth=false;render()">Lock</button></div>
+    </nav>
+    <div class="tabbar">${tabs.map(t=>`<button class="tabbtn${state.tab===t?' on':''}" onclick="state.tab='${t}';render()">${tabLabels[t]}</button>`).join('')}</div>
+    ${content}
+    ${renderModal()}
+    ${renderAnnounce()}`;
+  // restart timers
+  clearInterval(state._tick);
+  state._tick=setInterval(()=>{
+    state.pieces.forEach(p=>{if(p.ends_at&&!p.closed){const el=document.getElementById('t-'+p.id);if(el)el.textContent=fmtCd(p.ends_at);}});
+  },1000);
+}
+
+async function init(){
+  render();
+  await loadPieces();
+  await loadVisitors();
+  subscribeAll();
+}
+
+// Check if this is dashboard page
+if(window.location.pathname==='/dashboard'||window.location.search.includes('dashboard')){
+  render();
+} else {
+  // Track source on main auction page
+  const src=new URLSearchParams(window.location.search).get('source')||'direct';
+  trackVisit(src);
+  render();
+}
+</script>
+</body>
+</html>
