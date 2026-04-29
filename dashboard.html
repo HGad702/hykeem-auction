@@ -336,7 +336,7 @@ async function savePiece(){
   if(state.modal==='edit'&&state.editPiece){
     await sb.from('pieces').update(data).eq('id',state.editPiece.id);
     toast('Piece updated!','success');
-  } else {
+  
     await sb.from('pieces').insert(data);
     toast('Piece added!','success');
   }
@@ -569,15 +569,8 @@ async function init(){
   subscribeAll();
 }
 
-// Check if this is dashboard page
-if(window.location.pathname==='/dashboard'||window.location.search.includes('dashboard')){
-  render();
-} else {
-  // Track source on main auction page
-  const src=new URLSearchParams(window.location.search).get('source')||'direct';
-  trackVisit(src);
-  render();
-}
+// Always start with PIN screen
+render();
 </script>
 </body>
 </html>
