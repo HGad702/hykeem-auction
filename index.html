@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
-<title>Hykeem G — Live Auction</title>
+<title>Hykeem G's Art — Live Auction</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,500;0,600;1,400&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
@@ -37,11 +37,11 @@
   * { box-sizing: border-box; margin: 0; padding: 0; -webkit-font-smoothing: antialiased; }
   body { font-family: 'DM Sans', sans-serif; background: var(--off-white); color: var(--text-primary); min-height: 100vh; }
 
-  /* ── TOP NAV ── */
+  /* NAV */
   .topnav {
     background: var(--white);
     border-bottom: 1px solid var(--border);
-    padding: 0 20px;
+    padding: 0 16px;
     height: 52px;
     display: flex;
     align-items: center;
@@ -53,12 +53,13 @@
   }
   .topnav-logo {
     font-family: 'Playfair Display', serif;
-    font-size: 17px;
+    font-size: 16px;
     font-weight: 600;
     color: var(--text-primary);
-    letter-spacing: .04em;
+    letter-spacing: .02em;
   }
   .topnav-logo span { color: var(--purple); }
+  .topnav-brand-logo { height: 32px; width: auto; object-fit: contain; }
   .topnav-back {
     font-size: 13px;
     color: var(--text-secondary);
@@ -66,452 +67,128 @@
     display: flex;
     align-items: center;
     gap: 4px;
-    text-decoration: none;
+    background: none;
+    border: none;
+    font-family: 'DM Sans', sans-serif;
   }
   .topnav-back:hover { color: var(--purple); }
 
-  /* ── HERO BID BANNER ── */
-  .bid-banner {
-    background: var(--purple);
-    padding: 16px 20px;
+  /* HERO — WITH IMAGE */
+  .hero-with-image {
+    width: 100%;
+    min-height: 200px;
+    background: linear-gradient(160deg, #1A1814 0%, #2D1F6E 100%);
+    position: relative;
     display: flex;
-    justify-content: space-between;
-    align-items: center;
+    flex-direction: column;
+    justify-content: flex-end;
+    padding: 20px 16px 16px;
+    overflow: hidden;
   }
-  .bid-banner-side { }
-  .bid-banner-label {
-    font-size: 9px;
+  .hero-bg-img {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    opacity: .35;
+  }
+  .hero-overlay {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(to bottom, rgba(26,24,20,.2) 0%, rgba(26,24,20,.85) 100%);
+  }
+  .hero-content { position: relative; z-index: 1; }
+  .hero-eyebrow {
+    font-size: 10px;
     font-weight: 600;
-    color: rgba(255,255,255,.55);
-    letter-spacing: .1em;
+    color: var(--gold);
+    letter-spacing: .12em;
     text-transform: uppercase;
-    margin-bottom: 3px;
+    margin-bottom: 6px;
   }
-  .bid-banner-value {
+  .hero-title {
     font-family: 'Playfair Display', serif;
     font-size: 28px;
     font-weight: 600;
     color: #fff;
-    line-height: 1;
-  }
-  .bid-banner-sub {
-    font-size: 11px;
-    color: rgba(255,255,255,.55);
-    margin-top: 3px;
-  }
-  .bid-banner-timer {
-    font-family: 'DM Sans', sans-serif;
-    font-size: 22px;
-    font-weight: 600;
-    color: #FFB3A7;
-    line-height: 1;
-    text-align: right;
-    font-variant-numeric: tabular-nums;
-  }
-  .bid-banner-timer.urgent { color: #FF6B6B; animation: pulse 1s infinite; }
-  @keyframes pulse { 0%,100% { opacity: 1; } 50% { opacity: .6; } }
-
-  /* ── PAGE BODY ── */
-  .page { max-width: 480px; margin: 0 auto; }
-
-  /* ── ART IMAGE ── */
-  .art-zone {
-    position: relative;
-    background: var(--warm-gray);
-    width: 100%;
-    aspect-ratio: 4/3;
-    overflow: hidden;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-  }
-  .art-zone img { width: 100%; height: 100%; object-fit: cover; }
-  .art-zone-placeholder {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 8px;
-    color: var(--text-muted);
-  }
-  .art-zone-placeholder svg { opacity: .3; }
-  .art-zone-placeholder span { font-size: 11px; letter-spacing: .08em; }
-  .art-pill {
-    position: absolute;
-    display: flex;
-    align-items: center;
-    gap: 5px;
-    border-radius: var(--radius-pill);
-    padding: 4px 10px;
-    font-size: 10px;
-    font-weight: 600;
-    letter-spacing: .06em;
-    backdrop-filter: blur(8px);
-  }
-  .art-pill-live {
-    top: 12px; left: 12px;
-    background: rgba(255,255,255,.95);
-    color: var(--purple);
-    border: 1.5px solid var(--purple);
-    box-shadow: var(--shadow-sm);
-  }
-  .art-pill-live-dot {
-    width: 6px; height: 6px;
-    border-radius: 50%;
-    background: var(--purple);
-    animation: blink 1.4s infinite;
-  }
-  @keyframes blink { 0%,100%{opacity:1} 50%{opacity:.3} }
-  .art-pill-oo {
-    top: 12px; right: 12px;
-    background: rgba(255,255,255,.92);
-    color: var(--text-secondary);
-    border: 1px solid var(--border);
-  }
-
-  /* ── CONTENT SECTIONS ── */
-  .content { padding: 16px; display: flex; flex-direction: column; gap: 14px; }
-
-  .piece-header { }
-  .piece-title {
-    font-family: 'Playfair Display', serif;
-    font-size: 22px;
-    font-weight: 600;
-    color: var(--text-primary);
-    margin-bottom: 4px;
-    line-height: 1.25;
-  }
-  .piece-meta {
-    font-size: 12px;
-    color: var(--text-secondary);
-    letter-spacing: .02em;
-  }
-
-  /* ── URGENCY BAR ── */
-  .urgency-bar {
-    background: var(--coral-light);
-    border: 1px solid #F5C9B8;
-    border-radius: var(--radius-sm);
-    padding: 9px 12px;
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    font-size: 12px;
-    color: #8B3218;
-  }
-  .urgency-dot {
-    width: 7px; height: 7px;
-    border-radius: 50%;
-    background: var(--coral);
-    flex-shrink: 0;
-    animation: blink 1.4s infinite;
-  }
-
-  /* ── RESERVE STATUS ── */
-  .reserve-section { }
-  .reserve-row {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
+    line-height: 1.15;
     margin-bottom: 6px;
   }
-  .reserve-label { font-size: 10px; color: var(--text-muted); letter-spacing: .07em; font-weight: 500; text-transform: uppercase; }
-  .reserve-met { font-size: 11px; color: var(--green); font-weight: 600; display: flex; align-items: center; gap: 4px; }
-  .reserve-not-met { font-size: 11px; color: var(--text-muted); font-weight: 500; }
-  .reserve-bar { height: 4px; background: var(--border); border-radius: 2px; overflow: hidden; }
-  .reserve-fill { height: 100%; border-radius: 2px; background: var(--green); transition: width .6s ease; }
-  .reserve-fill.partial { background: var(--gold); }
+  .hero-sub { font-size: 13px; color: rgba(255,255,255,.6); }
 
-  /* ── BID FEED ── */
-  .feed-section { }
-  .section-title {
-    font-size: 10px;
-    font-weight: 600;
-    color: var(--text-muted);
-    letter-spacing: .1em;
-    text-transform: uppercase;
-    margin-bottom: 8px;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-  }
-  .feed-count {
-    background: var(--purple-light);
-    color: var(--purple);
-    border-radius: var(--radius-pill);
-    padding: 1px 8px;
-    font-size: 10px;
-    font-weight: 600;
-  }
-  .feed {
-    background: var(--white);
-    border: 1px solid var(--border);
-    border-radius: var(--radius);
+  /* HERO — NO IMAGE */
+  .hero-no-image {
+    background: linear-gradient(135deg, #1A1814 0%, #2D1F6E 60%, #5B3FD4 100%);
+    padding: 28px 16px 20px;
+    position: relative;
     overflow: hidden;
-    box-shadow: var(--shadow-sm);
   }
-  .feed-row {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    padding: 10px 13px;
-    border-bottom: 1px solid var(--border);
-    transition: background .15s;
-  }
-  .feed-row:last-child { border-bottom: none; }
-  .feed-row.top-bid { background: var(--white); }
-  .feed-row.past-bid { background: var(--off-white); }
-  .feed-row-left { display: flex; align-items: center; gap: 8px; }
-  .feed-tag {
-    border-radius: var(--radius-pill);
-    padding: 3px 10px;
-    font-size: 12px;
-    font-weight: 600;
-  }
-  .feed-tag-top {
-    background: var(--purple-light);
-    color: var(--purple);
-    border: 1.5px solid #C5B8F5;
-  }
-  .feed-tag-past {
-    background: var(--warm-gray);
-    color: var(--text-secondary);
-  }
-  .feed-time { font-size: 10px; color: var(--text-muted); }
-  .feed-amount-top { font-size: 15px; font-weight: 600; color: var(--text-primary); }
-  .feed-amount-past { font-size: 13px; color: var(--text-muted); }
-  .feed-empty {
-    padding: 20px;
-    text-align: center;
-    font-size: 13px;
-    color: var(--text-muted);
-  }
-
-  /* ── ARTIST STATEMENT ── */
-  .statement {
-    background: var(--warm-gray);
-    border-radius: var(--radius);
-    padding: 14px;
-  }
-  .statement-quote {
-    font-family: 'Playfair Display', serif;
-    font-style: italic;
-    font-size: 13px;
-    color: var(--text-secondary);
-    line-height: 1.7;
-    margin-bottom: 8px;
-  }
-  .statement-sig { font-size: 11px; color: var(--text-muted); }
-  .statement-sig a { color: var(--purple); text-decoration: none; }
-
-  /* ── BID FORM ── */
-  .form-card {
-    background: var(--white);
-    border: 1px solid var(--border);
-    border-radius: var(--radius);
-    padding: 16px;
-    box-shadow: var(--shadow-sm);
-  }
-  .form-title {
-    font-size: 10px;
-    font-weight: 600;
-    color: var(--text-primary);
-    letter-spacing: .1em;
-    text-transform: uppercase;
-    margin-bottom: 14px;
-  }
-  .field { margin-bottom: 10px; }
-  .field-label {
-    font-size: 10px;
-    font-weight: 500;
-    color: var(--text-secondary);
-    letter-spacing: .06em;
-    text-transform: uppercase;
-    display: block;
-    margin-bottom: 5px;
-  }
-  .field-input {
-    width: 100%;
-    background: var(--off-white);
-    border: 1.5px solid var(--border);
-    border-radius: var(--radius-sm);
-    padding: 11px 13px;
-    font-size: 15px;
-    font-family: 'DM Sans', sans-serif;
-    color: var(--text-primary);
-    outline: none;
-    transition: border-color .15s, box-shadow .15s;
-    -webkit-appearance: none;
-  }
-  .field-input::placeholder { color: var(--text-muted); font-size: 14px; }
-  .field-input:focus {
-    border-color: var(--purple);
-    background: var(--white);
-    box-shadow: 0 0 0 3px rgba(91,63,212,.1);
-  }
-  .field-input.bid-input {
-    border-color: var(--purple);
-    background: var(--purple-light);
-    color: var(--purple);
-    font-weight: 600;
-    font-size: 18px;
-  }
-  .field-input.bid-input:focus {
-    box-shadow: 0 0 0 3px rgba(91,63,212,.15);
-  }
-  .field-note { font-size: 11px; color: var(--text-muted); margin-top: 4px; }
-  .field-error { font-size: 11px; color: var(--red); margin-top: 4px; font-weight: 500; }
-
-  /* ── SMS OPT IN ── */
-  .sms-row {
-    display: flex;
-    align-items: flex-start;
-    gap: 10px;
-    background: var(--purple-light);
-    border-radius: var(--radius-sm);
-    padding: 11px 12px;
-    margin-bottom: 12px;
-    cursor: pointer;
-    border: 1.5px solid transparent;
-    transition: border-color .15s;
-  }
-  .sms-row.checked { border-color: #C5B8F5; }
-  .sms-checkbox {
-    width: 18px; height: 18px;
-    border-radius: 4px;
-    border: 2px solid #C5B8F5;
-    background: var(--white);
-    flex-shrink: 0;
-    margin-top: 1px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    transition: all .15s;
-  }
-  .sms-checkbox.checked {
-    background: var(--purple);
-    border-color: var(--purple);
-  }
-  .sms-checkbox-mark { color: #fff; font-size: 11px; font-weight: 700; }
-  .sms-label { font-size: 12px; color: var(--purple); line-height: 1.45; font-weight: 500; }
-
-  /* ── BUY IT NOW ── */
-  .btn-bin {
-    width: 100%;
-    background: var(--white);
-    border: 2px solid var(--coral);
-    border-radius: var(--radius-sm);
-    padding: 12px;
-    text-align: center;
-    cursor: pointer;
-    margin-bottom: 8px;
-    transition: all .15s;
-  }
-  .btn-bin:hover { background: var(--coral-light); }
-  .btn-bin:active { transform: scale(.99); }
-  .btn-bin-top { font-size: 9px; color: var(--coral); font-weight: 600; letter-spacing: .1em; text-transform: uppercase; margin-bottom: 2px; }
-  .btn-bin-val { font-size: 16px; font-weight: 600; color: var(--coral); }
-
-  /* ── PRIMARY BID BUTTON ── */
-  .btn-place {
-    width: 100%;
-    background: var(--purple);
-    border: none;
-    border-radius: var(--radius-sm);
-    padding: 15px;
-    text-align: center;
-    cursor: pointer;
-    transition: all .15s;
-    box-shadow: 0 4px 16px rgba(91,63,212,.35);
-    font-family: 'DM Sans', sans-serif;
-  }
-  .btn-place:hover { background: var(--purple-mid); box-shadow: 0 6px 20px rgba(91,63,212,.4); }
-  .btn-place:active { transform: scale(.99); }
-  .btn-place:disabled { background: var(--border-dark); box-shadow: none; cursor: not-allowed; }
-  .btn-place-text { font-size: 15px; font-weight: 600; color: #fff; letter-spacing: .02em; }
-
-  .form-foot { font-size: 11px; color: var(--text-muted); text-align: center; margin-top: 10px; line-height: 1.5; }
-
-  /* ── TRUST ROW ── */
-  .trust-row {
-    display: flex;
-    justify-content: center;
-    gap: 14px;
-    padding: 12px 0 4px;
-    flex-wrap: wrap;
-  }
-  .trust-item {
-    font-size: 10px;
-    color: var(--text-muted);
-    display: flex;
-    align-items: center;
-    gap: 4px;
-  }
-  .trust-dot { width: 4px; height: 4px; border-radius: 50%; background: var(--green); }
-
-  /* ── SUCCESS STATE ── */
-  .success-card {
-    background: var(--green-light);
-    border: 1.5px solid #A8DFC0;
-    border-radius: var(--radius);
-    padding: 20px;
-    text-align: center;
-  }
-  .success-icon { font-size: 32px; margin-bottom: 10px; }
-  .success-title { font-family: 'Playfair Display', serif; font-size: 18px; color: var(--green); margin-bottom: 6px; }
-  .success-body { font-size: 13px; color: #3B7A55; line-height: 1.55; }
-
-  /* ── CLOSED STATE ── */
-  .closed-banner {
-    background: #FEF2F2;
-    border: 1px solid #FECACA;
-    border-radius: var(--radius-sm);
-    padding: 10px 14px;
-    text-align: center;
-    font-size: 13px;
-    font-weight: 600;
-    color: var(--red);
-    margin-bottom: 2px;
-  }
-
-  /* ── LOADING ── */
-  .loading {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    min-height: 60vh;
-    gap: 14px;
-  }
-  .spinner {
-    width: 32px; height: 32px;
-    border: 3px solid var(--border);
-    border-top-color: var(--purple);
+  .hero-no-image::before {
+    content: '';
+    position: absolute;
+    top: -40px; right: -40px;
+    width: 180px; height: 180px;
     border-radius: 50%;
-    animation: spin .8s linear infinite;
+    background: rgba(91,63,212,.3);
   }
-  @keyframes spin { to { transform: rotate(360deg); } }
-  .loading-text { font-size: 13px; color: var(--text-muted); }
+  .hero-no-image::after {
+    content: '';
+    position: absolute;
+    bottom: -30px; left: -20px;
+    width: 120px; height: 120px;
+    border-radius: 50%;
+    background: rgba(196,146,58,.15);
+  }
+  .hero-no-image .hero-content { position: relative; z-index: 1; }
 
-  /* ── GALLERY PAGE ── */
-  .gallery-page { padding: 16px; }
-  .gallery-header { margin-bottom: 16px; }
-  .gallery-title { font-family: 'Playfair Display', serif; font-size: 22px; font-weight: 600; margin-bottom: 4px; }
-  .gallery-sub { font-size: 13px; color: var(--text-secondary); }
+  /* TOGGLE BAR */
+  .hero-toggle {
+    display: flex;
+    gap: 8px;
+    padding: 10px 16px;
+    background: var(--warm-gray);
+    border-bottom: 1px solid var(--border);
+    font-size: 11px;
+  }
+  .hero-toggle-label { color: var(--text-muted); align-self: center; }
+  .toggle-btn {
+    padding: 4px 10px;
+    border-radius: var(--radius-pill);
+    font-size: 11px;
+    font-weight: 500;
+    cursor: pointer;
+    border: 1px solid var(--border);
+    background: var(--white);
+    color: var(--text-secondary);
+    font-family: 'DM Sans', sans-serif;
+  }
+  .toggle-btn.active { background: var(--purple); color: #fff; border-color: var(--purple); }
+
+  /* GALLERY */
+  .gallery-page { }
+  .gallery-body { padding: 14px 16px; }
+  .gallery-count { font-size: 12px; color: var(--text-muted); margin-bottom: 12px; }
   .gallery-grid { display: flex; flex-direction: column; gap: 12px; }
+
+  /* CARD — with purple left border */
   .gallery-card {
     background: var(--white);
     border: 1px solid var(--border);
+    border-left: 4px solid var(--purple);
     border-radius: var(--radius);
     overflow: hidden;
     cursor: pointer;
     transition: box-shadow .15s, transform .15s;
     box-shadow: var(--shadow-sm);
+    display: flex;
+    flex-direction: column;
   }
   .gallery-card:hover { box-shadow: var(--shadow-md); transform: translateY(-1px); }
   .gallery-card:active { transform: scale(.99); }
   .gallery-card-img {
-    height: 160px;
-    background: var(--warm-gray);
+    height: 170px;
+    background: linear-gradient(135deg, var(--warm-gray) 0%, #E8E3DC 100%);
     display: flex;
     align-items: center;
     justify-content: center;
@@ -522,53 +199,175 @@
     position: relative;
   }
   .gallery-card-img img { width: 100%; height: 100%; object-fit: cover; }
-  .gallery-card-body { padding: 12px 14px; }
-  .gallery-card-title { font-family: 'Playfair Display', serif; font-size: 16px; font-weight: 600; margin-bottom: 2px; }
-  .gallery-card-meta { font-size: 11px; color: var(--text-secondary); margin-bottom: 10px; }
+  .gallery-card-body { padding: 13px 14px 14px; }
+  .gallery-card-top { display: flex; align-items: flex-start; justify-content: space-between; margin-bottom: 8px; }
+  .gallery-card-title {
+    font-family: 'Playfair Display', serif;
+    font-size: 17px;
+    font-weight: 600;
+    color: var(--text-primary);
+    line-height: 1.2;
+    flex: 1;
+    margin-right: 8px;
+  }
+  .gallery-card-format {
+    font-size: 9px;
+    font-weight: 600;
+    color: var(--purple);
+    background: var(--purple-light);
+    border-radius: var(--radius-pill);
+    padding: 3px 8px;
+    letter-spacing: .05em;
+    white-space: nowrap;
+    flex-shrink: 0;
+  }
+  .gallery-card-meta { font-size: 11px; color: var(--text-secondary); margin-bottom: 12px; }
+  .gallery-card-divider { height: 1px; background: var(--border); margin-bottom: 12px; }
   .gallery-card-row { display: flex; justify-content: space-between; align-items: flex-end; }
   .gallery-card-bid-label { font-size: 9px; color: var(--text-muted); letter-spacing: .07em; font-weight: 600; text-transform: uppercase; margin-bottom: 2px; }
-  .gallery-card-bid { font-size: 18px; font-weight: 600; color: var(--purple); font-family: 'Playfair Display', serif; }
-  .gallery-card-timer { font-size: 12px; color: var(--red); font-weight: 500; text-align: right; }
-  .gallery-card-open { font-size: 12px; color: var(--text-muted); text-align: right; }
+  .gallery-card-bid { font-size: 20px; font-weight: 600; color: var(--purple); font-family: 'Playfair Display', serif; }
+  .gallery-card-right { text-align: right; }
+  .gallery-card-timer { font-size: 12px; color: var(--red); font-weight: 600; }
+  .gallery-card-open { font-size: 11px; color: var(--text-muted); }
+  .gallery-card-bids { font-size: 10px; color: var(--text-muted); margin-top: 2px; }
   .gallery-card-bar { height: 3px; background: var(--border); border-radius: 2px; margin-top: 10px; overflow: hidden; }
-  .gallery-card-fill { height: 100%; background: var(--purple); border-radius: 2px; transition: width .4s; }
-  .gallery-card-fill.met { background: var(--green); }
+  .gallery-card-fill { height: 100%; border-radius: 2px; transition: width .4s; }
+  .gallery-card-fill-progress { background: var(--purple); }
+  .gallery-card-fill-met { background: var(--green); }
   .gallery-badge {
     position: absolute;
     top: 8px; left: 8px;
-    background: rgba(255,255,255,.95);
+    background: rgba(255,255,255,.96);
     border: 1.5px solid var(--purple);
     color: var(--purple);
     border-radius: var(--radius-pill);
-    padding: 2px 8px;
+    padding: 3px 8px;
     font-size: 9px;
     font-weight: 600;
     letter-spacing: .06em;
     display: flex;
     align-items: center;
-    gap: 3px;
+    gap: 4px;
+    box-shadow: var(--shadow-sm);
   }
+  .live-dot { width: 5px; height: 5px; border-radius: 50%; background: var(--purple); animation: blink 1.4s infinite; }
+  @keyframes blink { 0%,100%{opacity:1} 50%{opacity:.25} }
 
-  /* ── TOAST ── */
-  .toast {
-    position: fixed;
-    bottom: 24px;
-    left: 50%;
-    transform: translateX(-50%) translateY(80px);
-    background: var(--text-primary);
-    color: #fff;
-    padding: 12px 20px;
-    border-radius: var(--radius-pill);
-    font-size: 13px;
-    font-weight: 500;
-    z-index: 999;
-    transition: transform .3s cubic-bezier(.34,1.56,.64,1);
-    white-space: nowrap;
-    box-shadow: var(--shadow-lg);
+  /* BID BANNER */
+  .bid-banner {
+    background: var(--purple);
+    padding: 14px 16px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
   }
+  .bid-banner-label { font-size: 9px; font-weight: 600; color: rgba(255,255,255,.55); letter-spacing: .1em; text-transform: uppercase; margin-bottom: 3px; }
+  .bid-banner-value { font-family: 'Playfair Display', serif; font-size: 26px; font-weight: 600; color: #fff; line-height: 1; }
+  .bid-banner-sub { font-size: 11px; color: rgba(255,255,255,.5); margin-top: 3px; }
+  .bid-banner-timer { font-size: 20px; font-weight: 600; color: #FFB3A7; line-height: 1; font-variant-numeric: tabular-nums; text-align: right; }
+  .bid-banner-timer.urgent { color: #FF6B6B; animation: pulse 1s infinite; }
+  @keyframes pulse { 0%,100%{opacity:1} 50%{opacity:.5} }
+
+  /* PIECE PAGE */
+  .page { max-width: 480px; margin: 0 auto; }
+  .content { padding: 14px 16px; display: flex; flex-direction: column; gap: 13px; }
+  .piece-title { font-family: 'Playfair Display', serif; font-size: 22px; font-weight: 600; margin-bottom: 3px; line-height: 1.2; }
+  .piece-meta { font-size: 12px; color: var(--text-secondary); }
+
+  .art-zone { position: relative; background: var(--warm-gray); width: 100%; aspect-ratio: 4/3; overflow: hidden; display: flex; align-items: center; justify-content: center; }
+  .art-zone img { width: 100%; height: 100%; object-fit: cover; }
+  .art-zone-placeholder { display: flex; flex-direction: column; align-items: center; gap: 8px; color: var(--text-muted); }
+  .art-zone-placeholder span { font-size: 11px; letter-spacing: .08em; }
+  .art-pill { position: absolute; display: flex; align-items: center; gap: 5px; border-radius: var(--radius-pill); padding: 4px 10px; font-size: 10px; font-weight: 600; letter-spacing: .06em; }
+  .art-pill-live { top: 12px; left: 12px; background: rgba(255,255,255,.95); color: var(--purple); border: 1.5px solid var(--purple); box-shadow: var(--shadow-sm); }
+  .art-pill-oo { top: 12px; right: 12px; background: rgba(255,255,255,.92); color: var(--text-secondary); border: 1px solid var(--border); }
+
+  .urgency-bar { background: var(--coral-light); border: 1px solid #F5C9B8; border-radius: var(--radius-sm); padding: 9px 12px; display: flex; align-items: center; gap: 8px; font-size: 12px; color: #8B3218; }
+  .urgency-dot { width: 7px; height: 7px; border-radius: 50%; background: var(--coral); flex-shrink: 0; animation: blink 1.4s infinite; }
+
+  .reserve-row { display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px; }
+  .reserve-label { font-size: 10px; color: var(--text-muted); letter-spacing: .07em; font-weight: 500; text-transform: uppercase; }
+  .reserve-met { font-size: 11px; color: var(--green); font-weight: 600; }
+  .reserve-not-met { font-size: 11px; color: var(--text-muted); font-weight: 500; }
+  .reserve-bar { height: 4px; background: var(--border); border-radius: 2px; overflow: hidden; }
+  .reserve-fill { height: 100%; border-radius: 2px; transition: width .6s; }
+  .reserve-fill-met { background: var(--green); }
+  .reserve-fill-partial { background: var(--gold); }
+
+  .section-title { font-size: 10px; font-weight: 600; color: var(--text-muted); letter-spacing: .1em; text-transform: uppercase; margin-bottom: 8px; display: flex; align-items: center; justify-content: space-between; }
+  .feed-count { background: var(--purple-light); color: var(--purple); border-radius: var(--radius-pill); padding: 1px 8px; font-size: 10px; font-weight: 600; }
+  .feed { background: var(--white); border: 1px solid var(--border); border-radius: var(--radius); overflow: hidden; box-shadow: var(--shadow-sm); }
+  .feed-row { display: flex; align-items: center; justify-content: space-between; padding: 10px 13px; border-bottom: 1px solid var(--border); }
+  .feed-row:last-child { border-bottom: none; }
+  .feed-row-top { background: var(--white); }
+  .feed-row-past { background: var(--off-white); }
+  .feed-row-left { display: flex; align-items: center; gap: 8px; }
+  .feed-tag { border-radius: var(--radius-pill); padding: 3px 10px; font-size: 12px; font-weight: 600; }
+  .feed-tag-top { background: var(--purple-light); color: var(--purple); border: 1.5px solid #C5B8F5; }
+  .feed-tag-past { background: var(--warm-gray); color: var(--text-secondary); }
+  .feed-time { font-size: 10px; color: var(--text-muted); }
+  .feed-amount-top { font-size: 15px; font-weight: 600; color: var(--text-primary); }
+  .feed-amount-past { font-size: 13px; color: var(--text-muted); }
+  .feed-empty { padding: 20px; text-align: center; font-size: 13px; color: var(--text-muted); }
+
+  .statement { background: var(--warm-gray); border-radius: var(--radius); padding: 14px; }
+  .statement-quote { font-family: 'Playfair Display', serif; font-style: italic; font-size: 13px; color: var(--text-secondary); line-height: 1.7; margin-bottom: 8px; }
+  .statement-sig { font-size: 11px; color: var(--text-muted); }
+  .statement-sig a { color: var(--purple); text-decoration: none; }
+
+  .form-card { background: var(--white); border: 1px solid var(--border); border-radius: var(--radius); padding: 16px; box-shadow: var(--shadow-sm); }
+  .form-title { font-size: 10px; font-weight: 600; color: var(--text-primary); letter-spacing: .1em; text-transform: uppercase; margin-bottom: 14px; }
+  .field { margin-bottom: 10px; }
+  .field-label { font-size: 10px; font-weight: 500; color: var(--text-secondary); letter-spacing: .06em; text-transform: uppercase; display: block; margin-bottom: 5px; }
+  .field-input { width: 100%; background: var(--off-white); border: 1.5px solid var(--border); border-radius: var(--radius-sm); padding: 11px 13px; font-size: 15px; font-family: 'DM Sans', sans-serif; color: var(--text-primary); outline: none; transition: border-color .15s, box-shadow .15s; -webkit-appearance: none; }
+  .field-input::placeholder { color: var(--text-muted); font-size: 14px; }
+  .field-input:focus { border-color: var(--purple); background: var(--white); box-shadow: 0 0 0 3px rgba(91,63,212,.1); }
+  .field-input-bid { border-color: var(--purple); background: var(--purple-light); color: var(--purple); font-weight: 600; font-size: 18px; }
+  .field-input-bid:focus { box-shadow: 0 0 0 3px rgba(91,63,212,.15); }
+  .field-note { font-size: 11px; color: var(--text-muted); margin-top: 4px; }
+  .field-error { font-size: 11px; color: var(--red); margin-top: 4px; font-weight: 500; }
+
+  .sms-row { display: flex; align-items: flex-start; gap: 10px; background: var(--purple-light); border-radius: var(--radius-sm); padding: 11px 12px; margin-bottom: 12px; cursor: pointer; border: 1.5px solid transparent; transition: border-color .15s; }
+  .sms-row-checked { border-color: #C5B8F5; }
+  .sms-checkbox { width: 18px; height: 18px; border-radius: 4px; border: 2px solid #C5B8F5; background: var(--white); flex-shrink: 0; margin-top: 1px; display: flex; align-items: center; justify-content: center; transition: all .15s; }
+  .sms-checkbox-checked { background: var(--purple); border-color: var(--purple); }
+  .sms-checkbox-mark { color: #fff; font-size: 11px; font-weight: 700; }
+  .sms-label { font-size: 12px; color: var(--purple); line-height: 1.45; font-weight: 500; }
+
+  .btn-bin { width: 100%; background: var(--white); border: 2px solid var(--coral); border-radius: var(--radius-sm); padding: 12px; text-align: center; cursor: pointer; margin-bottom: 8px; transition: all .15s; }
+  .btn-bin:hover { background: var(--coral-light); }
+  .btn-bin-top { font-size: 9px; color: var(--coral); font-weight: 600; letter-spacing: .1em; text-transform: uppercase; margin-bottom: 2px; }
+  .btn-bin-val { font-size: 16px; font-weight: 600; color: var(--coral); }
+
+  .btn-place { width: 100%; background: var(--purple); border: none; border-radius: var(--radius-sm); padding: 15px; text-align: center; cursor: pointer; transition: all .15s; box-shadow: 0 4px 16px rgba(91,63,212,.35); font-family: 'DM Sans', sans-serif; }
+  .btn-place:hover { background: var(--purple-mid); }
+  .btn-place:active { transform: scale(.99); }
+  .btn-place:disabled { background: var(--border-dark); box-shadow: none; cursor: not-allowed; }
+  .btn-place-text { font-size: 15px; font-weight: 600; color: #fff; letter-spacing: .02em; }
+
+  .form-foot { font-size: 11px; color: var(--text-muted); text-align: center; margin-top: 10px; line-height: 1.5; }
+
+  .trust-row { display: flex; justify-content: center; gap: 14px; padding: 10px 0 4px; flex-wrap: wrap; }
+  .trust-item { font-size: 10px; color: var(--text-muted); display: flex; align-items: center; gap: 4px; }
+  .trust-dot { width: 4px; height: 4px; border-radius: 50%; background: var(--green); }
+
+  .success-card { background: var(--green-light); border: 1.5px solid #A8DFC0; border-radius: var(--radius); padding: 20px; text-align: center; }
+  .success-icon { font-size: 32px; margin-bottom: 10px; }
+  .success-title { font-family: 'Playfair Display', serif; font-size: 18px; color: var(--green); margin-bottom: 6px; }
+  .success-body { font-size: 13px; color: #3B7A55; line-height: 1.55; }
+  .success-rebid { margin-top: 14px; background: var(--purple); color: #fff; border: none; border-radius: var(--radius-sm); padding: 10px 20px; font-size: 13px; font-weight: 600; cursor: pointer; font-family: 'DM Sans', sans-serif; }
+
+  .closed-banner { background: #FEF2F2; border: 1px solid #FECACA; border-radius: var(--radius-sm); padding: 10px 14px; text-align: center; font-size: 13px; font-weight: 600; color: var(--red); }
+
+  .loading { display: flex; flex-direction: column; align-items: center; justify-content: center; min-height: 60vh; gap: 14px; }
+  .spinner { width: 32px; height: 32px; border: 3px solid var(--border); border-top-color: var(--purple); border-radius: 50%; animation: spin .8s linear infinite; }
+  @keyframes spin { to { transform: rotate(360deg); } }
+  .loading-text { font-size: 13px; color: var(--text-muted); }
+
+  .toast { position: fixed; bottom: 24px; left: 50%; transform: translateX(-50%) translateY(80px); background: var(--text-primary); color: #fff; padding: 12px 20px; border-radius: var(--radius-pill); font-size: 13px; font-weight: 500; z-index: 999; transition: transform .3s cubic-bezier(.34,1.56,.64,1); white-space: nowrap; box-shadow: var(--shadow-lg); }
   .toast.show { transform: translateX(-50%) translateY(0); }
-  .toast.success { background: var(--green); }
-  .toast.error { background: var(--red); }
+  .toast-success { background: var(--green); }
+  .toast-error { background: var(--red); }
 
   @media (min-width: 520px) {
     .page { border-left: 1px solid var(--border); border-right: 1px solid var(--border); min-height: 100vh; background: var(--white); }
@@ -576,19 +375,17 @@
 </style>
 </head>
 <body>
-
 <div id="app"></div>
 <div class="toast" id="toast"></div>
-
 <script>
-// ── CONFIG ──
 const SUPABASE_URL = 'https://iseyzvnapxqmmcfvwotu.supabase.co';
 const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImlzZXl6dm5hcHhxbW1jZnZ3b3R1Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzczOTI0MDgsImV4cCI6MjA5Mjk2ODQwOH0.5horDKmdPnEYVTEF6dC9Vk7g0HW7ayVR9VpWcw6HOs0';
+const EVERY_DAY_LOGO = 'data:image/png;base64,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';
 const sb = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
-// ── STATE ──
 let state = {
-  view: 'gallery',       // 'gallery' | 'piece'
+  view: 'gallery',
+  heroMode: 'with',
   pieces: [],
   currentPiece: null,
   bids: [],
@@ -596,426 +393,271 @@ let state = {
   errors: {},
   submitting: false,
   submitted: false,
-  timers: {},
+  _tick: null,
+  _channel: null,
 };
 
-// ── HELPERS ──
-function fmt(n) { return '$' + Number(n).toLocaleString('en-US', { minimumFractionDigits: 0 }); }
-
+function fmt(n) { return '$' + Number(n).toLocaleString('en-US', {minimumFractionDigits:0}); }
 function timeAgo(ts) {
-  const diff = Math.floor((Date.now() - new Date(ts)) / 1000);
-  if (diff < 60) return diff + 's ago';
-  if (diff < 3600) return Math.floor(diff / 60) + 'm ago';
-  return Math.floor(diff / 3600) + 'h ago';
+  const d = Math.floor((Date.now() - new Date(ts))/1000);
+  if(d<60) return d+'s ago'; if(d<3600) return Math.floor(d/60)+'m ago';
+  return Math.floor(d/3600)+'h ago';
 }
-
 function fmtCountdown(endsAt) {
-  if (!endsAt) return null;
-  const diff = Math.floor((new Date(endsAt) - Date.now()) / 1000);
-  if (diff <= 0) return '0m 00s';
-  const h = Math.floor(diff / 3600);
-  const m = Math.floor((diff % 3600) / 60);
-  const s = diff % 60;
-  if (h > 0) return h + 'h ' + m + 'm';
-  return m + 'm ' + String(s).padStart(2, '0') + 's';
+  if(!endsAt) return null;
+  const d = Math.floor((new Date(endsAt)-Date.now())/1000);
+  if(d<=0) return 'Ended';
+  const h=Math.floor(d/3600),m=Math.floor((d%3600)/60),s=d%60;
+  if(h>0) return h+'h '+m+'m';
+  return m+'m '+String(s).padStart(2,'0')+'s';
+}
+function isUrgent(endsAt) { return endsAt && (new Date(endsAt)-Date.now())<900000; }
+function reservePct(p) { return Math.min(100,Math.round(((p.current_bid||p.starting_bid)/p.reserve_price)*100)); }
+function reserveMet(p) { return (p.current_bid||0)>=p.reserve_price; }
+function initials(name) { return name.trim().split(' ').map(w=>w[0]||'').join('').toUpperCase().slice(0,2); }
+function minBid(p) { return (p.current_bid||p.starting_bid)+5; }
+function fmtFormat(f) { return f==='timed'?'TIMED':f==='open'?'OPEN':'FIXED END'; }
+
+function showToast(msg,type='') {
+  const t=document.getElementById('toast');
+  t.textContent=msg; t.className='toast show'+(type?' toast-'+type:'');
+  setTimeout(()=>t.className='toast',3000);
 }
 
-function isUrgent(endsAt) {
-  if (!endsAt) return false;
-  return (new Date(endsAt) - Date.now()) < 900000; // 15 min
-}
-
-function reservePct(piece) {
-  const top = piece.current_bid || piece.starting_bid;
-  return Math.min(100, Math.round((top / piece.reserve_price) * 100));
-}
-
-function reserveMet(piece) {
-  return (piece.current_bid || 0) >= piece.reserve_price;
-}
-
-function initials(name) {
-  return name.trim().split(' ').map(w => w[0] || '').join('').toUpperCase().slice(0, 2);
-}
-
-function minBid(piece) {
-  return (piece.current_bid || piece.starting_bid) + 5;
-}
-
-// ── TOAST ──
-function showToast(msg, type = '') {
-  const t = document.getElementById('toast');
-  t.textContent = msg;
-  t.className = 'toast show' + (type ? ' ' + type : '');
-  setTimeout(() => t.className = 'toast', 3000);
-}
-
-// ── SUPABASE CALLS ──
 async function loadPieces() {
-  const { data, error } = await sb.from('pieces').select('*').eq('closed', false).order('created_at');
-  if (error) { console.error(error); return; }
-  state.pieces = data || [];
-  render();
+  const {data,error}=await sb.from('pieces').select('*').eq('closed',false).order('created_at');
+  if(error){console.error(error);return;}
+  state.pieces=data||[]; render();
 }
-
 async function loadPiece(id) {
-  const { data, error } = await sb.from('pieces').select('*').eq('id', id).single();
-  if (error) { console.error(error); return; }
-  state.currentPiece = data;
+  const {data,error}=await sb.from('pieces').select('*').eq('id',id).single();
+  if(error){console.error(error);return;} state.currentPiece=data;
 }
-
 async function loadBids(pieceId) {
-  const { data, error } = await sb.from('bids').select('*, bidders(name, phone)').eq('piece_id', pieceId).order('created_at', { ascending: false }).limit(10);
-  if (error) { console.error(error); return; }
-  state.bids = data || [];
+  const {data,error}=await sb.from('bids').select('*,bidders(name,phone)').eq('piece_id',pieceId).order('created_at',{ascending:false}).limit(8);
+  if(error){console.error(error);return;} state.bids=data||[];
 }
 
 async function submitBid() {
-  const piece = state.currentPiece;
-  const { name, email, phone, amount, smsOptIn } = state.form;
-  const errors = {};
-
-  if (!name.trim()) errors.name = 'Name is required';
-  if (!email.trim() || !email.includes('@')) errors.email = 'Valid email required';
-  if (!phone.trim() || phone.replace(/\D/g,'').length < 10) errors.phone = 'Valid phone required';
-  const numAmount = parseFloat(amount);
-  if (!amount || isNaN(numAmount)) errors.amount = 'Enter a bid amount';
-  else if (numAmount < minBid(piece)) errors.amount = 'Minimum bid is ' + fmt(minBid(piece));
-
-  if (Object.keys(errors).length > 0) {
-    state.errors = errors;
-    render();
-    return;
-  }
-
-  state.submitting = true;
-  state.errors = {};
-  render();
-
+  const p=state.currentPiece;
+  const {name,email,phone,amount,smsOptIn}=state.form;
+  const errors={};
+  if(!name.trim()) errors.name='Name is required';
+  if(!email.trim()||!email.includes('@')) errors.email='Valid email required';
+  if(!phone.trim()||phone.replace(/\D/g,'').length<10) errors.phone='Valid 10-digit phone required';
+  const num=parseFloat(amount);
+  if(!amount||isNaN(num)) errors.amount='Enter a bid amount';
+  else if(num<minBid(p)) errors.amount='Minimum bid is '+fmt(minBid(p));
+  if(Object.keys(errors).length>0){state.errors=errors;render();return;}
+  state.submitting=true; state.errors={}; render();
   try {
-    // Upsert bidder
     let bidderId;
-    const { data: existing } = await sb.from('bidders').select('id').eq('email', email).maybeSingle();
-    if (existing) {
-      bidderId = existing.id;
-    } else {
-      const { data: newBidder, error: bidderErr } = await sb.from('bidders').insert({ name: name.trim(), email: email.trim(), phone: phone.trim(), sms_opt_in: smsOptIn }).select('id').single();
-      if (bidderErr) throw bidderErr;
-      bidderId = newBidder.id;
+    const {data:existing}=await sb.from('bidders').select('id').eq('email',email).maybeSingle();
+    if(existing){bidderId=existing.id;}
+    else {
+      const {data:nb,error:be}=await sb.from('bidders').insert({name:name.trim(),email:email.trim(),phone:phone.trim(),sms_opt_in:smsOptIn}).select('id').single();
+      if(be) throw be; bidderId=nb.id;
     }
-
-    // Insert bid
-    const { error: bidErr } = await sb.from('bids').insert({ piece_id: piece.id, bidder_id: bidderId, amount: numAmount });
-    if (bidErr) throw bidErr;
-
-    state.submitted = true;
-    state.submitting = false;
-    showToast('Bid placed! ' + fmt(numAmount), 'success');
-    await loadPiece(piece.id);
-    await loadBids(piece.id);
-    render();
-
-  } catch (err) {
-    console.error(err);
-    state.submitting = false;
-    showToast('Something went wrong. Please try again.', 'error');
-    render();
+    const {error:bidErr}=await sb.from('bids').insert({piece_id:p.id,bidder_id:bidderId,amount:num});
+    if(bidErr) throw bidErr;
+    state.submitted=true; state.submitting=false;
+    showToast('Bid of '+fmt(num)+' placed!','success');
+    await loadPiece(p.id); await loadBids(p.id); render();
+  } catch(err) {
+    console.error(err); state.submitting=false;
+    showToast('Something went wrong. Try again.','error'); render();
   }
 }
 
 async function submitBIN() {
-  const piece = state.currentPiece;
-  const { name, email, phone } = state.form;
-  const errors = {};
-  if (!name.trim()) errors.name = 'Name is required';
-  if (!email.trim() || !email.includes('@')) errors.email = 'Valid email required';
-  if (!phone.trim() || phone.replace(/\D/g,'').length < 10) errors.phone = 'Valid phone required';
-  if (Object.keys(errors).length > 0) {
-    state.errors = errors;
-    render();
-    showToast('Please fill in your details first', 'error');
-    return;
-  }
-  showToast('Buy It Now selected! We will be in touch shortly.', 'success');
+  const {name,email,phone}=state.form; const errors={};
+  if(!name.trim()) errors.name='Name is required';
+  if(!email.trim()||!email.includes('@')) errors.email='Valid email required';
+  if(!phone.trim()||phone.replace(/\D/g,'').length<10) errors.phone='Valid phone required';
+  if(Object.keys(errors).length>0){state.errors=errors;render();showToast('Fill in your details first','error');return;}
+  showToast('Buy It Now! We will contact you shortly.','success');
 }
 
-// ── REAL-TIME ──
 function subscribeRealtime(pieceId) {
-  sb.channel('bids-' + pieceId)
-    .on('postgres_changes', { event: 'INSERT', schema: 'public', table: 'bids', filter: 'piece_id=eq.' + pieceId }, async () => {
-      await loadPiece(pieceId);
-      await loadBids(pieceId);
-      render();
-    })
-    .subscribe();
+  if(state._channel) sb.removeChannel(state._channel);
+  state._channel = sb.channel('bids-'+pieceId)
+    .on('postgres_changes',{event:'INSERT',schema:'public',table:'bids',filter:'piece_id=eq.'+pieceId},async()=>{
+      await loadPiece(pieceId); await loadBids(pieceId); render();
+    }).subscribe();
 }
 
-// ── NAVIGATION ──
 async function goToPiece(piece) {
-  state.view = 'piece';
-  state.currentPiece = piece;
-  state.bids = [];
-  state.submitted = false;
-  state.form = { name: '', email: '', phone: '', amount: '', smsOptIn: true };
-  state.errors = {};
-  render();
-  await loadBids(piece.id);
-  subscribeRealtime(piece.id);
-  render();
+  state.view='piece'; state.currentPiece=piece; state.bids=[];
+  state.submitted=false; state.form={name:'',email:'',phone:'',amount:'',smsOptIn:true}; state.errors={};
+  render(); await loadBids(piece.id); subscribeRealtime(piece.id); render();
 }
-
 function goToGallery() {
-  state.view = 'gallery';
-  state.currentPiece = null;
-  state.submitted = false;
-  loadPieces();
+  state.view='gallery'; state.currentPiece=null; state.submitted=false;
+  clearInterval(state._tick); loadPieces();
 }
+function updateField(f,v){state.form[f]=v;if(state.errors[f]){delete state.errors[f];render();}}
+function toggleSMS(){state.form.smsOptIn=!state.form.smsOptIn;render();}
+function setHero(mode){state.heroMode=mode;render();}
 
-// ── FORM HANDLERS ──
-function updateField(field, value) {
-  state.form[field] = value;
-  if (state.errors[field]) {
-    delete state.errors[field];
-    render();
-  }
-}
-
-function toggleSMS() {
-  state.form.smsOptIn = !state.form.smsOptIn;
-  render();
-}
-
-// ── RENDER: GALLERY ──
-function renderGallery() {
-  const pieces = state.pieces;
-  const cards = pieces.length === 0
-    ? `<div style="text-align:center;padding:40px 20px;color:var(--text-muted);font-size:14px">Auctions will appear here when they go live.</div>`
-    : pieces.map(p => {
-        const top = p.current_bid || p.starting_bid;
-        const pct = reservePct(p);
-        const met = reserveMet(p);
-        const timer = p.format === 'timed' && p.ends_at ? fmtCountdown(p.ends_at) : null;
-        const urgent = isUrgent(p.ends_at);
-        return `
-          <div class="gallery-card" onclick="goToPiece(${JSON.stringify(p).replace(/"/g, '&quot;')})">
-            <div class="gallery-card-img">
-              ${p.image_url ? `<img src="${p.image_url}" alt="${p.title}">` : '<span>ARTWORK PHOTO</span>'}
-              <div class="gallery-badge"><div class="art-pill-live-dot" style="width:5px;height:5px;border-radius:50%;background:var(--purple);animation:blink 1.4s infinite;flex-shrink:0"></div>LIVE</div>
-            </div>
-            <div class="gallery-card-body">
-              <div class="gallery-card-title">${p.title}</div>
-              <div class="gallery-card-meta">${p.medium || ''} ${p.dimensions ? '· ' + p.dimensions : ''}</div>
-              <div class="gallery-card-row">
-                <div>
-                  <div class="gallery-card-bid-label">Current bid</div>
-                  <div class="gallery-card-bid">${fmt(top)}</div>
-                </div>
-                <div>
-                  ${timer ? `<div class="gallery-card-timer${urgent ? '' : ''}">${timer}</div>` : `<div class="gallery-card-open">${p.format === 'open' ? 'Open bidding' : 'Ends at show close'}</div>`}
-                  <div style="font-size:10px;color:var(--text-muted);text-align:right;margin-top:2px">${p.bid_count || 0} bid${(p.bid_count || 0) !== 1 ? 's' : ''}</div>
-                </div>
-              </div>
-              <div class="gallery-card-bar"><div class="gallery-card-fill ${met ? 'met' : ''}" style="width:${pct}%"></div></div>
-            </div>
-          </div>`;
-      }).join('');
-
-  return `
-    <div class="page">
-      <nav class="topnav">
-        <span class="topnav-logo">HYKEEM <span>G</span></span>
-        <span style="font-size:12px;color:var(--text-muted)">June 19th Art Show</span>
-      </nav>
-      <div class="gallery-page">
-        <div class="gallery-header">
-          <div class="gallery-title">Live Auctions</div>
-          <div class="gallery-sub">${pieces.length} piece${pieces.length !== 1 ? 's' : ''} available · Tap any piece to bid</div>
-        </div>
-        <div class="gallery-grid">${cards}</div>
+function renderHero() {
+  if(state.heroMode==='with') {
+    return `<div class="hero-with-image">
+      <div class="hero-overlay"></div>
+      <div class="hero-content">
+        <div class="hero-eyebrow">June 19th · Las Vegas</div>
+        <div class="hero-title">Hykeem G's Art</div>
+        <div class="hero-sub">Live auction — bid from anywhere</div>
       </div>
     </div>`;
+  }
+  return `<div class="hero-no-image">
+    <div class="hero-content">
+      <div class="hero-eyebrow" style="color:var(--gold)">June 19th · Las Vegas</div>
+      <div class="hero-title" style="color:#fff;font-family:'Playfair Display',serif;font-size:26px;font-weight:600;margin-bottom:5px">Hykeem G's Art</div>
+      <div class="hero-sub" style="font-size:13px;color:rgba(255,255,255,.6)">Live auction — bid from anywhere</div>
+    </div>
+  </div>`;
 }
 
-// ── RENDER: PIECE ──
+function renderGallery() {
+  const pieces=state.pieces;
+  const cards=pieces.length===0
+    ? `<div style="text-align:center;padding:40px 20px;color:var(--text-muted);font-size:14px">Auctions will appear here when they go live.</div>`
+    : pieces.map(p=>{
+        const top=p.current_bid||p.starting_bid;
+        const pct=reservePct(p); const met=reserveMet(p);
+        const timer=p.format==='timed'&&p.ends_at?fmtCountdown(p.ends_at):null;
+        return `<div class="gallery-card" onclick='goToPiece(${JSON.stringify(p).replace(/'/g,"\\'")})'> 
+          <div class="gallery-card-img">
+            ${p.image_url?`<img src="${p.image_url}" alt="${p.title}">`:'<span>ARTWORK PHOTO</span>'}
+            <div class="gallery-badge"><div class="live-dot"></div>LIVE</div>
+          </div>
+          <div class="gallery-card-body">
+            <div class="gallery-card-top">
+              <div class="gallery-card-title">${p.title}</div>
+              <div class="gallery-card-format">${fmtFormat(p.format)}</div>
+            </div>
+            <div class="gallery-card-meta">${[p.medium,p.dimensions].filter(Boolean).join(' · ')}</div>
+            <div class="gallery-card-divider"></div>
+            <div class="gallery-card-row">
+              <div>
+                <div class="gallery-card-bid-label">Current bid</div>
+                <div class="gallery-card-bid">${fmt(top)}</div>
+              </div>
+              <div class="gallery-card-right">
+                ${timer?`<div class="gallery-card-timer">${timer}</div>`:`<div class="gallery-card-open">${p.format==='open'?'Open bidding':'Ends at show'}</div>`}
+                <div class="gallery-card-bids">${p.bid_count||0} bid${(p.bid_count||0)!==1?'s':''}</div>
+              </div>
+            </div>
+            <div class="gallery-card-bar">
+              <div class="gallery-card-fill ${met?'gallery-card-fill-met':'gallery-card-fill-progress'}" style="width:${pct}%"></div>
+            </div>
+          </div>
+        </div>`;
+      }).join('');
+
+  return `<div class="page">
+    <nav class="topnav">
+      <span class="topnav-logo">Hykeem G's <span>Art</span></span>
+      <img class="topnav-brand-logo" src="${EVERY_DAY_LOGO}" alt="EVERY DAY.">
+    </nav>
+    ${renderHero()}
+    <div class="hero-toggle">
+      <span class="hero-toggle-label">Hero style:</span>
+      <button class="toggle-btn ${state.heroMode==='with'?'active':''}" onclick="setHero('with')">With image space</button>
+      <button class="toggle-btn ${state.heroMode==='no'?'active':''}" onclick="setHero('no')">Color only</button>
+    </div>
+    <div class="gallery-body">
+      <div class="gallery-count">${pieces.length} piece${pieces.length!==1?'s':''} available · Tap to bid</div>
+      <div class="gallery-grid">${cards}</div>
+    </div>
+  </div>`;
+}
+
 function renderPiece() {
-  const p = state.currentPiece;
-  if (!p) return '<div class="loading"><div class="spinner"></div></div>';
+  const p=state.currentPiece; if(!p) return '<div class="loading"><div class="spinner"></div></div>';
+  const top=p.current_bid||p.starting_bid; const pct=reservePct(p); const met=reserveMet(p);
+  const timer=p.format==='timed'&&p.ends_at?fmtCountdown(p.ends_at):null;
+  const urgent=isUrgent(p.ends_at);
+  const {name,email,phone,amount,smsOptIn}=state.form;
+  const {errors,submitting,submitted}=state;
 
-  const top = p.current_bid || p.starting_bid;
-  const pct = reservePct(p);
-  const met = reserveMet(p);
-  const timer = p.format === 'timed' && p.ends_at ? fmtCountdown(p.ends_at) : null;
-  const urgent = isUrgent(p.ends_at);
-  const { name, email, phone, amount, smsOptIn } = state.form;
-  const { errors, submitting, submitted } = state;
-
-  const feedRows = state.bids.length === 0
+  const feedRows=state.bids.length===0
     ? `<div class="feed-empty">No bids yet — be the first!</div>`
-    : state.bids.map((b, i) => `
-        <div class="feed-row ${i === 0 ? 'top-bid' : 'past-bid'}">
+    : state.bids.map((b,i)=>`
+        <div class="feed-row ${i===0?'feed-row-top':'feed-row-past'}">
           <div class="feed-row-left">
-            <span class="feed-tag ${i === 0 ? 'feed-tag-top' : 'feed-tag-past'}">${b.bidders ? initials(b.bidders.name) : '??'}</span>
+            <span class="feed-tag ${i===0?'feed-tag-top':'feed-tag-past'}">${b.bidders?initials(b.bidders.name):'??'}</span>
             <span class="feed-time">${timeAgo(b.created_at)}</span>
           </div>
-          <span class="${i === 0 ? 'feed-amount-top' : 'feed-amount-past'}">${fmt(b.amount)}</span>
+          <span class="${i===0?'feed-amount-top':'feed-amount-past'}">${fmt(b.amount)}</span>
         </div>`).join('');
 
-  const formSection = submitted
+  const formSection=submitted
     ? `<div class="success-card">
         <div class="success-icon">🎉</div>
         <div class="success-title">Bid placed!</div>
-        <div class="success-body">Your bid of <strong>${fmt(parseFloat(amount))}</strong> is live. ${smsOptIn ? "We'll text you if you're outbid." : "Check back to see if you're still winning."}</div>
-        <button onclick="state.submitted=false;render()" style="margin-top:14px;background:var(--purple);color:#fff;border:none;border-radius:var(--radius-sm);padding:10px 20px;font-size:13px;font-weight:600;cursor:pointer;font-family:'DM Sans',sans-serif">Bid again</button>
-       </div>`
+        <div class="success-body">Your bid of <strong>${fmt(parseFloat(amount))}</strong> is live.${smsOptIn?" We'll text you if you're outbid.":""}</div>
+        <button class="success-rebid" onclick="state.submitted=false;render()">Bid again</button>
+      </div>`
     : `<div class="form-card">
         <div class="form-title">Place your bid</div>
-        <div class="field">
-          <label class="field-label">Your name</label>
-          <input class="field-input" type="text" placeholder="First and last name" value="${name}" oninput="updateField('name',this.value)" autocomplete="name">
-          ${errors.name ? `<div class="field-error">${errors.name}</div>` : ''}
-        </div>
-        <div class="field">
-          <label class="field-label">Email</label>
-          <input class="field-input" type="email" placeholder="you@email.com" value="${email}" oninput="updateField('email',this.value)" autocomplete="email">
-          ${errors.email ? `<div class="field-error">${errors.email}</div>` : ''}
-        </div>
-        <div class="field">
-          <label class="field-label">Phone</label>
-          <input class="field-input" type="tel" placeholder="555-000-0000" value="${phone}" oninput="updateField('phone',this.value)" autocomplete="tel">
-          ${errors.phone ? `<div class="field-error">${errors.phone}</div>` : ''}
-        </div>
-        <div class="field">
-          <label class="field-label">Your bid</label>
-          <input class="field-input bid-input" type="number" inputmode="numeric" placeholder="${minBid(p)}" value="${amount}" oninput="updateField('amount',this.value)">
-          <div class="field-note">Minimum ${fmt(minBid(p))} · $5 above current bid</div>
-          ${errors.amount ? `<div class="field-error">${errors.amount}</div>` : ''}
-        </div>
-        <div class="sms-row ${smsOptIn ? 'checked' : ''}" onclick="toggleSMS()">
-          <div class="sms-checkbox ${smsOptIn ? 'checked' : ''}"><span class="sms-checkbox-mark">${smsOptIn ? '✓' : ''}</span></div>
-          <div class="sms-label">Text me if I'm outbid — I want to stay in it</div>
-        </div>
-        ${p.buy_it_now_price ? `
-        <div class="btn-bin" onclick="submitBIN()">
-          <div class="btn-bin-top">Buy it now — skip the auction</div>
-          <div class="btn-bin-val">${fmt(p.buy_it_now_price)} · Yours instantly</div>
-        </div>` : ''}
-        <button class="btn-place" onclick="submitBid()" ${submitting ? 'disabled' : ''}>
-          <div class="btn-place-text">${submitting ? 'Placing bid...' : 'Place bid →'}</div>
-        </button>
-        <div class="form-foot">Your info is saved for future Hykeem G shows · No account needed</div>
+        <div class="field"><label class="field-label">Your name</label><input class="field-input" type="text" placeholder="First and last name" value="${name}" oninput="updateField('name',this.value)" autocomplete="name">${errors.name?`<div class="field-error">${errors.name}</div>`:''}</div>
+        <div class="field"><label class="field-label">Email</label><input class="field-input" type="email" placeholder="you@email.com" value="${email}" oninput="updateField('email',this.value)" autocomplete="email">${errors.email?`<div class="field-error">${errors.email}</div>`:''}</div>
+        <div class="field"><label class="field-label">Phone</label><input class="field-input" type="tel" placeholder="555-000-0000" value="${phone}" oninput="updateField('phone',this.value)" autocomplete="tel">${errors.phone?`<div class="field-error">${errors.phone}</div>`:''}</div>
+        <div class="field"><label class="field-label">Your bid</label><input class="field-input field-input-bid" type="number" inputmode="numeric" placeholder="${minBid(p)}" value="${amount}" oninput="updateField('amount',this.value)"><div class="field-note">Minimum ${fmt(minBid(p))} · must be $5 above current bid</div>${errors.amount?`<div class="field-error">${errors.amount}</div>`:''}</div>
+        <div class="sms-row ${smsOptIn?'sms-row-checked':''}" onclick="toggleSMS()"><div class="sms-checkbox ${smsOptIn?'sms-checkbox-checked':''}"><span class="sms-checkbox-mark">${smsOptIn?'✓':''}</span></div><div class="sms-label">Text me if I'm outbid — I want to stay in it</div></div>
+        ${p.buy_it_now_price?`<div class="btn-bin" onclick="submitBIN()"><div class="btn-bin-top">Buy it now — skip the auction</div><div class="btn-bin-val">${fmt(p.buy_it_now_price)} · Yours instantly</div></div>`:''}
+        <button class="btn-place" onclick="submitBid()" ${submitting?'disabled':''}><div class="btn-place-text">${submitting?'Placing bid...':'Place bid →'}</div></button>
+        <div class="form-foot">Your info is saved for future Hykeem G's Art shows · No account needed</div>
       </div>`;
 
-  return `
-    <div class="page">
-      <nav class="topnav">
-        <span class="topnav-logo">HYKEEM <span>G</span></span>
-        <a class="topnav-back" onclick="goToGallery()">← All pieces</a>
-      </nav>
-
-      <div class="art-zone">
-        ${p.image_url ? `<img src="${p.image_url}" alt="${p.title}">` : `<div class="art-zone-placeholder"><svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="m21 15-5-5L5 21"/></svg><span>ARTWORK PHOTO</span></div>`}
-        <div class="art-pill art-pill-live"><div class="art-pill-live-dot"></div>LIVE</div>
-        <div class="art-pill art-pill-oo">1 OF 1 · ORIGINAL</div>
+  return `<div class="page">
+    <nav class="topnav">
+      <span class="topnav-logo">Hykeem G's <span>Art</span></span>
+      <button class="topnav-back" onclick="goToGallery()">← All pieces</button>
+    </nav>
+    <div class="art-zone">
+      ${p.image_url?`<img src="${p.image_url}" alt="${p.title}">`:`<div class="art-zone-placeholder"><svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="m21 15-5-5L5 21"/></svg><span>ARTWORK PHOTO</span></div>`}
+      <div class="art-pill art-pill-live"><div class="live-dot"></div>LIVE</div>
+      <div class="art-pill art-pill-oo">1 OF 1 · ORIGINAL</div>
+    </div>
+    <div class="bid-banner">
+      <div><div class="bid-banner-label">Current bid</div><div class="bid-banner-value">${fmt(top)}</div><div class="bid-banner-sub">${p.bid_count||0} bid${(p.bid_count||0)!==1?'s':''} placed</div></div>
+      <div style="text-align:right">
+        <div class="bid-banner-label">${timer?'Time left':p.format==='open'?'Format':'Closes'}</div>
+        ${timer?`<div class="bid-banner-timer ${urgent?'urgent':''}" id="countdown">${timer}</div><div class="bid-banner-sub">Ends tonight</div>`:`<div class="bid-banner-timer" style="font-size:15px">${p.format==='open'?'Open':'At show end'}</div><div class="bid-banner-sub">Artist closes manually</div>`}
       </div>
-
-      <div class="bid-banner">
-        <div class="bid-banner-side">
-          <div class="bid-banner-label">Current bid</div>
-          <div class="bid-banner-value">${fmt(top)}</div>
-          <div class="bid-banner-sub">${p.bid_count || 0} bid${(p.bid_count || 0) !== 1 ? 's' : ''} placed</div>
-        </div>
-        <div class="bid-banner-side" style="text-align:right">
-          <div class="bid-banner-label">${timer ? 'Time left' : p.format === 'open' ? 'Format' : 'Closes'}</div>
-          ${timer
-            ? `<div class="bid-banner-timer ${urgent ? 'urgent' : ''}" id="countdown">${timer}</div><div class="bid-banner-sub">Ends tonight</div>`
-            : `<div class="bid-banner-timer" style="font-size:16px">${p.format === 'open' ? 'Open' : 'At show end'}</div><div class="bid-banner-sub">Artist closes manually</div>`}
-        </div>
-      </div>
-
-      <div class="content">
-        <div class="piece-header">
-          <div class="piece-title">${p.title}</div>
-          <div class="piece-meta">${[p.medium, p.dimensions, p.year].filter(Boolean).join(' · ')}</div>
-        </div>
-
-        <div class="urgency-bar">
-          <div class="urgency-dot"></div>
-          <span>Several collectors are viewing this piece right now</span>
-        </div>
-
-        <div class="reserve-section">
-          <div class="reserve-row">
-            <span class="reserve-label">Reserve status</span>
-            ${met
-              ? `<span class="reserve-met">✓ Reserve met</span>`
-              : `<span class="reserve-not-met">${pct}% of reserve</span>`}
-          </div>
-          <div class="reserve-bar">
-            <div class="reserve-fill ${met ? '' : 'partial'}" style="width:${pct}%"></div>
-          </div>
-        </div>
-
-        <div class="feed-section">
-          <div class="section-title">
-            <span>Live bid feed</span>
-            <span class="feed-count">${p.bid_count || 0} bids</span>
-          </div>
-          <div class="feed">${feedRows}</div>
-        </div>
-
-        ${p.description ? `
-        <div class="statement">
-          <div class="statement-quote">"${p.description}"</div>
-          <div class="statement-sig">— Hykeem G · <a href="https://instagram.com/hykeemg" target="_blank">@hykeemg</a></div>
-        </div>` : ''}
-
-        ${p.closed ? `<div class="closed-banner">This auction is now closed</div>` : formSection}
-
-        <div class="trust-row">
-          <div class="trust-item"><div class="trust-dot"></div>Secure checkout</div>
-          <div class="trust-item"><div class="trust-dot"></div>Certificate of authenticity</div>
-          <div class="trust-item"><div class="trust-dot"></div>Payment plans available</div>
-        </div>
-      </div>
-    </div>`;
+    </div>
+    <div class="content">
+      <div><div class="piece-title">${p.title}</div><div class="piece-meta">${[p.medium,p.dimensions,p.year].filter(Boolean).join(' · ')}</div></div>
+      <div class="urgency-bar"><div class="urgency-dot"></div><span>Several collectors are viewing this piece right now</span></div>
+      <div><div class="reserve-row"><span class="reserve-label">Reserve status</span>${met?`<span class="reserve-met">✓ Reserve met</span>`:`<span class="reserve-not-met">${pct}% of reserve</span>`}</div><div class="reserve-bar"><div class="reserve-fill ${met?'reserve-fill-met':'reserve-fill-partial'}" style="width:${pct}%"></div></div></div>
+      <div><div class="section-title"><span>Live bid feed</span><span class="feed-count">${p.bid_count||0} bids</span></div><div class="feed">${feedRows}</div></div>
+      ${p.description?`<div class="statement"><div class="statement-quote">"${p.description}"</div><div class="statement-sig">— Hykeem G · <a href="https://instagram.com/hykeemg" target="_blank">@hykeemg</a></div></div>`:''}
+      ${p.closed?`<div class="closed-banner">This auction is now closed</div>`:formSection}
+      <div class="trust-row"><div class="trust-item"><div class="trust-dot"></div>Secure checkout</div><div class="trust-item"><div class="trust-dot"></div>Certificate of authenticity</div><div class="trust-item"><div class="trust-dot"></div>Payment plans available</div></div>
+    </div>
+  </div>`;
 }
 
-// ── MAIN RENDER ──
 function render() {
-  const app = document.getElementById('app');
-  if (state.view === 'gallery') {
-    app.innerHTML = renderGallery();
-  } else {
-    app.innerHTML = renderPiece();
-    // restart countdown tick
-    if (state.currentPiece?.ends_at) {
-      clearInterval(state._tick);
-      state._tick = setInterval(() => {
-        const el = document.getElementById('countdown');
-        if (el) el.textContent = fmtCountdown(state.currentPiece.ends_at);
-      }, 1000);
-    }
+  document.getElementById('app').innerHTML = state.view==='gallery' ? renderGallery() : renderPiece();
+  if(state.view==='piece' && state.currentPiece?.ends_at) {
+    clearInterval(state._tick);
+    state._tick=setInterval(()=>{const el=document.getElementById('countdown');if(el)el.textContent=fmtCountdown(state.currentPiece.ends_at);},1000);
   }
 }
 
-// ── INIT ──
 async function init() {
-  document.getElementById('app').innerHTML = '<div class="loading"><div class="spinner"></div><div class="loading-text">Loading auction...</div></div>';
+  document.getElementById('app').innerHTML='<div class="loading"><div class="spinner"></div><div class="loading-text">Loading auction...</div></div>';
   await loadPieces();
-
-  // check URL for direct piece link: ?piece=ID
-  const params = new URLSearchParams(window.location.search);
-  const pieceId = params.get('piece');
-  if (pieceId) {
-    const piece = state.pieces.find(p => p.id === pieceId);
-    if (piece) { goToPiece(piece); return; }
-  }
+  const params=new URLSearchParams(window.location.search);
+  const pieceId=params.get('piece');
+  if(pieceId){const piece=state.pieces.find(p=>p.id===pieceId);if(piece){goToPiece(piece);return;}}
   render();
-
-  // refresh gallery every 30s
-  setInterval(loadPieces, 30000);
+  setInterval(loadPieces,30000);
 }
-
 init();
 </script>
 </body>
