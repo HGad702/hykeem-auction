@@ -3,322 +3,338 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
-<title>Hykeem G's Art — Live Auction</title>
-<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,500;0,600;1,400&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+<title>EVERY DAY. Art Exhibition</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,500;0,600;0,700;1,400&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <style>
 :root{
-  --white:#FFFFFF;--off:#F8F7F5;--warm:#F2F0ED;--border:#E8E5E0;--bd:#D4CFC8;
-  --text:#1A1814;--sec:#6B6760;--muted:#A8A49E;
-  --purple:#5B3FD4;--pl:#EEE9FF;--pm:#7B5FE8;
-  --coral:#E8522A;--cl:#FDF0EB;
-  --green:#2D7A4F;--gl:#EAF5EF;
-  --gold:#C4923A;--goldl:#FEF6EC;
-  --red:#D63B3B;--redl:#FEF2F2;
-  --blue:#1D6FD4;--bluel:#E6F1FB;
-  --shadow:0 1px 4px rgba(0,0,0,.07);
-  --shadow-md:0 4px 16px rgba(0,0,0,.09);
-  --shadow-lg:0 12px 40px rgba(0,0,0,.13);
-  --r:14px;--rs:9px;--rp:100px;
+  --bg:#06060A;--bg2:#0D0D1A;--bg3:#111122;--bg4:#161628;
+  --border:rgba(255,255,255,.07);--border2:rgba(255,255,255,.12);
+  --text:#FFFFFF;--text2:rgba(255,255,255,.7);--text3:rgba(255,255,255,.35);--text4:rgba(255,255,255,.15);
+  --purple:#7B5FE8;--purple2:#9B85F0;--purpled:rgba(123,95,232,.2);--purpleb:rgba(123,95,232,.4);
+  --coral:#E8522A;--corald:rgba(232,82,42,.15);--coralb:rgba(232,82,42,.3);
+  --gold:#D4AF7A;--goldd:rgba(212,175,122,.12);--goldb:rgba(212,175,122,.3);
+  --green:#2D9E6B;--greend:rgba(45,158,107,.15);--greenb:rgba(45,158,107,.35);
+  --red:#E24B4A;--redd:rgba(226,75,74,.15);
+  --edred:#E8172A;--edblue:#1A4BDB;
+  --shadow:0 2px 8px rgba(0,0,0,.4);
+  --shadow-md:0 4px 20px rgba(0,0,0,.5);
+  --shadow-lg:0 8px 40px rgba(0,0,0,.6);
+  --shadow-purple:0 6px 24px rgba(123,95,232,.4);
+  --r:12px;--rs:8px;--rp:100px;
 }
 *{box-sizing:border-box;margin:0;padding:0;-webkit-font-smoothing:antialiased}
-body{font-family:'DM Sans',sans-serif;background:var(--off);color:var(--text);min-height:100vh}
+body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);min-height:100vh}
 button{font-family:'DM Sans',sans-serif;cursor:pointer}
+input,select,textarea{font-family:'DM Sans',sans-serif}
 
-/* NAV */
-.topnav{background:var(--white);border-bottom:1px solid var(--border);padding:0 16px;height:54px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:100;box-shadow:var(--shadow)}
-.nav-logo{font-family:'Playfair Display',serif;font-size:16px;font-weight:600;color:var(--text)}
-.nav-logo span{color:var(--purple)}
-.nav-img{height:30px;width:auto;object-fit:contain}
-.nav-back{font-size:13px;color:var(--sec);background:none;border:none;cursor:pointer;display:flex;align-items:center;gap:4px}
-.nav-back:hover{color:var(--purple)}
-.nav-lock{font-size:12px;color:var(--muted);background:none;border:none;cursor:pointer;padding:4px 8px}
-.nav-badge{font-size:10px;font-weight:600;padding:3px 9px;border-radius:var(--rp);background:var(--gl);color:var(--green)}
+/* ── TOP HEADER ── */
+.site-header{background:var(--bg2);border-bottom:1px solid var(--border);padding:12px 16px 10px;text-align:center;position:sticky;top:0;z-index:100}
+.header-brand{font-size:22px;font-weight:700;letter-spacing:.04em;line-height:1}
+.header-brand .red{color:var(--edred)}
+.header-brand .dot{color:var(--edblue)}
+.header-sub{font-size:11px;color:var(--text3);margin-top:3px;letter-spacing:.02em}
+.header-date{font-size:10px;color:var(--text4);margin-top:2px;letter-spacing:.04em}
+.header-back{position:absolute;left:14px;top:50%;transform:translateY(-50%);font-size:12px;color:var(--text3);background:none;border:none;cursor:pointer;display:flex;align-items:center;gap:4px}
+.header-back:hover{color:var(--text2)}
+.header-logo{position:absolute;right:14px;top:50%;transform:translateY(-50%);height:28px;width:auto;object-fit:contain}
+.header-lock{position:absolute;right:14px;top:50%;transform:translateY(-50%);font-size:11px;color:var(--text3);background:none;border:none;cursor:pointer}
+.header-badge{position:absolute;right:14px;top:50%;transform:translateY(-50%);background:var(--greend);border:1px solid var(--greenb);color:var(--green);font-size:10px;font-weight:600;padding:3px 8px;border-radius:var(--rp)}
 
-/* PIN */
-.pin-screen{min-height:100vh;display:flex;align-items:center;justify-content:center;background:linear-gradient(135deg,#1A1814 0%,#2D1F6E 100%);padding:20px}
-.pin-card{background:var(--white);border-radius:20px;padding:32px 28px;width:100%;max-width:320px;text-align:center;box-shadow:var(--shadow-lg)}
-.pin-logo{font-family:'Playfair Display',serif;font-size:20px;font-weight:600;margin-bottom:4px}
-.pin-logo span{color:var(--purple)}
-.pin-sub{font-size:12px;color:var(--muted);margin-bottom:24px}
+/* ── PIN ── */
+.pin-screen{min-height:100vh;display:flex;align-items:center;justify-content:center;background:var(--bg);padding:20px}
+.pin-card{background:var(--bg2);border:1px solid var(--border2);border-radius:20px;padding:32px 28px;width:100%;max-width:320px;text-align:center;box-shadow:var(--shadow-lg)}
+.pin-brand{font-size:22px;font-weight:700;letter-spacing:.04em;margin-bottom:4px}
+.pin-brand .red{color:var(--edred)}.pin-brand .dot{color:var(--edblue)}
+.pin-sub{font-size:12px;color:var(--text3);margin-bottom:24px}
 .pin-dots{display:flex;justify-content:center;gap:12px;margin-bottom:24px}
-.pin-dot{width:14px;height:14px;border-radius:50%;border:2px solid var(--border);transition:all .15s}
-.pin-dot.on{background:var(--purple);border-color:var(--purple)}
+.pin-dot{width:14px;height:14px;border-radius:50%;border:2px solid var(--border2);transition:all .15s}
+.pin-dot.on{background:var(--purple);border-color:var(--purple);box-shadow:0 0 8px rgba(123,95,232,.5)}
 .pin-dot.err{background:var(--red);border-color:var(--red)}
 .pin-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-bottom:8px}
-.pin-btn{background:var(--off);border:1px solid var(--border);border-radius:var(--rs);padding:16px;font-size:20px;font-weight:500;color:var(--text);cursor:pointer;transition:all .15s}
-.pin-btn:hover{background:var(--pl);border-color:var(--purple);color:var(--purple)}
+.pin-btn{background:var(--bg3);border:1px solid var(--border2);border-radius:var(--rs);padding:16px;font-size:20px;font-weight:500;color:var(--text);cursor:pointer;transition:all .15s}
+.pin-btn:hover{background:var(--purpled);border-color:var(--purple);color:var(--purple2)}
 .pin-btn:active{transform:scale(.95)}
 .pin-err{font-size:12px;color:var(--red);margin-top:8px;min-height:18px}
 
-/* HERO */
-.hero{background:linear-gradient(135deg,#1A1814 0%,#2D1F6E 100%);padding:24px 16px 20px;position:relative;overflow:hidden}
-.hero::before{content:"";position:absolute;top:-40px;right:-40px;width:180px;height:180px;border-radius:50%;background:rgba(91,63,212,.25)}
-.hero::after{content:"";position:absolute;bottom:-30px;left:-20px;width:120px;height:120px;border-radius:50%;background:rgba(196,146,58,.12)}
+/* ── HERO ── */
+.hero{background:var(--bg2);padding:20px 16px 16px;border-bottom:1px solid var(--border);position:relative;overflow:hidden}
+.hero-glow1{position:absolute;top:-40px;right:-40px;width:200px;height:200px;border-radius:50%;background:rgba(123,95,232,.12);pointer-events:none}
+.hero-glow2{position:absolute;bottom:-60px;left:-30px;width:150px;height:150px;border-radius:50%;background:rgba(232,82,42,.06);pointer-events:none}
 .hero-inner{position:relative;z-index:1}
-.hero-eye{font-size:10px;font-weight:600;color:var(--gold);letter-spacing:.12em;text-transform:uppercase;margin-bottom:6px}
-.hero-ttl{font-family:'Playfair Display',serif;font-size:26px;font-weight:600;color:#fff;margin-bottom:5px;line-height:1.15}
-.hero-sub{font-size:13px;color:rgba(255,255,255,.55)}
+.hero-ttl{font-family:'Playfair Display',serif;font-size:28px;font-weight:700;color:var(--text);margin-bottom:4px;line-height:1.15}
+.hero-sub{font-size:13px;color:var(--text3);margin-bottom:12px}
+.hero-stats{display:flex;gap:16px}
+.hero-stat{font-size:11px;color:var(--text3)}
+.hero-stat span{color:var(--purple2);font-weight:600}
 
-/* GALLERY */
-.gallery-page{padding:14px 16px}
-.gallery-grid{display:flex;flex-direction:column;gap:14px}
-.gcard{background:var(--white);border:1px solid var(--border);border-left:4px solid var(--purple);border-radius:var(--r);overflow:hidden;cursor:pointer;transition:box-shadow .2s,transform .2s;box-shadow:var(--shadow)}
-.gcard:hover{box-shadow:var(--shadow-md);transform:translateY(-1px)}
+/* ── GALLERY ── */
+.gallery-body{padding:14px 14px;display:flex;flex-direction:column;gap:12px}
+.gcard{background:var(--bg2);border:1px solid var(--border);border-radius:var(--r);overflow:hidden;cursor:pointer;transition:border-color .2s,box-shadow .2s}
+.gcard:hover{border-color:var(--purpleb);box-shadow:0 0 20px rgba(123,95,232,.15)}
 .gcard:active{transform:scale(.99)}
-.gcard.gclosed{border-left-color:var(--bd)}
-.gcard-img{height:180px;background:var(--warm);display:flex;align-items:center;justify-content:center;overflow:hidden;position:relative}
+.gcard.gclosed{border-color:var(--border);opacity:.7}
+.gcard-img{height:180px;background:var(--bg3);display:flex;align-items:center;justify-content:center;overflow:hidden;position:relative}
 .gcard-img img{width:100%;height:100%;object-fit:cover}
-.gcard-img-ph{display:flex;flex-direction:column;align-items:center;gap:8px;color:var(--muted)}
-.gcard-img-ph span{font-size:11px;letter-spacing:.08em}
-.gcard-body{padding:14px}
-.gcard-top{display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:6px}
-.gcard-title{font-family:'Playfair Display',serif;font-size:17px;font-weight:600;flex:1;margin-right:8px;line-height:1.2;color:var(--text)}
-.gcard-fmt{font-size:9px;font-weight:600;padding:3px 8px;border-radius:var(--rp);white-space:nowrap;flex-shrink:0}
-.gcard-fmt-timed{background:var(--pl);color:var(--purple)}
-.gcard-fmt-open{background:var(--goldl);color:var(--gold)}
-.gcard-fmt-fixed{background:var(--bluel);color:var(--blue)}
-.gcard-fmt-closed{background:var(--warm);color:var(--muted)}
-.gcard-meta{font-size:11px;color:var(--muted);margin-bottom:12px}
+.gcard-img-ph{display:flex;flex-direction:column;align-items:center;gap:8px;color:var(--text4)}
+.gcard-img-ph span{font-size:10px;letter-spacing:.08em}
+.live-pill{position:absolute;top:10px;left:10px;background:rgba(6,6,10,.85);border:1.5px solid var(--purple);color:var(--purple2);border-radius:var(--rp);padding:3px 9px;font-size:9px;font-weight:600;letter-spacing:.06em;display:flex;align-items:center;gap:4px;backdrop-filter:blur(4px)}
+.closed-pill{position:absolute;top:10px;left:10px;background:rgba(6,6,10,.85);border:1px solid var(--border2);color:var(--text3);border-radius:var(--rp);padding:3px 9px;font-size:9px;font-weight:600;letter-spacing:.06em}
+.ldot{width:5px;height:5px;border-radius:50%;background:var(--purple);animation:blink 1.4s infinite;flex-shrink:0}
+@keyframes blink{0%,100%{opacity:1}50%{opacity:.15}}
+.fmt-pill{position:absolute;top:10px;right:10px;border-radius:var(--rp);padding:3px 8px;font-size:9px;font-weight:600;letter-spacing:.05em;backdrop-filter:blur(4px)}
+.fmt-timed{background:rgba(123,95,232,.3);color:var(--purple2);border:1px solid var(--purpleb)}
+.fmt-open{background:rgba(212,175,122,.2);color:var(--gold);border:1px solid var(--goldb)}
+.fmt-fixed{background:rgba(30,100,200,.2);color:#7AADFF;border:1px solid rgba(30,100,200,.4)}
+.fmt-closed{background:rgba(255,255,255,.06);color:var(--text3);border:1px solid var(--border)}
+.gcard-body{padding:13px 14px}
+.gcard-title{font-family:'Playfair Display',serif;font-size:17px;font-weight:600;color:var(--text);margin-bottom:3px;line-height:1.2}
+.gcard-meta{font-size:11px;color:var(--text3);margin-bottom:12px}
 .gcard-divider{height:1px;background:var(--border);margin-bottom:12px}
 .gcard-row{display:flex;justify-content:space-between;align-items:flex-end}
-.gcard-bid-wrap{}
-.gcard-bid-lbl{font-size:9px;color:var(--muted);letter-spacing:.07em;font-weight:600;text-transform:uppercase;margin-bottom:2px}
+.gcard-bid-lbl{font-size:9px;color:var(--text3);letter-spacing:.07em;font-weight:600;text-transform:uppercase;margin-bottom:3px}
 .gcard-bid-row{display:flex;align-items:center;gap:8px}
-.gcard-bid{font-size:20px;font-weight:600;color:var(--purple);font-family:'Playfair Display',serif}
-.gcard-initials{background:var(--pl);color:var(--purple);border-radius:var(--rp);padding:2px 8px;font-size:11px;font-weight:600}
+.gcard-bid{font-family:'Playfair Display',serif;font-size:22px;font-weight:600;color:var(--purple2)}
+.gcard-initials{background:var(--purpled);border:1px solid var(--purpleb);color:var(--purple2);border-radius:var(--rp);padding:2px 8px;font-size:10px;font-weight:600}
 .gcard-right{text-align:right}
-.gcard-timer{font-size:12px;color:var(--red);font-weight:600}
-.gcard-open{font-size:11px;color:var(--muted)}
-.gcard-bids{font-size:10px;color:var(--muted);margin-top:2px}
-.live-badge{position:absolute;top:10px;left:10px;background:rgba(255,255,255,.95);border:1.5px solid var(--purple);color:var(--purple);border-radius:var(--rp);padding:3px 9px;font-size:9px;font-weight:600;letter-spacing:.06em;display:flex;align-items:center;gap:4px;box-shadow:var(--shadow)}
-.closed-badge{position:absolute;top:10px;left:10px;background:rgba(255,255,255,.95);border:1px solid var(--bd);color:var(--muted);border-radius:var(--rp);padding:3px 9px;font-size:9px;font-weight:600;letter-spacing:.06em}
-.ldot{width:6px;height:6px;border-radius:50%;background:var(--purple);animation:blink 1.4s infinite}
-@keyframes blink{0%,100%{opacity:1}50%{opacity:.2}}
-.gallery-empty{text-align:center;padding:48px 20px;color:var(--muted);font-size:14px}
+.gcard-timer{font-size:12px;color:var(--coral);font-weight:600;font-variant-numeric:tabular-nums}
+.gcard-open{font-size:11px;color:var(--text3)}
+.gcard-bids{font-size:10px;color:var(--text3);margin-top:2px}
+.gallery-empty{text-align:center;padding:48px 20px;color:var(--text3);font-size:14px}
 
-/* PIECE PAGE — 3 SECTIONS */
-.piece-page{max-width:520px;margin:0 auto}
+/* ── PIECE PAGE ── */
+.piece-page{max-width:520px;margin:0 auto;background:var(--bg)}
 
-/* SECTION 1: PAINTING INFO */
-.piece-info-section{background:var(--white);border-bottom:1px solid var(--border)}
-.art-zone{position:relative;width:100%;aspect-ratio:4/3;background:var(--warm);display:flex;align-items:center;justify-content:center;overflow:hidden}
+/* SECTION 1 */
+.art-zone{position:relative;width:100%;aspect-ratio:4/3;background:var(--bg2);display:flex;align-items:center;justify-content:center;overflow:hidden}
 .art-zone img{width:100%;height:100%;object-fit:cover}
-.art-ph{display:flex;flex-direction:column;align-items:center;gap:8px;color:var(--muted)}
-.art-ph span{font-size:11px;letter-spacing:.08em}
-.art-photos-strip{display:flex;gap:6px;padding:10px 14px;background:var(--off);border-bottom:1px solid var(--border);overflow-x:auto}
-.art-photos-strip::-webkit-scrollbar{display:none}
-.art-thumb{width:56px;height:56px;border-radius:6px;object-fit:cover;cursor:pointer;border:2px solid transparent;flex-shrink:0}
-.art-thumb.active{border-color:var(--purple)}
-.piece-details{padding:16px}
-.piece-title{font-family:'Playfair Display',serif;font-size:22px;font-weight:600;margin-bottom:4px;line-height:1.2}
-.piece-meta{font-size:12px;color:var(--muted);margin-bottom:14px}
-.piece-status-row{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;margin-bottom:14px}
-.piece-stat{background:var(--off);border-radius:var(--rs);padding:10px 12px;border:1px solid var(--border)}
-.piece-stat-lbl{font-size:9px;color:var(--muted);letter-spacing:.07em;font-weight:600;text-transform:uppercase;margin-bottom:4px}
-.piece-stat-val{font-size:16px;font-weight:600;color:var(--text)}
-.piece-stat-val-purple{color:var(--purple)}
-.piece-stat-val-red{color:var(--red);font-variant-numeric:tabular-nums}
-.piece-stat-sub{font-size:10px;color:var(--muted);margin-top:2px}
-.piece-quote{background:var(--warm);border-radius:var(--rs);padding:14px;border-left:3px solid var(--purple)}
-.piece-quote-text{font-family:'Playfair Display',serif;font-style:italic;font-size:13px;color:var(--sec);line-height:1.7;margin-bottom:6px}
-.piece-quote-sig{font-size:11px;color:var(--muted)}
-.piece-quote-sig a{color:var(--purple);text-decoration:none}
-.closed-notice{background:var(--redl);border:1px solid #FECACA;border-radius:var(--rs);padding:12px 14px;text-align:center;margin-top:14px}
+.art-ph{display:flex;flex-direction:column;align-items:center;gap:8px;color:var(--text4)}
+.art-ph span{font-size:10px;letter-spacing:.08em}
+.art-strip{display:flex;gap:6px;padding:8px 14px;background:var(--bg2);border-bottom:1px solid var(--border);overflow-x:auto}
+.art-strip::-webkit-scrollbar{display:none}
+.art-thumb{width:52px;height:52px;border-radius:6px;object-fit:cover;cursor:pointer;border:2px solid transparent;flex-shrink:0;transition:border-color .15s}
+.art-thumb.on{border-color:var(--purple)}
+.piece-info{padding:16px;background:var(--bg);border-bottom:1px solid var(--border)}
+.piece-title{font-family:'Playfair Display',serif;font-size:22px;font-weight:600;color:var(--text);margin-bottom:4px;line-height:1.2}
+.piece-meta{font-size:12px;color:var(--text3);margin-bottom:14px}
+.piece-stats{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:14px}
+.pstat{background:var(--bg2);border:1px solid var(--border);border-radius:var(--rs);padding:10px 11px}
+.pstat-lbl{font-size:9px;color:var(--text3);letter-spacing:.07em;font-weight:600;text-transform:uppercase;margin-bottom:4px}
+.pstat-val{font-size:15px;font-weight:600;color:var(--text)}
+.pstat-val-purple{color:var(--purple2)}
+.pstat-val-red{color:var(--coral);font-variant-numeric:tabular-nums}
+.pstat-sub{font-size:9px;color:var(--text3);margin-top:2px}
+.piece-quote{background:var(--bg2);border:1px solid var(--border);border-left:3px solid var(--purple);border-radius:0 var(--rs) var(--rs) 0;padding:13px;margin-bottom:0}
+.piece-quote-text{font-family:'Playfair Display',serif;font-style:italic;font-size:13px;color:var(--text2);line-height:1.7;margin-bottom:6px}
+.piece-quote-sig{font-size:11px;color:var(--text3)}
+.piece-quote-sig a{color:var(--purple2);text-decoration:none}
+.closed-notice{background:var(--redd);border:1px solid rgba(226,75,74,.3);border-radius:var(--rs);padding:12px 14px;text-align:center;margin-top:14px}
 .closed-notice-ttl{font-size:14px;font-weight:600;color:var(--red);margin-bottom:2px}
-.closed-notice-sub{font-size:12px;color:#B91C1C}
+.closed-notice-sub{font-size:12px;color:rgba(226,75,74,.7)}
 
-/* SECTION 2: BID FORM */
-.bid-form-section{background:var(--white);border-bottom:1px solid var(--border);padding:20px 16px}
-.section-header{display:flex;align-items:center;gap:10px;margin-bottom:18px}
-.section-header-num{width:28px;height:28px;border-radius:50%;background:var(--purple);color:#fff;font-size:12px;font-weight:600;display:flex;align-items:center;justify-content:center;flex-shrink:0}
-.section-header-title{font-family:'Playfair Display',serif;font-size:18px;font-weight:600}
-.bid-highlight-box{background:var(--purple);border-radius:var(--rs);padding:14px 16px;margin-bottom:18px;display:flex;justify-content:space-between;align-items:center}
-.bid-highlight-lbl{font-size:10px;font-weight:600;color:rgba(255,255,255,.6);letter-spacing:.08em;text-transform:uppercase;margin-bottom:3px}
-.bid-highlight-val{font-family:'Playfair Display',serif;font-size:24px;font-weight:600;color:#fff}
-.bid-highlight-right{text-align:right}
-.bid-highlight-timer{font-size:18px;font-weight:600;color:#FFB3A7;font-variant-numeric:tabular-nums}
-.bid-highlight-timer.urgent{color:#FF6B6B;animation:pulse 1s infinite}
+/* SECTION 2 — BID FORM */
+.bid-form-section{padding:20px 16px;background:var(--bg);border-bottom:1px solid var(--border)}
+.sec-hd{display:flex;align-items:center;gap:10px;margin-bottom:18px}
+.sec-num{width:26px;height:26px;border-radius:50%;background:var(--purple);color:#fff;font-size:11px;font-weight:600;display:flex;align-items:center;justify-content:center;flex-shrink:0;box-shadow:0 0 10px rgba(123,95,232,.4)}
+.sec-title{font-family:'Playfair Display',serif;font-size:18px;font-weight:600;color:var(--text)}
+.bid-stat-bar{background:var(--bg2);border:1px solid var(--border);border-radius:var(--rs);padding:14px 16px;margin-bottom:18px;display:flex;justify-content:space-between;align-items:center}
+.bsb-lbl{font-size:9px;font-weight:600;color:var(--text3);letter-spacing:.08em;text-transform:uppercase;margin-bottom:4px}
+.bsb-val{font-family:'Playfair Display',serif;font-size:24px;font-weight:600;color:var(--purple2)}
+.bsb-timer{font-size:18px;font-weight:600;color:var(--coral);font-variant-numeric:tabular-nums;text-align:right}
+.bsb-timer.urgent{color:var(--red);animation:pulse 1s infinite}
 @keyframes pulse{0%,100%{opacity:1}50%{opacity:.5}}
+.urgency-bar{background:var(--corald);border:1px solid var(--coralb);border-radius:var(--rs);padding:8px 12px;display:flex;align-items:center;gap:7px;font-size:12px;color:#F09595;margin-bottom:14px}
+.urg-dot{width:6px;height:6px;border-radius:50%;background:var(--coral);flex-shrink:0;animation:blink 1.2s infinite}
 .fld{margin-bottom:12px}
-.fld-lbl{font-size:11px;font-weight:600;color:var(--sec);letter-spacing:.05em;text-transform:uppercase;display:block;margin-bottom:5px}
-.fld-inp{width:100%;background:var(--off);border:1.5px solid var(--border);border-radius:var(--rs);padding:12px 14px;font-size:16px;color:var(--text);outline:none;-webkit-appearance:none;transition:border-color .15s}
-.fld-inp:focus{border-color:var(--purple);background:var(--white);box-shadow:0 0 0 3px rgba(91,63,212,.1)}
-.fld-inp::placeholder{color:var(--muted);font-size:14px}
-.fld-inp-bid{border-color:var(--purple);background:var(--pl);color:var(--purple);font-weight:600;font-size:20px}
-.fld-inp-bid:focus{box-shadow:0 0 0 3px rgba(91,63,212,.15)}
-.fld-note{font-size:11px;color:var(--muted);margin-top:4px}
-.fld-err{font-size:11px;color:var(--red);margin-top:4px;font-weight:500}
-.sms-row{display:flex;align-items:flex-start;gap:10px;background:var(--pl);border-radius:var(--rs);padding:12px;margin-bottom:14px;cursor:pointer;border:1.5px solid transparent;transition:border-color .15s;-webkit-tap-highlight-color:transparent}
-.sms-row.ck{border-color:#C5B8F5}
-.sms-chk{width:20px;height:20px;border-radius:4px;border:2px solid #C5B8F5;background:var(--white);flex-shrink:0;margin-top:1px;display:flex;align-items:center;justify-content:center;transition:all .15s}
-.sms-chk.ck{background:var(--purple);border-color:var(--purple)}
+.fld-lbl{font-size:11px;font-weight:600;color:var(--text3);letter-spacing:.05em;text-transform:uppercase;display:block;margin-bottom:5px}
+.fld-inp{width:100%;background:var(--bg2);border:1.5px solid var(--border2);border-radius:var(--rs);padding:13px 14px;font-size:16px;color:var(--text);outline:none;-webkit-appearance:none;transition:border-color .15s,box-shadow .15s}
+.fld-inp:focus{border-color:var(--purple);box-shadow:0 0 0 3px rgba(123,95,232,.2)}
+.fld-inp::placeholder{color:var(--text4);font-size:14px}
+.fld-inp-bid{border-color:var(--purple);background:var(--purpled);color:var(--purple2);font-weight:600;font-size:20px}
+.fld-inp-bid:focus{box-shadow:0 0 0 3px rgba(123,95,232,.25)}
+.fld-note{font-size:11px;color:var(--text3);margin-top:4px}
+.fld-err{font-size:11px;color:var(--coral);margin-top:4px;font-weight:500}
+.sms-row{display:flex;align-items:flex-start;gap:10px;background:var(--purpled);border:1.5px solid transparent;border-radius:var(--rs);padding:12px;margin-bottom:14px;cursor:pointer;transition:border-color .15s;-webkit-tap-highlight-color:transparent}
+.sms-row.ck{border-color:var(--purpleb)}
+.sms-chk{width:20px;height:20px;border-radius:4px;border:2px solid var(--purpleb);background:var(--bg2);flex-shrink:0;margin-top:1px;display:flex;align-items:center;justify-content:center;transition:all .15s}
+.sms-chk.ck{background:var(--purple);border-color:var(--purple);box-shadow:0 0 8px rgba(123,95,232,.4)}
 .sms-chk-mark{color:#fff;font-size:13px;font-weight:700;line-height:1}
-.sms-lbl{font-size:13px;color:var(--purple);line-height:1.45;font-weight:500}
-.bin-btn{width:100%;background:var(--white);border:2px solid var(--coral);border-radius:var(--rs);padding:14px;text-align:center;cursor:pointer;margin-bottom:10px;transition:all .15s;-webkit-tap-highlight-color:transparent}
-.bin-btn:hover{background:var(--cl)}
-.bin-btn-top{font-size:10px;color:var(--coral);font-weight:600;letter-spacing:.08em;text-transform:uppercase;margin-bottom:3px}
-.bin-btn-val{font-size:17px;font-weight:600;color:var(--coral)}
-.place-bid-btn{width:100%;background:var(--purple);border:none;border-radius:var(--rs);padding:16px;text-align:center;cursor:pointer;box-shadow:0 6px 20px rgba(91,63,212,.4);transition:all .2s;-webkit-tap-highlight-color:transparent}
-.place-bid-btn:hover{background:var(--pm);box-shadow:0 8px 24px rgba(91,63,212,.45)}
-.place-bid-btn:active{transform:scale(.99)}
-.place-bid-btn:disabled{background:var(--bd);box-shadow:none;cursor:not-allowed}
-.place-bid-txt{font-size:16px;font-weight:600;color:#fff;letter-spacing:.03em}
-.form-foot{font-size:11px;color:var(--muted);text-align:center;margin-top:10px;line-height:1.5;padding:0 8px}
-.success-card{background:var(--gl);border:1.5px solid #A8DFC0;border-radius:var(--r);padding:22px;text-align:center}
+.sms-lbl{font-size:13px;color:var(--purple2);line-height:1.45;font-weight:500}
+.bin-btn{width:100%;background:var(--bg2);border:2px solid var(--coral);border-radius:var(--rs);padding:13px;text-align:center;cursor:pointer;margin-bottom:10px;transition:all .15s;-webkit-tap-highlight-color:transparent}
+.bin-btn:hover{background:var(--corald)}
+.bin-btn-top{font-size:9px;color:var(--coral);font-weight:600;letter-spacing:.08em;text-transform:uppercase;margin-bottom:3px}
+.bin-btn-val{font-size:16px;font-weight:600;color:var(--coral)}
+.bin-btn-sub{font-size:10px;color:rgba(232,82,42,.6);margin-top:3px;line-height:1.4}
+.place-btn{width:100%;background:var(--purple);border:none;border-radius:var(--rs);padding:16px;text-align:center;cursor:pointer;box-shadow:var(--shadow-purple);transition:all .2s;-webkit-tap-highlight-color:transparent;position:relative;overflow:hidden}
+.place-btn::before{content:"";position:absolute;inset:0;background:linear-gradient(135deg,rgba(255,255,255,.08) 0%,transparent 60%);pointer-events:none}
+.place-btn:hover{background:var(--purple2);box-shadow:0 8px 28px rgba(123,95,232,.5)}
+.place-btn:active{transform:scale(.99)}
+.place-btn:disabled{background:var(--bg3);box-shadow:none;cursor:not-allowed}
+.place-btn-txt{font-size:16px;font-weight:600;color:#fff;letter-spacing:.03em;position:relative}
+.form-foot{font-size:11px;color:var(--text3);text-align:center;margin-top:12px;line-height:1.5;padding:0 8px}
+.success-card{background:var(--greend);border:1.5px solid var(--greenb);border-radius:var(--r);padding:22px;text-align:center}
 .success-icon{font-size:36px;margin-bottom:10px}
 .success-ttl{font-family:'Playfair Display',serif;font-size:20px;color:var(--green);margin-bottom:6px}
-.success-body{font-size:13px;color:#3B7A55;line-height:1.6}
-.success-rebid{margin-top:16px;background:var(--purple);color:#fff;border:none;border-radius:var(--rs);padding:11px 22px;font-size:13px;font-weight:600;cursor:pointer}
+.success-body{font-size:13px;color:rgba(45,158,107,.9);line-height:1.6}
+.success-rebid{margin-top:16px;background:var(--purple);color:#fff;border:none;border-radius:var(--rs);padding:11px 22px;font-size:13px;font-weight:600;cursor:pointer;box-shadow:var(--shadow-purple)}
 .trust-row{display:flex;justify-content:center;gap:14px;padding:14px 0 4px;flex-wrap:wrap}
-.trust-item{font-size:10px;color:var(--muted);display:flex;align-items:center;gap:4px}
+.trust-item{font-size:10px;color:var(--text3);display:flex;align-items:center;gap:4px}
 .trust-dot{width:4px;height:4px;border-radius:50%;background:var(--green)}
 
-/* SECTION 3: BID FEED */
-.bid-feed-section{background:var(--white);padding:20px 16px 24px}
-.feed-card{background:var(--off);border:1px solid var(--border);border-radius:var(--r);overflow:hidden}
-.feed-item{display:flex;align-items:center;justify-content:space-between;padding:11px 14px;border-bottom:1px solid var(--border)}
-.feed-item:last-child{border:none}
-.feed-item-top{background:var(--white)}
-.feed-tag-top{background:var(--pl);color:var(--purple);border:1.5px solid #C5B8F5;border-radius:var(--rp);padding:3px 10px;font-size:12px;font-weight:600}
-.feed-tag-past{background:var(--warm);color:var(--sec);border-radius:var(--rp);padding:3px 10px;font-size:12px}
-.feed-time{font-size:10px;color:var(--muted);margin-left:6px}
-.feed-top-amt{font-size:15px;font-weight:600;color:var(--text)}
-.feed-past-amt{font-size:13px;color:var(--muted)}
-.feed-empty{padding:20px;text-align:center;font-size:13px;color:var(--muted)}
-.feed-expand{width:100%;background:none;border:none;border-top:1px solid var(--border);padding:11px;font-size:12px;color:var(--purple);font-weight:500;cursor:pointer;text-align:center}
-.feed-expand:hover{background:var(--pl)}
+/* SECTION 3 — FEED */
+.feed-section{padding:20px 16px 28px;background:var(--bg)}
+.feed-card{background:var(--bg2);border:1px solid var(--border);border-radius:var(--r);overflow:hidden}
+.fi{display:flex;align-items:center;justify-content:space-between;padding:11px 14px;border-bottom:1px solid var(--border)}
+.fi:last-child{border:none}
+.fi-top{background:var(--bg3)}
+.fi-tag-top{background:var(--purpled);border:1.5px solid var(--purpleb);color:var(--purple2);border-radius:var(--rp);padding:3px 10px;font-size:12px;font-weight:600}
+.fi-tag-past{background:rgba(255,255,255,.05);color:var(--text3);border-radius:var(--rp);padding:3px 10px;font-size:12px}
+.fi-time{font-size:10px;color:var(--text4);margin-left:6px}
+.fi-top-amt{font-size:15px;font-weight:600;color:var(--text)}
+.fi-past-amt{font-size:13px;color:var(--text3)}
+.fi-empty{padding:20px;text-align:center;font-size:13px;color:var(--text3)}
+.feed-expand{width:100%;background:none;border:none;border-top:1px solid var(--border);padding:11px;font-size:12px;color:var(--purple2);font-weight:500;cursor:pointer;text-align:center}
+.feed-expand:hover{background:var(--purpled)}
 
-/* DASHBOARD */
+/* ── DASHBOARD ── */
 .dash-stats{display:grid;grid-template-columns:repeat(2,1fr);gap:8px;padding:14px 14px 0}
-.dstat{background:var(--white);border:1px solid var(--border);border-radius:var(--rs);padding:12px;box-shadow:var(--shadow);cursor:pointer;transition:box-shadow .15s}
-.dstat:hover{box-shadow:var(--shadow-md)}
-.dstat-lbl{font-size:9px;color:var(--muted);letter-spacing:.07em;font-weight:600;text-transform:uppercase;margin-bottom:5px}
-.dstat-val{font-size:22px;font-weight:600}
-.dstat-sub{font-size:10px;color:var(--muted);margin-top:3px}
-.dstat-purple{color:var(--purple)}
-.dstat-green{color:var(--green)}
-.dstat-gold{color:var(--gold)}
-.dstat-red{color:var(--red)}
-.dstat-hint{font-size:10px;color:var(--purple);margin-top:4px}
-.src-card{background:var(--white);border:1px solid var(--border);border-radius:var(--r);padding:14px;margin:10px 14px 0;box-shadow:var(--shadow)}
-.src-ttl{font-size:10px;font-weight:600;color:var(--muted);letter-spacing:.08em;text-transform:uppercase;margin-bottom:10px}
-.src-row{display:flex;align-items:center;gap:8px;margin-bottom:7px}
-.src-row:last-child{margin:0}
-.src-lbl{font-size:12px;color:var(--sec);width:100px;flex-shrink:0}
-.src-bg{flex:1;height:7px;background:var(--warm);border-radius:4px;overflow:hidden}
-.src-bar{height:100%;border-radius:4px;transition:width .5s}
-.src-qr{background:var(--purple)}.src-web{background:var(--blue)}.src-dir{background:var(--gold)}
-.src-n{font-size:11px;font-weight:600;width:28px;text-align:right}
+.dstat{background:var(--bg2);border:1px solid var(--border);border-radius:var(--rs);padding:12px;transition:border-color .15s,box-shadow .15s}
+.dstat.clickable{cursor:pointer}
+.dstat.clickable:hover{border-color:var(--purpleb);box-shadow:0 0 12px rgba(123,95,232,.15)}
+.dstat-lbl{font-size:9px;color:var(--text3);letter-spacing:.07em;font-weight:600;text-transform:uppercase;margin-bottom:5px}
+.dstat-val{font-size:22px;font-weight:600;color:var(--text)}
+.dstat-sub{font-size:10px;color:var(--text3);margin-top:3px}
+.dstat-hint{font-size:10px;color:var(--purple2);margin-top:4px}
+.dstat-purple{color:var(--purple2)}.dstat-green{color:var(--green)}.dstat-gold{color:var(--gold)}.dstat-coral{color:var(--coral)}
+.src-wrap{margin:10px 14px 0}
+.src-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
+.src-item{background:var(--bg2);border:1px solid var(--border);border-radius:var(--rs);padding:10px 11px;text-align:center}
+.src-item-lbl{font-size:9px;color:var(--text3);letter-spacing:.06em;font-weight:600;text-transform:uppercase;margin-bottom:5px}
+.src-item-val{font-size:20px;font-weight:600;color:var(--text)}
+.src-item-sub{font-size:9px;color:var(--text3);margin-top:2px}
+.src-item-icon{font-size:14px;margin-bottom:4px}
 .cards-wrap{padding:12px 14px;display:flex;flex-direction:column;gap:10px}
 .cards-tb{display:flex;justify-content:space-between;align-items:center;margin-bottom:8px}
-.acard{background:var(--white);border:1px solid var(--border);border-left:4px solid var(--purple);border-radius:var(--r);padding:14px;box-shadow:var(--shadow)}
-.acard.closed{border-left-color:var(--bd)}.acard.res-met{border-left-color:var(--green)}
+.acard{background:var(--bg2);border:1px solid var(--border);border-left:3px solid var(--purple);border-radius:var(--r);padding:14px}
+.acard.closed{border-left-color:var(--border2)}.acard.res-met{border-left-color:var(--green)}
 .acard-top{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:8px}
-.acard-title{font-family:'Playfair Display',serif;font-size:16px;font-weight:600;margin-bottom:2px}
-.acard-meta{font-size:11px;color:var(--muted)}
-.acard-timer{font-size:15px;font-weight:600;color:var(--red);font-variant-numeric:tabular-nums}
-.acard-timer.safe{color:var(--sec);font-size:12px}
+.acard-title{font-family:'Playfair Display',serif;font-size:16px;font-weight:600;color:var(--text);margin-bottom:2px}
+.acard-meta{font-size:11px;color:var(--text3)}
+.acard-timer{font-size:14px;font-weight:600;color:var(--coral);font-variant-numeric:tabular-nums}
+.acard-timer.safe{color:var(--text3);font-size:12px}
 .badges{display:flex;gap:5px;flex-wrap:wrap;margin-bottom:10px}
-.bdg{font-size:10px;font-weight:600;padding:2px 8px;border-radius:var(--rp);letter-spacing:.04em}
-.bdg-live{background:var(--gl);color:var(--green)}.bdg-closed{background:var(--warm);color:var(--muted)}
-.bdg-met{background:var(--gl);color:var(--green)}.bdg-notmet{background:var(--redl);color:var(--red)}
-.bdg-timed{background:var(--pl);color:var(--purple)}.bdg-open{background:var(--goldl);color:var(--gold)}
-.bdg-paid{background:var(--gl);color:var(--green)}.bdg-viewers{background:var(--bluel);color:var(--blue)}
+.bdg{font-size:10px;font-weight:600;padding:2px 8px;border-radius:var(--rp)}
+.bdg-live{background:var(--greend);color:var(--green);border:1px solid var(--greenb)}
+.bdg-closed{background:rgba(255,255,255,.06);color:var(--text3);border:1px solid var(--border)}
+.bdg-met{background:var(--greend);color:var(--green);border:1px solid var(--greenb)}
+.bdg-notmet{background:var(--redd);color:var(--red);border:1px solid rgba(226,75,74,.3)}
+.bdg-timed{background:var(--purpled);color:var(--purple2);border:1px solid var(--purpleb)}
+.bdg-open{background:var(--goldd);color:var(--gold);border:1px solid var(--goldb)}
+.bdg-paid{background:var(--greend);color:var(--green);border:1px solid var(--greenb)}
 .acard-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:6px;margin-bottom:8px}
-.astat{background:var(--off);border-radius:var(--rs);padding:8px}
-.astat-lbl{font-size:9px;color:var(--muted);letter-spacing:.06em;margin-bottom:3px}
-.astat-val{font-size:15px;font-weight:600}
+.astat{background:var(--bg3);border-radius:var(--rs);padding:8px;border:1px solid var(--border)}
+.astat-lbl{font-size:9px;color:var(--text3);letter-spacing:.06em;margin-bottom:3px}
+.astat-val{font-size:15px;font-weight:600;color:var(--text)}
 .rbar{height:3px;background:var(--border);border-radius:2px;overflow:hidden}
 .rfill{height:100%;border-radius:2px;transition:width .4s}
 .rfill-met{background:var(--green)}.rfill-part{background:var(--purple)}
-.feed-mini{background:var(--off);border-radius:var(--rs);overflow:hidden;margin-bottom:10px;margin-top:8px}
-.frow{display:flex;justify-content:space-between;align-items:center;padding:6px 10px;border-bottom:1px solid var(--border);font-size:12px}
-.frow:last-child{border:none}
-.ftag{background:var(--pl);color:var(--purple);border-radius:var(--rp);padding:1px 7px;font-size:11px;font-weight:600}
-.ftag-p{background:var(--warm);color:var(--sec)}
-.ft{font-size:10px;color:var(--muted);margin-left:5px}
-.famt{font-weight:600}.famt-p{color:var(--muted)}
-.winner-box{background:var(--goldl);border:1.5px solid #F5D99A;border-radius:var(--rs);padding:12px;margin-bottom:10px}
+.mini-feed{background:var(--bg3);border-radius:var(--rs);overflow:hidden;margin-top:8px;margin-bottom:8px;border:1px solid var(--border)}
+.mfrow{display:flex;justify-content:space-between;align-items:center;padding:6px 10px;border-bottom:1px solid var(--border);font-size:12px}
+.mfrow:last-child{border:none}
+.mftag{background:var(--purpled);color:var(--purple2);border-radius:var(--rp);padding:1px 7px;font-size:11px;font-weight:600}
+.mftag-p{background:rgba(255,255,255,.05);color:var(--text3);border-radius:var(--rp);padding:1px 7px;font-size:11px}
+.mft{font-size:10px;color:var(--text4);margin-left:5px}
+.mfamt{font-weight:600;color:var(--text)}.mfamt-p{color:var(--text3)}
+.winner-box{background:var(--goldd);border:1px solid var(--goldb);border-radius:var(--rs);padding:12px;margin-bottom:8px}
 .winner-ttl{font-size:10px;font-weight:600;color:var(--gold);letter-spacing:.07em;text-transform:uppercase;margin-bottom:8px}
-.winner-row{display:flex;justify-content:space-between;padding:4px 0;border-bottom:1px solid #F5D99A;font-size:12px}
+.winner-row{display:flex;justify-content:space-between;padding:4px 0;border-bottom:1px solid rgba(212,175,122,.15);font-size:12px}
 .winner-row:last-child{border:none}
-.wk{color:var(--sec)}.wv{font-weight:600}
+.wk{color:var(--text3)}.wv{font-weight:600;color:var(--text)}
+.bin-alert{background:rgba(212,175,122,.1);border:1px solid var(--goldb);border-radius:var(--rs);padding:10px;margin-bottom:8px;font-size:12px;color:var(--gold);line-height:1.5}
 .card-actions{display:flex;gap:6px;flex-wrap:wrap;margin-top:8px}
 
-/* DRILL DOWN MODAL */
-.drill-modal{position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:300;display:flex;align-items:flex-end;justify-content:center}
-.drill-inner{background:var(--white);border-radius:20px 20px 0 0;padding:20px 16px;width:100%;max-width:560px;max-height:85vh;overflow-y:auto}
+/* ── DRILL DOWN ── */
+.drill-overlay{position:fixed;inset:0;background:rgba(0,0,0,.7);z-index:300;display:flex;align-items:flex-end;justify-content:center}
+.drill-inner{background:var(--bg2);border-radius:20px 20px 0 0;border-top:1px solid var(--border2);padding:20px 16px;width:100%;max-width:560px;max-height:85vh;overflow-y:auto}
 .drill-hd{display:flex;align-items:center;justify-content:space-between;margin-bottom:14px}
-.drill-ttl{font-family:'Playfair Display',serif;font-size:18px;font-weight:600}
-.drill-x{background:var(--warm);border:none;border-radius:50%;width:30px;height:30px;font-size:14px;color:var(--sec);cursor:pointer;display:flex;align-items:center;justify-content:center}
-.drill-item{background:var(--off);border:1px solid var(--border);border-radius:var(--rs);padding:12px;margin-bottom:8px}
-.drill-item-top{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:6px}
-.drill-item-title{font-family:'Playfair Display',serif;font-size:14px;font-weight:600}
-.drill-item-badge{font-size:10px;font-weight:600;padding:2px 8px;border-radius:var(--rp)}
-.drill-item-meta{font-size:12px;color:var(--muted)}
+.drill-ttl{font-family:'Playfair Display',serif;font-size:18px;font-weight:600;color:var(--text)}
+.drill-x{background:var(--bg3);border:1px solid var(--border2);border-radius:50%;width:30px;height:30px;font-size:14px;color:var(--text3);cursor:pointer;display:flex;align-items:center;justify-content:center}
+.drill-item{background:var(--bg3);border:1px solid var(--border);border-radius:var(--rs);padding:12px;margin-bottom:8px}
+.drill-item-top{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:5px}
+.drill-item-title{font-family:'Playfair Display',serif;font-size:14px;font-weight:600;color:var(--text)}
+.drill-item-meta{font-size:12px;color:var(--text3)}
 
-/* MODAL */
-.overlay{position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:200;display:flex;align-items:flex-end;justify-content:center}
-.modal{background:var(--white);border-radius:20px 20px 0 0;padding:20px 16px;width:100%;max-width:580px;max-height:90vh;overflow-y:auto}
+/* ── MODAL ── */
+.overlay{position:fixed;inset:0;background:rgba(0,0,0,.75);z-index:200;display:flex;align-items:flex-end;justify-content:center}
+.modal{background:var(--bg2);border-radius:20px 20px 0 0;border-top:1px solid var(--border2);padding:20px 16px;width:100%;max-width:580px;max-height:90vh;overflow-y:auto}
 .modal-hd{display:flex;align-items:center;justify-content:space-between;margin-bottom:16px}
-.modal-ttl{font-family:'Playfair Display',serif;font-size:18px;font-weight:600}
-.modal-x{background:var(--warm);border:none;border-radius:50%;width:30px;height:30px;font-size:14px;color:var(--sec);cursor:pointer;display:flex;align-items:center;justify-content:center}
-.mfield{margin-bottom:11px}
-.mfl{font-size:10px;font-weight:600;color:var(--sec);letter-spacing:.06em;text-transform:uppercase;display:block;margin-bottom:4px}
-.mfi{width:100%;background:var(--off);border:1.5px solid var(--border);border-radius:var(--rs);padding:10px 12px;font-size:14px;color:var(--text);outline:none;-webkit-appearance:none}
-.mfi:focus{border-color:var(--purple);background:var(--white)}
-.mfi-note{font-size:11px;color:var(--muted);margin-top:3px}
+.modal-ttl{font-family:'Playfair Display',serif;font-size:18px;font-weight:600;color:var(--text)}
+.modal-x{background:var(--bg3);border:1px solid var(--border2);border-radius:50%;width:30px;height:30px;font-size:14px;color:var(--text3);cursor:pointer;display:flex;align-items:center;justify-content:center}
+.mf{margin-bottom:11px}
+.mfl{font-size:10px;font-weight:600;color:var(--text3);letter-spacing:.06em;text-transform:uppercase;display:block;margin-bottom:4px}
+.mfi{width:100%;background:var(--bg3);border:1.5px solid var(--border2);border-radius:var(--rs);padding:10px 12px;font-size:14px;color:var(--text);outline:none;-webkit-appearance:none}
+.mfi:focus{border-color:var(--purple)}
+.mfi-note{font-size:11px;color:var(--text3);margin-top:3px}
 .mf2{display:grid;grid-template-columns:1fr 1fr;gap:8px}
-.mfsec{font-size:10px;font-weight:600;color:var(--muted);letter-spacing:.08em;text-transform:uppercase;padding:10px 0 6px;border-top:1px solid var(--border);margin-top:4px}
-.mfsec:first-child{border-top:none;padding-top:0}
-.photos-preview{display:flex;gap:8px;margin-top:8px;flex-wrap:wrap}
-.photo-thumb{width:70px;height:70px;border-radius:var(--rs);object-fit:cover;border:1px solid var(--border)}
-.photo-remove{width:70px;height:70px;border-radius:var(--rs);border:1px solid var(--border);background:var(--redl);color:var(--red);font-size:20px;cursor:pointer;display:flex;align-items:center;justify-content:center}
+.mfsec{font-size:10px;font-weight:600;color:var(--text3);letter-spacing:.08em;text-transform:uppercase;padding:10px 0 6px;border-top:1px solid var(--border);margin-top:4px}
+.photo-grid{display:flex;gap:8px;flex-wrap:wrap;margin-top:8px}
+.photo-item{position:relative;width:72px;height:72px}
+.photo-thumb{width:72px;height:72px;border-radius:var(--rs);object-fit:cover;border:1px solid var(--border)}
+.photo-rm{position:absolute;top:-6px;right:-6px;width:20px;height:20px;border-radius:50%;background:var(--red);color:#fff;border:none;font-size:11px;cursor:pointer;display:flex;align-items:center;justify-content:center;line-height:1}
+.upload-area{background:var(--bg3);border:1.5px dashed var(--border2);border-radius:var(--rs);padding:16px;text-align:center;cursor:pointer;transition:border-color .15s}
+.upload-area:hover{border-color:var(--purpleb)}
+.upload-lbl{font-size:13px;color:var(--text3);margin-bottom:4px}
+.upload-sub{font-size:11px;color:var(--text4)}
 
-/* ANNOUNCE */
-.ann-box{background:var(--gl);border:1.5px solid #A8DFC0;border-radius:var(--r);padding:16px;text-align:center;margin-bottom:14px}
+/* ── ANNOUNCE ── */
+.ann-box{background:var(--greend);border:1.5px solid var(--greenb);border-radius:var(--r);padding:16px;text-align:center;margin-bottom:14px}
 .ann-icon{font-size:36px;margin-bottom:8px}
 .ann-title{font-family:'Playfair Display',serif;font-size:20px;color:var(--green);margin-bottom:4px}
-.ann-body{font-size:13px;color:#3B7A55;line-height:1.5}
+.ann-body{font-size:13px;color:rgba(45,158,107,.9);line-height:1.5}
 
-/* TABS */
-.tabbar{background:var(--white);border-bottom:1px solid var(--border);display:flex;overflow-x:auto}
+/* ── TABS ── */
+.tabbar{background:var(--bg2);border-bottom:1px solid var(--border);display:flex;overflow-x:auto}
 .tabbar::-webkit-scrollbar{display:none}
-.tabbtn{flex-shrink:0;padding:12px 16px;font-size:12px;font-weight:500;color:var(--muted);background:none;border:none;border-bottom:2px solid transparent;white-space:nowrap;cursor:pointer}
-.tabbtn.on{color:var(--purple);border-bottom-color:var(--purple)}
+.tabbtn{flex-shrink:0;padding:12px 16px;font-size:12px;font-weight:500;color:var(--text3);background:none;border:none;border-bottom:2px solid transparent;white-space:nowrap;cursor:pointer;transition:all .15s}
+.tabbtn.on{color:var(--purple2);border-bottom-color:var(--purple)}
 
-/* GUIDES */
+/* ── GUIDES ── */
 .guide-wrap{padding:14px;display:flex;flex-direction:column;gap:12px}
-.gcard-g{background:var(--white);border:1px solid var(--border);border-radius:var(--r);padding:16px;box-shadow:var(--shadow)}
-.gcard-ttl{font-family:'Playfair Display',serif;font-size:17px;font-weight:600;margin-bottom:3px}
-.gcard-sub{font-size:12px;color:var(--muted);margin-bottom:14px}
+.gcard-g{background:var(--bg2);border:1px solid var(--border);border-radius:var(--r);padding:16px}
+.gcard-ttl{font-family:'Playfair Display',serif;font-size:17px;font-weight:600;color:var(--text);margin-bottom:3px}
+.gcard-sub{font-size:12px;color:var(--text3);margin-bottom:14px}
 .gstep{display:flex;gap:10px;margin-bottom:12px}
-.gnum{width:24px;height:24px;border-radius:50%;background:var(--purple);color:#fff;font-size:11px;font-weight:600;display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:2px}
-.gstep-ttl{font-size:13px;font-weight:600;margin-bottom:2px}
-.gstep-desc{font-size:12px;color:var(--sec);line-height:1.55}
-.gnote{background:var(--pl);border-radius:var(--rs);padding:10px 12px;font-size:12px;color:var(--purple);line-height:1.5;margin-top:10px}
-.grule{background:var(--off);border:1px solid var(--border);border-radius:var(--rs);padding:9px 12px;margin-bottom:8px;font-size:12px;color:var(--sec);line-height:1.5;display:flex;gap:8px}
-.grule-num{font-weight:600;color:var(--purple);flex-shrink:0}
+.gnum{width:24px;height:24px;border-radius:50%;background:var(--purple);color:#fff;font-size:11px;font-weight:600;display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:2px;box-shadow:0 0 8px rgba(123,95,232,.4)}
+.gstep-ttl{font-size:13px;font-weight:600;color:var(--text);margin-bottom:2px}
+.gstep-desc{font-size:12px;color:var(--text3);line-height:1.55}
+.gnote{background:var(--purpled);border:1px solid var(--purpleb);border-radius:var(--rs);padding:10px 12px;font-size:12px;color:var(--purple2);line-height:1.5;margin-top:10px}
+.grule{background:var(--bg3);border:1px solid var(--border);border-radius:var(--rs);padding:9px 12px;margin-bottom:8px;font-size:12px;color:var(--text2);line-height:1.5;display:flex;gap:8px}
+.grule-num{font-weight:600;color:var(--purple2);flex-shrink:0;min-width:20px}
 
-/* UTIL */
-.btn{border-radius:var(--rs);padding:8px 12px;font-size:12px;font-weight:500;border:1px solid var(--border);background:var(--off);color:var(--text);cursor:pointer;transition:all .15s}
+/* ── BUTTONS ── */
+.btn{border-radius:var(--rs);padding:8px 12px;font-size:12px;font-weight:500;border:1px solid var(--border2);background:var(--bg3);color:var(--text);cursor:pointer;transition:all .15s}
+.btn:hover{background:var(--bg4)}
 .btn-sm{padding:6px 10px;font-size:11px}
 .btn-full{width:100%;text-align:center;padding:12px;font-size:14px}
-.btn-purple{background:var(--purple);color:#fff;border-color:var(--purple)}
-.btn-red{background:var(--red);color:#fff;border-color:var(--red)}
-.btn-green{background:var(--green);color:#fff;border-color:var(--green)}
-.btn-gold{background:var(--gold);color:#fff;border-color:var(--gold)}
-.loading{display:flex;flex-direction:column;align-items:center;justify-content:center;min-height:60vh;gap:14px}
-.spinner{width:32px;height:32px;border:3px solid var(--border);border-top-color:var(--purple);border-radius:50%;animation:spin .8s linear infinite}
+.btn-purple{background:var(--purple);color:#fff;border-color:var(--purple);box-shadow:0 2px 8px rgba(123,95,232,.3)}
+.btn-purple:hover{background:var(--purple2)}
+.btn-red{background:rgba(226,75,74,.2);color:var(--red);border-color:rgba(226,75,74,.3)}
+.btn-red:hover{background:rgba(226,75,74,.3)}
+.btn-green{background:var(--greend);color:var(--green);border-color:var(--greenb)}
+.btn-gold{background:var(--goldd);color:var(--gold);border-color:var(--goldb)}
+
+/* ── UTIL ── */
+.loading{display:flex;flex-direction:column;align-items:center;justify-content:center;min-height:100vh;gap:14px;background:var(--bg)}
+.spinner{width:32px;height:32px;border:3px solid var(--border2);border-top-color:var(--purple);border-radius:50%;animation:spin .8s linear infinite}
 @keyframes spin{to{transform:rotate(360deg)}}
-.loading-txt{font-size:13px;color:var(--muted)}
-.empty{text-align:center;padding:40px 20px;color:var(--muted);font-size:13px}
-.toast{position:fixed;bottom:24px;left:50%;transform:translateX(-50%) translateY(80px);background:var(--text);color:#fff;padding:12px 20px;border-radius:var(--rp);font-size:13px;font-weight:500;z-index:999;transition:transform .3s cubic-bezier(.34,1.56,.64,1);white-space:nowrap;box-shadow:var(--shadow-lg);pointer-events:none}
+.loading-txt{font-size:13px;color:var(--text3)}
+.empty{text-align:center;padding:40px 20px;color:var(--text3);font-size:13px}
+.toast{position:fixed;bottom:24px;left:50%;transform:translateX(-50%) translateY(80px);background:var(--bg3);border:1px solid var(--border2);color:var(--text);padding:12px 20px;border-radius:var(--rp);font-size:13px;font-weight:500;z-index:999;transition:transform .3s cubic-bezier(.34,1.56,.64,1);white-space:nowrap;box-shadow:var(--shadow-lg);pointer-events:none}
 .toast.show{transform:translateX(-50%) translateY(0)}
-.toast-success{background:var(--green)}.toast-error{background:var(--red)}
-@media(min-width:520px){.piece-page,.gallery-page{max-width:520px;margin:0 auto}}
-@media(min-width:768px){.dash-stats{grid-template-columns:repeat(4,1fr);padding:16px 20px 0}.cards-wrap,.gallery-page{padding:14px 20px}.src-card{margin:10px 20px 0}}
+.toast-success{background:var(--greend);color:var(--green);border-color:var(--greenb)}
+.toast-error{background:var(--redd);color:var(--red);border-color:rgba(226,75,74,.3)}
+@media(min-width:520px){.piece-page,.gallery-body{max-width:520px;margin:0 auto}}
+@media(min-width:768px){.dash-stats{grid-template-columns:repeat(3,1fr);padding:16px 20px 0}.cards-wrap,.gallery-body{padding:14px 20px}.src-wrap{margin:10px 20px 0}}
 </style>
 </head>
 <body>
@@ -332,23 +348,19 @@ const LOGO="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACgAAAAoCAIAAAADnC86AA
 const sb=supabase.createClient(SURL,SKEY);
 const IS_DASH=window.location.search.includes("dashboard");
 
-// STATE — no re-render on input, inputs are uncontrolled
 let S={
   mode:IS_DASH?"pin":"gallery",
-  pieces:[],
+  pieces:[],dbids:{},
   current:null,abids:[],feedExpanded:false,activePhoto:0,
   pin:"",pinErr:"",
   dtab:"auctions",
-  dbids:{},visitors:{qr:0,web:0,direct:0},
-  dmodal:null,editP:null,
-  announcing:null,
-  drillType:null,
+  visitors:{qr:0,web:0,direct:0},
+  dmodal:null,editP:null,uploadedPhotos:[],uploadingPhotos:false,
+  announcing:null,drillType:null,
+  lastBidAmt:0,lastBidSms:true,
   _tick:null,_achan:null,_dchans:[],
-  // photo upload state
-  uploadedPhotos:[],uploadingPhotos:false,
 };
 
-// HELPERS
 const fmt=n=>"$"+Number(n).toLocaleString("en-US",{minimumFractionDigits:0});
 const ago=ts=>{const d=Math.floor((Date.now()-new Date(ts))/1000);if(d<60)return d+"s ago";if(d<3600)return Math.floor(d/60)+"m ago";return Math.floor(d/3600)+"h ago";};
 const cd=e=>{if(!e)return null;const d=Math.floor((new Date(e)-Date.now())/1000);if(d<=0)return"Ended";const h=Math.floor(d/3600),m=Math.floor((d%3600)/60),s=d%60;if(h>0)return h+"h "+m+"m";return m+"m "+String(s).padStart(2,"0")+"s";};
@@ -356,12 +368,24 @@ const pct=p=>Math.min(100,Math.round(((p.current_bid||p.starting_bid)/p.reserve_
 const met=p=>(p.current_bid||0)>=p.reserve_price;
 const ini=n=>n.trim().split(" ").map(w=>w[0]||"").join("").toUpperCase().slice(0,2);
 const minBid=p=>(p.current_bid||p.starting_bid)+5;
-const fmtFmt=f=>f==="timed"?"TIMED":f==="open"?"OPEN":"FIXED";
-const toast=(m,t="")=>{const el=document.getElementById("toast");el.textContent=m;el.className="toast show"+(t?" toast-"+t:"");setTimeout(()=>el.className="toast",3000);};
 const gv=id=>document.getElementById(id)?.value||"";
-const isOpen=p=>!p.closed&&(!p.starts_at||new Date(p.starts_at)<=Date.now());
+const toast=(m,t="")=>{const el=document.getElementById("toast");el.textContent=m;el.className="toast show"+(t?" toast-"+t:"");setTimeout(()=>el.className="toast",3000);};
 
-// DATA
+function headerHTML(opts={}){
+  const{back,lock,badge,logo}=opts;
+  return`<div class="site-header">
+    ${back?`<button class="header-back" onclick="goGallery()">&#8592; All</button>`:""}
+    ${lock?`<button class="header-lock" onclick="S.mode='pin';S.pin='';renderPin()">Lock</button>`:""}
+    ${badge?`<span class="header-badge">LIVE</span>`:""}
+    <div>
+      <div class="header-brand"><span class="red">EVERY DAY</span><span class="dot">.</span></div>
+      <div class="header-sub">An Art Exhibition from the mind of Hykeem G</div>
+      <div class="header-date">June 19th &middot; Las Vegas</div>
+    </div>
+    ${logo?`<img class="header-logo" src="${LOGO}" alt="EVERY DAY.">`:""}
+  </div>`;
+}
+
 async function loadPieces(){const{data}=await sb.from("pieces").select("*").order("created_at");S.pieces=data||[];}
 async function loadABids(id){const{data}=await sb.from("bids").select("*,bidders(name,phone,email)").eq("piece_id",id).order("created_at",{ascending:false}).limit(S.feedExpanded?50:3);S.abids=data||[];}
 async function loadDBids(id){const{data}=await sb.from("bids").select("*,bidders(name,phone,email)").eq("piece_id",id).order("created_at",{ascending:false}).limit(5);S.dbids[id]=data||[];}
@@ -370,26 +394,34 @@ async function loadPiece(id){const{data}=await sb.from("pieces").select("*").eq(
 function loadVisitors(){S.visitors=JSON.parse(localStorage.getItem("hg_v")||'{"qr":0,"web":0,"direct":0}');}
 function trackVisit(src){const v=JSON.parse(localStorage.getItem("hg_v")||'{"qr":0,"web":0,"direct":0}');v[src]=(v[src]||0)+1;localStorage.setItem("hg_v",JSON.stringify(v));}
 
-// PHOTO UPLOAD
 async function uploadPhotos(files){
+  if(S.uploadedPhotos.length>=3){toast("Maximum 3 photos per piece","error");return;}
   S.uploadingPhotos=true;
-  const urls=[];
-  for(const file of files){
-    const ext=file.name.split(".").pop();
+  updatePhotoUI();
+  const toUpload=Array.from(files).slice(0,3-S.uploadedPhotos.length);
+  for(const file of toUpload){
+    const ext=file.name.split(".").pop().toLowerCase();
     const path=`pieces/${Date.now()}-${Math.random().toString(36).slice(2)}.${ext}`;
-    const{error}=await sb.storage.from("artwork-photos").upload(path,file,{upsert:true});
+    const{error}=await sb.storage.from("artwork-photos").upload(path,file,{upsert:true,contentType:file.type});
     if(!error){
       const{data}=sb.storage.from("artwork-photos").getPublicUrl(path);
-      urls.push(data.publicUrl);
-    }
+      S.uploadedPhotos.push(data.publicUrl);
+    }else{toast("Upload error: "+error.message,"error");}
   }
-  S.uploadedPhotos=[...S.uploadedPhotos,...urls];
   S.uploadingPhotos=false;
-  renderModal();
+  updatePhotoUI();
 }
-function removePhoto(idx){S.uploadedPhotos.splice(idx,1);renderModal();}
 
-// PIN
+function updatePhotoUI(){
+  const grid=document.getElementById("photo-grid");
+  const status=document.getElementById("upload-status");
+  if(!grid)return;
+  const previews=S.uploadedPhotos.map((url,i)=>`<div class="photo-item"><img class="photo-thumb" src="${url}"><button class="photo-rm" onclick="removePhoto(${i})">&#10005;</button></div>`).join("");
+  grid.innerHTML=previews;
+  if(status)status.textContent=S.uploadingPhotos?"Uploading...":`${S.uploadedPhotos.length}/3 photos`;
+}
+function removePhoto(i){S.uploadedPhotos.splice(i,1);updatePhotoUI();}
+
 function pinPress(n){
   if(S.pin.length>=4)return;
   S.pin+=n;renderPin();
@@ -403,152 +435,125 @@ function pinPress(n){
 function pinClear(){S.pin=S.pin.slice(0,-1);renderPin();}
 function renderPin(){document.getElementById("app").innerHTML=rPin();}
 
-// AUCTION NAV
 async function goToPiece(p){
   S.mode="piece";S.current=p;S.abids=[];S.feedExpanded=false;S.activePhoto=0;
-  render();
-  await loadABids(p.id);subAuction(p.id);
-  renderPieceOnly();
+  render();await loadABids(p.id);await loadDBids(p.id);subAuction(p.id);renderPiece();
 }
-function goGallery(){S.mode="gallery";S.current=null;S.feedExpanded=false;loadPieces().then(render);}
-function setActivePhoto(i){S.activePhoto=i;renderPieceOnly();}
+function goGallery(){S.mode="gallery";S.current=null;S.feedExpanded=false;loadPieces().then(()=>loadAllDBids()).then(render);}
+function setActivePhoto(i){S.activePhoto=i;const zone=document.getElementById("main-photo");if(zone&&S.current?.photos?.[i])zone.src=S.current.photos[i];const thumbs=document.querySelectorAll(".art-thumb");thumbs.forEach((t,j)=>t.classList.toggle("on",j===i));}
+async function toggleFeed(){S.feedExpanded=!S.feedExpanded;await loadABids(S.current.id);renderPiece();}
 
-async function toggleFeed(){
-  S.feedExpanded=!S.feedExpanded;
-  await loadABids(S.current.id);
-  renderPieceOnly();
-}
-
-// BIDDING — reads directly from DOM, no re-render on input
 async function submitBid(){
   const p=S.current;
   const name=gv("b-name"),email=gv("b-email"),phone=gv("b-phone"),amount=gv("b-amount");
-  const sms=document.getElementById("b-sms")?.checked;
+  const sms=document.getElementById("sms-chk")?.classList.contains("ck")??true;
   let valid=true;
-  const setErr=(id,msg)=>{const el=document.getElementById(id);if(el)el.textContent=msg;valid=false;};
+  const setErr=(id,msg)=>{const el=document.getElementById(id);if(el){el.textContent=msg;valid=false;}};
   const clrErr=id=>{const el=document.getElementById(id);if(el)el.textContent="";};
-  clrErr("err-name");clrErr("err-email");clrErr("err-phone");clrErr("err-amount");
+  ["err-name","err-email","err-phone","err-amount"].forEach(clrErr);
   if(!name.trim())setErr("err-name","Name required");
   if(!email.trim()||!email.includes("@"))setErr("err-email","Valid email required");
-  if(!phone.trim()||phone.replace(/\D/g,"").length<10)setErr("err-phone","Valid 10-digit phone required");
+  if(!phone.trim()||phone.replace(/[^0-9]/g,"").length<10)setErr("err-phone","Valid 10-digit phone required");
   const num=parseFloat(amount);
   if(!amount||isNaN(num))setErr("err-amount","Enter a bid amount");
   else if(num<minBid(p))setErr("err-amount","Minimum bid is "+fmt(minBid(p)));
   if(!valid)return;
-  const btn=document.getElementById("place-bid-btn");
-  if(btn){btn.disabled=true;btn.querySelector(".place-bid-txt").textContent="Placing bid...";}
+  const btn=document.getElementById("place-btn");
+  if(btn){btn.disabled=true;btn.querySelector(".place-btn-txt").textContent="Placing bid...";}
   try{
     let bid;
     const{data:ex}=await sb.from("bidders").select("id").eq("email",email.trim()).maybeSingle();
-    if(ex){bid=ex.id;}
+    if(ex)bid=ex.id;
     else{
       const{data:nb,error:be}=await sb.from("bidders").insert({name:name.trim(),email:email.trim(),phone:phone.trim(),sms_opt_in:sms}).select("id").single();
       if(be)throw be;bid=nb.id;
     }
     const{error:bidErr}=await sb.from("bids").insert({piece_id:p.id,bidder_id:bid,amount:num});
     if(bidErr)throw bidErr;
-    toast("Bid of "+fmt(num)+" placed! 🎉","success");
+    S.lastBidAmt=num;S.lastBidSms=sms;
+    toast(fmt(num)+" bid placed!","success");
     await loadPiece(p.id);await loadABids(p.id);
-    S.mode="success";S.lastBidAmt=num;S.lastBidSms=sms;
-    renderPieceOnly();
+    S.mode="success";renderPiece();
   }catch(e){
-    console.error(e);
-    toast("Something went wrong. Please try again.","error");
-    if(btn){btn.disabled=false;btn.querySelector(".place-bid-txt").textContent="Place bid →";}
+    console.error(e);toast("Something went wrong. Try again.","error");
+    if(btn){btn.disabled=false;btn.querySelector(".place-btn-txt").textContent="Place bid →";}
   }
 }
+
 async function submitBIN(){
   const name=gv("b-name"),email=gv("b-email"),phone=gv("b-phone");
-  if(!name.trim()||!email.trim()||!phone.trim()){toast("Please fill in your details first","error");return;}
+  if(!name.trim()||!email.trim()||!phone.trim()){toast("Please fill in your details above first","error");return;}
   const p=S.current;
-  // Log BIN attempt in dashboard
-  toast("Buy It Now request submitted! Please speak with Hykeem or the Every Day. Art Exhibition team to complete your purchase.","success");
-  // Mark in Supabase as BIN pending
   await sb.from("pieces").update({bin_pending:true,bin_buyer_name:name.trim(),bin_buyer_email:email.trim(),bin_buyer_phone:phone.trim()}).eq("id",p.id);
-  await loadPiece(p.id);await loadPieces();
+  await loadPiece(p.id);
+  toast("Request received! Please find Hykeem or the Every Day. team","success");
 }
 
 function subAuction(id){
   if(S._achan)sb.removeChannel(S._achan);
-  S._achan=sb.channel("a-"+id).on("postgres_changes",{event:"INSERT",schema:"public",table:"bids",filter:"piece_id=eq."+id},async()=>{
-    await loadPiece(id);await loadABids(id);renderPieceOnly();
-  }).subscribe();
+  S._achan=sb.channel("a-"+id).on("postgres_changes",{event:"INSERT",schema:"public",table:"bids",filter:"piece_id=eq."+id},async()=>{await loadPiece(id);await loadABids(id);renderPiece();}).subscribe();
 }
 
-// DASHBOARD
 async function initDash(){loadVisitors();await loadPieces();await loadAllDBids();subDash();render();}
 function subDash(){
   S._dchans.forEach(c=>sb.removeChannel(c));S._dchans=[];
   const c=sb.channel("dash")
-    .on("postgres_changes",{event:"*",schema:"public",table:"bids"},async pl=>{if(pl.new?.piece_id){await loadDBids(pl.new.piece_id);await loadPiece(pl.new.piece_id);if(S.mode==="dashboard")renderDashOnly();}  })
-    .on("postgres_changes",{event:"*",schema:"public",table:"pieces"},async()=>{await loadPieces();await loadAllDBids();if(S.mode==="dashboard")renderDashOnly();})
-    .subscribe();
+    .on("postgres_changes",{event:"*",schema:"public",table:"bids"},async pl=>{if(pl.new?.piece_id){await loadDBids(pl.new.piece_id);await loadPiece(pl.new.piece_id);if(S.mode==="dashboard")renderDash();}  })
+    .on("postgres_changes",{event:"*",schema:"public",table:"pieces"},async()=>{await loadPieces();await loadAllDBids();if(S.mode==="dashboard")renderDash();}).subscribe();
   S._dchans.push(c);
 }
 
 async function openAuction(id){
-  const p=S.pieces.find(x=>x.id===id);
+  const p=S.pieces.find(x=>x.id===id);if(!p)return;
   const upd={closed:false,starts_at:new Date().toISOString()};
-  if(p.format==="timed"&&p.duration_minutes)upd.ends_at=new Date(Date.now()+p.duration_minutes*60000).toISOString();
-  else if(p.ends_at&&new Date(p.ends_at)>Date.now()){/* keep existing end */}
+  if(p.format==="timed"&&p.duration_minutes&&!p.ends_at)upd.ends_at=new Date(Date.now()+p.duration_minutes*60000).toISOString();
   const{error}=await sb.from("pieces").update(upd).eq("id",id);
-  if(error){toast("Error opening auction: "+error.message,"error");return;}
-  toast("Auction opened!","success");await loadPieces();await loadAllDBids();renderDashOnly();
+  if(error){toast("Error: "+error.message,"error");return;}
+  toast("Auction opened!","success");await loadPieces();await loadAllDBids();renderDash();
 }
 async function closeAuction(id){
   const{error}=await sb.from("pieces").update({closed:true}).eq("id",id);
   if(error){toast("Error: "+error.message,"error");return;}
-  toast("Auction closed.");await loadPieces();await loadAllDBids();renderDashOnly();
+  toast("Closed.");await loadPieces();await loadAllDBids();renderDash();
 }
 async function closeAll(){
-  if(!confirm("Close ALL active auctions? This cannot be undone."))return;
-  const active=S.pieces.filter(x=>!x.closed);
-  for(const p of active){await sb.from("pieces").update({closed:true}).eq("id",p.id);}
-  toast("All auctions closed.");await loadPieces();await loadAllDBids();renderDashOnly();
+  if(!confirm("Close ALL active auctions?"))return;
+  for(const p of S.pieces.filter(x=>!x.closed))await sb.from("pieces").update({closed:true}).eq("id",p.id);
+  toast("All auctions closed.");await loadPieces();await loadAllDBids();renderDash();
 }
 async function deletePiece(id){
   if(!confirm("Delete this piece and all its bids?"))return;
   const{error}=await sb.from("pieces").delete().eq("id",id);
   if(error){toast("Error: "+error.message,"error");return;}
-  toast("Piece deleted.");await loadPieces();await loadAllDBids();renderDashOnly();
+  toast("Deleted.");await loadPieces();await loadAllDBids();renderDash();
 }
 async function markPaid(id){
   await sb.from("pieces").update({winner_paid:true}).eq("id",id);
-  toast("Marked as paid ✓","success");await loadPieces();renderDashOnly();
+  toast("Marked as paid","success");await loadPieces();renderDash();
 }
 
-// FORM — read values directly from DOM on save, no re-render on input
-function openAdd(){
-  S.dmodal="add";S.editP=null;S.uploadedPhotos=[];
-  renderModal();
-}
-function openEdit(p){
-  S.dmodal="edit";S.editP=p;
-  S.uploadedPhotos=p.photos||[];
-  renderModal();
-}
-function closeModal(){S.dmodal=null;S.editP=null;S.uploadedPhotos=[];renderDashOnly();}
+function openAdd(){S.dmodal="add";S.editP=null;S.uploadedPhotos=[];renderDash();}
+function openEdit(p){S.dmodal="edit";S.editP=p;S.uploadedPhotos=p.photos||[];renderDash();}
+function closeModal(){S.dmodal=null;S.editP=null;S.uploadedPhotos=[];renderDash();}
 
 async function saveP(){
-  const title=gv("mf-title"),medium=gv("mf-medium"),dimensions=gv("mf-dims"),
-    year=gv("mf-year"),desc=gv("mf-desc"),sb_=gv("mf-start-bid"),res=gv("mf-reserve"),
-    bin=gv("mf-bin"),fmt_=gv("mf-format"),dur=gv("mf-dur"),
-    startDt=gv("mf-start-dt"),startTm=gv("mf-start-tm"),
-    endDt=gv("mf-end-dt"),endTm=gv("mf-end-tm"),tz=gv("mf-tz");
-  if(!title.trim()){toast("Title is required","error");return;}
-  if(!sb_||!res){toast("Starting bid and reserve are required","error");return;}
+  const title=gv("mf-title"),medium=gv("mf-medium"),dims=gv("mf-dims"),
+    year=gv("mf-year"),desc=gv("mf-desc"),sb_=gv("mf-sbid"),res=gv("mf-res"),
+    bin=gv("mf-bin"),fmt_=gv("mf-fmt"),dur=gv("mf-dur"),
+    sdt=gv("mf-sdt"),stm=gv("mf-stm"),edt=gv("mf-edt"),etm=gv("mf-etm"),tz=gv("mf-tz");
+  if(!title.trim()){toast("Title required","error");return;}
+  if(!sb_||!res){toast("Starting bid and reserve required","error");return;}
   let starts_at=null,ends_at=null;
-  if(startDt&&startTm){starts_at=new Date(startDt+"T"+startTm+(tz||"+00:00")).toISOString();}
-  if(fmt_==="timed"||fmt_==="fixed"){
-    if(endDt&&endTm){ends_at=new Date(endDt+"T"+endTm+(tz||"+00:00")).toISOString();}
-  }
-  const duration_minutes=fmt_==="timed"&&dur?parseInt(dur):null;
+  if(sdt&&stm)starts_at=new Date(sdt+"T"+stm+tz).toISOString();
+  if(edt&&etm)ends_at=new Date(edt+"T"+etm+tz).toISOString();
   const d={
-    title:title.trim(),medium:medium.trim(),dimensions:dimensions.trim(),
+    title:title.trim(),medium:medium.trim(),dimensions:dims.trim(),
     year:parseInt(year)||new Date().getFullYear(),description:desc.trim(),
     starting_bid:parseFloat(sb_),reserve_price:parseFloat(res),
     buy_it_now_price:bin?parseFloat(bin):null,
-    format:fmt_,duration_minutes,starts_at,ends_at,
+    format:fmt_,
+    duration_minutes:fmt_==="timed"&&dur?parseInt(dur):null,
+    starts_at,ends_at,
     photos:S.uploadedPhotos,
     image_url:S.uploadedPhotos[0]||null,
   };
@@ -560,233 +565,199 @@ async function saveP(){
     const r=await sb.from("pieces").insert({...d,current_bid:null,bid_count:0,closed:true});error=r.error;
     if(!error)toast("Piece added!","success");
   }
-  if(error){toast("Error saving: "+error.message,"error");console.error(error);return;}
-  closeModal();await loadPieces();await loadAllDBids();renderDashOnly();
+  if(error){toast("Save error: "+error.message,"error");console.error(error);return;}
+  closeModal();await loadPieces();await loadAllDBids();renderDash();
 }
 
-function openAnnounce(p){S.announcing=p;renderDashOnly();}
-function closeAnnounce(){S.announcing=null;renderDashOnly();}
-function openDrill(type){S.drillType=type;renderDashOnly();}
-function closeDrill(){S.drillType=null;renderDashOnly();}
+function openAnnounce(p){S.announcing=p;renderDash();}
+function closeAnnounce(){S.announcing=null;renderDash();}
+function openDrill(t){S.drillType=t;renderDash();}
+function closeDrill(){S.drillType=null;renderDash();}
+function toggleSMSCheck(){
+  const chk=document.getElementById("sms-chk"),row=document.getElementById("sms-row");if(!chk)return;
+  const on=chk.classList.contains("ck");
+  if(on){chk.classList.remove("ck");row.classList.remove("ck");chk.innerHTML="";}
+  else{chk.classList.add("ck");row.classList.add("ck");chk.innerHTML=`<span class="sms-chk-mark">&#10003;</span>`;}
+}
 
-// RENDERERS
 function rPin(){
   const dots=[0,1,2,3].map(i=>`<div class="pin-dot${i<S.pin.length?" on":""}${S.pinErr?" err":""}"></div>`).join("");
   const nums=["1","2","3","4","5","6","7","8","9","","0","x"];
   const btns=nums.map(n=>n===""?"<div></div>":n==="x"?`<button class="pin-btn" onclick="pinClear()">&#9003;</button>`:`<button class="pin-btn" onclick="pinPress('${n}')">${n}</button>`).join("");
-  return`<div class="pin-screen"><div class="pin-card"><div class="pin-logo">Hykeem G's <span>Art</span></div><div class="pin-sub">Artist Dashboard &middot; Enter PIN</div><div class="pin-dots">${dots}</div><div class="pin-grid">${btns}</div><div class="pin-err">${S.pinErr}</div></div></div>`;
+  return`<div class="pin-screen"><div class="pin-card"><div class="pin-brand"><span class="red">EVERY DAY</span><span class="dot">.</span></div><div class="pin-sub">Artist Dashboard &middot; Enter PIN</div><div class="pin-dots">${dots}</div><div class="pin-grid">${btns}</div><div class="pin-err">${S.pinErr}</div></div></div>`;
 }
 
 function rGallery(){
   const live=S.pieces.filter(p=>!p.closed);
   const closed=S.pieces.filter(p=>p.closed);
-  const allShow=[...live,...closed];
-  const cards=allShow.length===0?`<div class="gallery-empty">Auctions will appear here when live.</div>`:allShow.map(p=>{
+  const all=[...live,...closed];
+  const cards=all.length===0?`<div class="gallery-empty">Auctions will appear here when live.</div>`:all.map(p=>{
     const top=p.current_bid||p.starting_bid;const isMet=met(p);
     const timer=!p.closed&&p.format==="timed"&&p.ends_at?cd(p.ends_at):null;
-    const topBid=S.dbids[p.id]?.[0];
-    const topIni=topBid?.bidders?ini(topBid.bidders.name):"—";
-    const fmtClass=p.closed?"gcard-fmt-closed":p.format==="timed"?"gcard-fmt-timed":p.format==="open"?"gcard-fmt-open":"gcard-fmt-fixed";
-    const fmtLbl=p.closed?"CLOSED":fmtFmt(p.format);
+    const topBid=S.dbids[p.id]?.[0];const topIni=topBid?.bidders?ini(topBid.bidders.name):"";
+    const fmtCls=p.closed?"fmt-closed":p.format==="timed"?"fmt-timed":p.format==="open"?"fmt-open":"fmt-fixed";
+    const fmtLbl=p.closed?"CLOSED":p.format==="timed"?"TIMED":p.format==="open"?"OPEN":"FIXED";
     return`<div class="gcard${p.closed?" gclosed":""}" onclick="goToPiece(${JSON.stringify(p).replace(/"/g,"&quot;")})">
       <div class="gcard-img">
         ${p.image_url?`<img src="${p.image_url}" alt="${p.title}">`:`<div class="gcard-img-ph"><svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="m21 15-5-5L5 21"/></svg><span>ARTWORK PHOTO</span></div>`}
-        ${!p.closed?`<div class="live-badge"><div class="ldot"></div>LIVE</div>`:`<div class="closed-badge">CLOSED</div>`}
+        ${!p.closed?`<div class="live-pill"><div class="ldot"></div>LIVE</div>`:`<div class="closed-pill">CLOSED</div>`}
+        <div class="fmt-pill ${fmtCls}">${fmtLbl}</div>
       </div>
       <div class="gcard-body">
-        <div class="gcard-top"><div class="gcard-title">${p.title}</div><div class="gcard-fmt ${fmtClass}">${fmtLbl}</div></div>
+        <div class="gcard-title">${p.title}</div>
         <div class="gcard-meta">${[p.medium,p.dimensions].filter(Boolean).join(" &middot; ")}</div>
         <div class="gcard-divider"></div>
         <div class="gcard-row">
-          <div class="gcard-bid-wrap">
-            <div class="gcard-bid-lbl">Current bid</div>
-            <div class="gcard-bid-row">
-              <div class="gcard-bid">${fmt(top)}</div>
-              ${p.bid_count>0?`<div class="gcard-initials">${topIni}</div>`:""}
-            </div>
-          </div>
-          <div class="gcard-right">
-            ${timer?`<div class="gcard-timer">${timer}</div>`:`<div class="gcard-open">${p.closed?"Auction ended":p.format==="open"?"Open bidding":"Ends at show"}</div>`}
-            <div class="gcard-bids">${p.bid_count||0} bid${(p.bid_count||0)!==1?"s":""}</div>
-          </div>
+          <div><div class="gcard-bid-lbl">Current bid</div><div class="gcard-bid-row"><div class="gcard-bid">${fmt(top)}</div>${topIni?`<div class="gcard-initials">${topIni}</div>`:""} </div></div>
+          <div class="gcard-right">${timer?`<div class="gcard-timer">${timer}</div>`:`<div class="gcard-open">${p.closed?"Ended":p.format==="open"?"Open":"At show end"}</div>`}<div class="gcard-bids">${p.bid_count||0} bid${(p.bid_count||0)!==1?"s":""}</div></div>
         </div>
       </div>
     </div>`;
   }).join("");
-  return`<div class="page">
-    <nav class="topnav"><span class="nav-logo">Hykeem G's <span>Art</span></span><img class="nav-img" src="${LOGO}" alt="EVERY DAY."></nav>
-    <div class="hero"><div class="hero-inner"><div class="hero-eye">June 19th &middot; Las Vegas</div><div class="hero-ttl">Live Auctions</div><div class="hero-sub">Bid in person or from anywhere in the world</div></div></div>
-    <div class="gallery-page">
-      <div style="font-size:12px;color:var(--muted);margin-bottom:14px">${live.length} live &middot; ${closed.length} closed &middot; Tap any piece to bid</div>
-      <div class="gallery-grid">${cards}</div>
+  return`${headerHTML({logo:true})}
+  <div class="hero">
+    <div class="hero-glow1"></div><div class="hero-glow2"></div>
+    <div class="hero-inner">
+      <div class="hero-ttl">Live Auctions</div>
+      <div class="hero-sub">Bid in person or from anywhere in the world</div>
+      <div class="hero-stats"><div class="hero-stat"><span>${live.length}</span> live</div><div class="hero-stat"><span>${S.pieces.reduce((a,p)=>a+(p.bid_count||0),0)}</span> bids placed</div></div>
     </div>
-  </div>`;
+  </div>
+  <div class="gallery-body">${cards}</div>`;
 }
 
+function renderPiece(){document.getElementById("app").innerHTML=rPiece();startTick();}
 function rPiece(){
   const p=S.current;if(!p)return`<div class="loading"><div class="spinner"></div></div>`;
   const top=p.current_bid||p.starting_bid;const isPct=pct(p);const isMet=met(p);
   const timer=!p.closed&&p.format==="timed"&&p.ends_at?cd(p.ends_at):null;
   const urgent=p.ends_at&&(new Date(p.ends_at)-Date.now())<900000;
   const photos=p.photos||[];
-  const mainPhoto=photos[S.activePhoto]||p.image_url||null;
-  const photoStrip=photos.length>1?`<div class="art-photos-strip">${photos.map((url,i)=>`<img class="art-thumb${i===S.activePhoto?" active":""}" src="${url}" onclick="setActivePhoto(${i})">`).join("")}</div>`:"";
-  const feedRows=S.abids.length===0?`<div class="feed-empty">No bids yet &mdash; be the first!</div>`:S.abids.map((b,i)=>`<div class="feed-item${i===0?" feed-item-top":""}"><div style="display:flex;align-items:center;gap:8px"><span class="${i===0?"feed-tag-top":"feed-tag-past"}">${b.bidders?ini(b.bidders.name):"??"}</span><span class="feed-time">${ago(b.created_at)}</span></div><span class="${i===0?"feed-top-amt":"feed-past-amt"}">${fmt(b.amount)}</span></div>`).join("");
-  const totalBids=p.bid_count||0;
+  const mainSrc=photos[S.activePhoto]||p.image_url||null;
+  const strip=photos.length>1?`<div class="art-strip">${photos.map((u,i)=>`<img class="art-thumb${i===S.activePhoto?" on":""}" src="${u}" onclick="setActivePhoto(${i})">`).join("")}</div>`:"";
+  const topBid=S.dbids[p.id]?.[0];
+  const feedRows=S.abids.length===0?`<div class="fi-empty">No bids yet &mdash; be the first!</div>`:S.abids.map((b,i)=>`<div class="fi${i===0?" fi-top":""}"><div style="display:flex;align-items:center;gap:7px"><span class="${i===0?"fi-tag-top":"fi-tag-past"}">${b.bidders?ini(b.bidders.name):"??"}</span><span class="fi-time">${ago(b.created_at)}</span></div><span class="${i===0?"fi-top-amt":"fi-past-amt"}">${fmt(b.amount)}</span></div>`).join("");
   const formContent=S.mode==="success"
-    ?`<div class="success-card"><div class="success-icon">&#127881;</div><div class="success-ttl">Bid placed!</div><div class="success-body">Your bid of <strong>${fmt(S.lastBidAmt)}</strong> is live.${S.lastBidSms?" We'll text you if you're outbid.":" Check back to stay in the lead."}</div><button class="success-rebid" onclick="S.mode='piece';render()">Bid again</button></div>`
-    :`<div class="bid-highlight-box">
-        <div><div class="bid-highlight-lbl">Current bid</div><div class="bid-highlight-val">${fmt(top)}</div></div>
-        <div class="bid-highlight-right"><div class="bid-highlight-lbl">${timer?"Time left":p.format==="open"?"Bidding":"Closes"}</div>${timer?`<div class="bid-highlight-timer${urgent?" urgent":""}" id="cd">${timer}</div>`:`<div class="bid-highlight-timer" style="font-size:15px">${p.format==="open"?"Open":"At show end"}</div>`}</div>
+    ?`<div class="success-card"><div class="success-icon">&#127881;</div><div class="success-ttl">Bid placed!</div><div class="success-body">Your bid of <strong>${fmt(S.lastBidAmt)}</strong> is live.${S.lastBidSms?" We'll text you if you're outbid.":" Check back to stay in the lead."}</div><button class="success-rebid" onclick="S.mode='piece';renderPiece()">Bid again</button></div>`
+    :`${!p.closed?`
+      <div class="bid-stat-bar">
+        <div><div class="bsb-lbl">Current bid</div><div class="bsb-val">${fmt(top)}</div></div>
+        <div style="text-align:right"><div class="bsb-lbl">${timer?"Time left":p.format==="open"?"Bidding":"Closes"}</div>${timer?`<div class="bsb-timer${urgent?" urgent":""}" id="cd">${timer}</div>`:`<div class="bsb-timer" style="font-size:14px">${p.format==="open"?"Open":"At show end"}</div>`}</div>
       </div>
+      <div class="urgency-bar"><div class="urg-dot"></div>Several collectors are viewing this piece right now</div>
       <div class="fld"><label class="fld-lbl">First and last name</label><input class="fld-inp" id="b-name" type="text" placeholder="Your full name" autocomplete="name"><div class="fld-err" id="err-name"></div></div>
       <div class="fld"><label class="fld-lbl">Phone number</label><input class="fld-inp" id="b-phone" type="tel" placeholder="10-digit number" autocomplete="tel" inputmode="numeric"><div class="fld-err" id="err-phone"></div></div>
       <div class="fld"><label class="fld-lbl">Email</label><input class="fld-inp" id="b-email" type="email" placeholder="you@email.com" autocomplete="email"><div class="fld-err" id="err-email"></div></div>
-      <div class="fld"><label class="fld-lbl">Your bid</label><input class="fld-inp fld-inp-bid" id="b-amount" type="number" inputmode="decimal" placeholder="${minBid(p)}"><div class="fld-note">Minimum ${fmt(minBid(p))} &middot; must be $5 above current bid</div><div class="fld-err" id="err-amount"></div></div>
-      <div class="sms-row" id="sms-row" onclick="toggleSMSCheck()"><div class="sms-chk" id="sms-chk"><span class="sms-chk-mark">&#10003;</span></div><div class="sms-lbl">Text me if I'm outbid &mdash; I want to stay in it</div></div>
-      ${p.buy_it_now_price?`<div class="bin-btn" onclick="submitBIN()"><div class="bin-btn-top">Buy it now &mdash; skip the auction</div><div class="bin-btn-val">${fmt(p.buy_it_now_price)} &middot; Speak with Hykeem or the Every Day. Art Exhibition team to complete</div></div>`:""}
-      <button class="place-bid-btn" id="place-bid-btn" onclick="submitBid()"><div class="place-bid-txt">Place bid &rarr;</div></button>
-      <div class="form-foot">Your info is securely stored for auction victory and purchase verification purposes only.</div>`;
-  return`<div class="piece-page">
-    <nav class="topnav"><span class="nav-logo">Hykeem G's <span>Art</span></span><button class="nav-back" onclick="goGallery()">&#8592; All pieces</button></nav>
-
-    <!-- SECTION 1: PAINTING INFO -->
-    <div class="piece-info-section">
-      <div class="art-zone">
-        ${mainPhoto?`<img src="${mainPhoto}" alt="${p.title}">`:`<div class="art-ph"><svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="m21 15-5-5L5 21"/></svg><span>ARTWORK PHOTO</span></div>`}
-        ${!p.closed?`<div class="live-badge"><div class="ldot"></div>LIVE</div>`:`<div class="closed-badge">CLOSED</div>`}
-      </div>
-      ${photoStrip}
-      <div class="piece-details">
+      <div class="fld"><label class="fld-lbl">Your bid</label><input class="fld-inp fld-inp-bid" id="b-amount" type="number" inputmode="decimal" placeholder="${minBid(p)}"><div class="fld-note">Min ${fmt(minBid(p))} &middot; must be $5 above current bid</div><div class="fld-err" id="err-amount"></div></div>
+      <div class="sms-row ck" id="sms-row" onclick="toggleSMSCheck()"><div class="sms-chk ck" id="sms-chk"><span class="sms-chk-mark">&#10003;</span></div><div class="sms-lbl">Text me if I'm outbid &mdash; I want to stay in it</div></div>
+      ${p.buy_it_now_price?`<div class="bin-btn" onclick="submitBIN()"><div class="bin-btn-top">Buy it now &mdash; skip the auction</div><div class="bin-btn-val">${fmt(p.buy_it_now_price)}</div><div class="bin-btn-sub">Speak with Hykeem or the Every Day. team to complete</div></div>`:""}
+      <button class="place-btn" id="place-btn" onclick="submitBid()"><div class="place-btn-txt">Place bid &rarr;</div></button>
+      <div class="form-foot">Your info is securely stored for auction victory and purchase verification purposes only.</div>
+    `:`<div class="closed-notice"><div class="closed-notice-ttl">This auction has closed</div><div class="closed-notice-sub">Thank you to all who participated</div></div>`}
+    <div class="trust-row"><div class="trust-item"><div class="trust-dot"></div>Secure checkout</div><div class="trust-item"><div class="trust-dot"></div>Certificate of authenticity</div><div class="trust-item"><div class="trust-dot"></div>Payment plans available</div></div>`;
+  return`${headerHTML({back:true})}
+    <div class="piece-page">
+      <div class="art-zone">${mainSrc?`<img id="main-photo" src="${mainSrc}" alt="${p.title}">`:`<div class="art-ph"><svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="m21 15-5-5L5 21"/></svg><span>ARTWORK PHOTO</span></div>`}${!p.closed?`<div class="live-pill"><div class="ldot"></div>LIVE</div>`:`<div class="closed-pill">CLOSED</div>`}</div>
+      ${strip}
+      <div class="piece-info">
         <div class="piece-title">${p.title}</div>
         <div class="piece-meta">${[p.medium,p.dimensions,p.year].filter(Boolean).join(" &middot; ")}</div>
-        <div class="piece-status-row">
-          <div class="piece-stat"><div class="piece-stat-lbl">Top bid</div><div class="piece-stat-val piece-stat-val-purple">${fmt(top)}</div>${p.bid_count>0&&S.dbids[p.id]?.[0]?`<div class="piece-stat-sub">${ini(S.dbids[p.id][0].bidders?.name||"??")}</div>`:""}</div>
-          <div class="piece-stat"><div class="piece-stat-lbl">Bids</div><div class="piece-stat-val">${totalBids}</div></div>
-          <div class="piece-stat"><div class="piece-stat-lbl">${timer?"Ends in":p.closed?"Status":"Format"}</div><div class="piece-stat-val${timer?" piece-stat-val-red":""}" id="ps-timer">${timer||(!p.closed?(p.format==="open"?"Open":"Fixed"):"Closed")}</div></div>
+        <div class="piece-stats">
+          <div class="pstat"><div class="pstat-lbl">Top bid</div><div class="pstat-val pstat-val-purple">${fmt(top)}</div>${topBid?`<div class="pstat-sub">${ini(topBid.bidders?.name||"??")}</div>`:""}</div>
+          <div class="pstat"><div class="pstat-lbl">Bids</div><div class="pstat-val">${p.bid_count||0}</div></div>
+          <div class="pstat"><div class="pstat-lbl">${timer?"Ends in":p.closed?"Status":"Format"}</div><div class="pstat-val${timer?" pstat-val-red":""}" id="ps-timer">${timer||(p.closed?"Closed":p.format==="open"?"Open":"Fixed")}</div></div>
         </div>
         ${p.description?`<div class="piece-quote"><div class="piece-quote-text">"${p.description}"</div><div class="piece-quote-sig">&mdash; Hykeem G &middot; <a href="https://instagram.com/hykeemg" target="_blank">@hykeemg</a></div></div>`:""}
-        ${p.closed?`<div class="closed-notice"><div class="closed-notice-ttl">This auction has closed</div><div class="closed-notice-sub">Thank you to all who participated</div></div>`:""}
       </div>
-    </div>
-
-    <!-- SECTION 2: BID FORM -->
-    ${!p.closed?`<div class="bid-form-section">
-      <div class="section-header"><div class="section-header-num">2</div><div class="section-header-title">Place your bid</div></div>
-      ${formContent}
-      <div class="trust-row"><div class="trust-item"><div class="trust-dot"></div>Secure checkout</div><div class="trust-item"><div class="trust-dot"></div>Certificate of authenticity</div><div class="trust-item"><div class="trust-dot"></div>Payment plans available</div></div>
-    </div>`:""}
-
-    <!-- SECTION 3: BID FEED -->
-    <div class="bid-feed-section">
-      <div class="section-header"><div class="section-header-num">${!p.closed?"3":"2"}</div><div class="section-header-title">Live bid feed</div></div>
-      <div class="feed-card">
-        ${S.abids.length===0?`<div class="feed-empty">No bids placed yet.</div>`:feedRows}
-        ${totalBids>3?`<button class="feed-expand" onclick="toggleFeed()">${S.feedExpanded?"Show less &#8593;":"See all ${totalBids} bids &#8595;"}</button>`:""}
+      <div class="bid-form-section">
+        <div class="sec-hd"><div class="sec-num">2</div><div class="sec-title">Place your bid</div></div>
+        ${formContent}
       </div>
-    </div>
-  </div>`;
+      <div class="feed-section">
+        <div class="sec-hd"><div class="sec-num">${!p.closed?"3":"2"}</div><div class="sec-title">Live bid feed</div></div>
+        <div class="feed-card">
+          ${S.abids.length===0?`<div class="fi-empty">No bids placed yet.</div>`:feedRows}
+          ${(p.bid_count||0)>3?`<button class="feed-expand" onclick="toggleFeed()">${S.feedExpanded?"Show less &#8593;":"See all ${p.bid_count} bids &#8595;"}</button>`:""}
+        </div>
+      </div>
+    </div>`;
 }
 
-// SMS toggle without re-render
-function toggleSMSCheck(){
-  const chk=document.getElementById("sms-chk");
-  const row=document.getElementById("sms-row");
-  const inp=document.getElementById("b-sms");
-  if(!chk)return;
-  const isOn=chk.classList.contains("ck");
-  if(isOn){chk.classList.remove("ck");row.classList.remove("ck");chk.innerHTML="";if(inp)inp.checked=false;}
-  else{chk.classList.add("ck");row.classList.add("ck");chk.innerHTML=`<span class="sms-chk-mark">&#10003;</span>`;if(inp)inp.checked=true;}
-}
-
+function renderDash(){document.getElementById("app").innerHTML=rDash();startTick();}
 function rDash(){
   const active=S.pieces.filter(p=>!p.closed);
   const closed=S.pieces.filter(p=>p.closed);
   const totalBids=S.pieces.reduce((a,p)=>a+(p.bid_count||0),0);
   const totalVal=S.pieces.reduce((a,p)=>a+(p.current_bid||0),0);
-  const allBidAmts=Object.values(S.dbids).flat().map(b=>b.amount);
-  const avgBid=allBidAmts.length?Math.round(allBidAmts.reduce((a,b)=>a+b,0)/allBidAmts.length):0;
+  const allAmts=Object.values(S.dbids).flat().map(b=>b.amount);
+  const avgBid=allAmts.length?Math.round(allAmts.reduce((a,b)=>a+b,0)/allAmts.length):0;
   const resMet=S.pieces.filter(p=>met(p)).length;
   const tot=S.visitors.qr+S.visitors.web+S.visitors.direct||1;
-  const qP=Math.round(S.visitors.qr/tot*100),wP=Math.round(S.visitors.web/tot*100),dP=Math.round(S.visitors.direct/tot*100);
   const stats=`<div class="dash-stats">
-    <div class="dstat" onclick="openDrill('active')"><div class="dstat-lbl">Active auctions</div><div class="dstat-val dstat-purple">${active.length}</div><div class="dstat-hint">Tap to view &rarr;</div></div>
-    <div class="dstat" onclick="openDrill('closed')"><div class="dstat-lbl">Closed auctions</div><div class="dstat-val dstat-red">${closed.length}</div><div class="dstat-hint">Tap to view &rarr;</div></div>
+    <div class="dstat clickable" onclick="openDrill('active')"><div class="dstat-lbl">Active auctions</div><div class="dstat-val dstat-purple">${active.length}</div><div class="dstat-hint">Tap to view &rarr;</div></div>
+    <div class="dstat clickable" onclick="openDrill('closed')"><div class="dstat-lbl">Closed auctions</div><div class="dstat-val dstat-coral">${closed.length}</div><div class="dstat-hint">Tap to view &rarr;</div></div>
     <div class="dstat"><div class="dstat-lbl">Total bid value</div><div class="dstat-val dstat-gold">${fmt(totalVal)}</div></div>
-    <div class="dstat"><div class="dstat-lbl">Avg bid amount</div><div class="dstat-val">${avgBid?fmt(avgBid):"—"}</div></div>
+    <div class="dstat"><div class="dstat-lbl">Avg bid</div><div class="dstat-val">${avgBid?fmt(avgBid):"&mdash;"}</div></div>
     <div class="dstat"><div class="dstat-lbl">Total bids</div><div class="dstat-val">${totalBids}</div></div>
     <div class="dstat"><div class="dstat-lbl">Reserves met</div><div class="dstat-val dstat-green">${resMet}</div><div class="dstat-sub">of ${S.pieces.length} pieces</div></div>
   </div>`;
-  const src=`<div class="src-card"><div class="src-ttl">Visitor traffic source</div>
-    <div class="src-row"><div class="src-lbl">QR code scan</div><div class="src-bg"><div class="src-bar src-qr" style="width:${qP}%"></div></div><div class="src-n">${S.visitors.qr}</div></div>
-    <div class="src-row"><div class="src-lbl">hykeemg.com</div><div class="src-bg"><div class="src-bar src-web" style="width:${wP}%"></div></div><div class="src-n">${S.visitors.web}</div></div>
-    <div class="src-row"><div class="src-lbl">Direct link</div><div class="src-bg"><div class="src-bar src-dir" style="width:${dP}%"></div></div><div class="src-n">${S.visitors.direct}</div></div>
-  </div>`;
+  const src=`<div class="src-wrap"><div class="src-grid">
+    <div class="src-item"><div class="src-item-icon">&#128247;</div><div class="src-item-lbl">QR Scan</div><div class="src-item-val">${S.visitors.qr}</div><div class="src-item-sub">${Math.round(S.visitors.qr/tot*100)}% of traffic</div></div>
+    <div class="src-item"><div class="src-item-icon">&#127760;</div><div class="src-item-lbl">hykeemg.com</div><div class="src-item-val">${S.visitors.web}</div><div class="src-item-sub">${Math.round(S.visitors.web/tot*100)}% of traffic</div></div>
+    <div class="src-item"><div class="src-item-icon">&#128279;</div><div class="src-item-lbl">Direct</div><div class="src-item-val">${S.visitors.direct}</div><div class="src-item-sub">${Math.round(S.visitors.direct/tot*100)}% of traffic</div></div>
+  </div></div>`;
   const cards=S.pieces.length===0?`<div class="empty">No pieces yet &mdash; tap + Add Piece to get started.</div>`:S.pieces.map(p=>{
     const bids=S.dbids[p.id]||[];const top=p.current_bid||p.starting_bid;
     const isMet=met(p);const isPct=pct(p);
     const timer=!p.closed&&p.format==="timed"&&p.ends_at?cd(p.ends_at):null;
     const w=bids[0];
-    const feedRows=bids.slice(0,4).map((b,i)=>`<div class="frow"><div style="display:flex;align-items:center;gap:5px"><span class="${i===0?"ftag":"ftag-p"}">${b.bidders?ini(b.bidders.name):"??"}</span><span class="ft">${ago(b.created_at)}</span></div><span class="${i===0?"famt":"famt-p"}">${fmt(b.amount)}</span></div>`).join("");
-    const winnerBox=p.closed&&w?`<div class="winner-box"><div class="winner-ttl">&#127942; Winner</div><div class="winner-row"><span class="wk">Name</span><span class="wv">${w.bidders?.name||"—"}</span></div><div class="winner-row"><span class="wk">Phone</span><span class="wv">${w.bidders?.phone||"—"}</span></div><div class="winner-row"><span class="wk">Email</span><span class="wv">${w.bidders?.email||"—"}</span></div><div class="winner-row"><span class="wk">Winning bid</span><span class="wv">${fmt(top)}</span></div>${p.winner_paid?'<div class="winner-row"><span class="wk">Payment</span><span class="wv" style="color:var(--green)">&#10003; Paid</span></div>':""} </div>`:"";
-    const binPending=p.bin_pending?`<div style="background:var(--goldl);border:1px solid #F5D99A;border-radius:var(--rs);padding:10px;margin-bottom:10px;font-size:12px"><strong>&#128276; Buy It Now request</strong> from ${p.bin_buyer_name} (${p.bin_buyer_phone}). Speak with them to complete purchase.</div>`:"";
+    const feedRows=bids.slice(0,3).map((b,i)=>`<div class="mfrow"><div style="display:flex;align-items:center;gap:5px"><span class="${i===0?"mftag":"mftag-p"}">${b.bidders?ini(b.bidders.name):"??"}</span><span class="mft">${ago(b.created_at)}</span></div><span class="${i===0?"mfamt":"mfamt-p"}">${fmt(b.amount)}</span></div>`).join("");
+    const winnerBox=p.closed&&w?`<div class="winner-box"><div class="winner-ttl">&#127942; Winner</div><div class="winner-row"><span class="wk">Name</span><span class="wv">${w.bidders?.name||"&mdash;"}</span></div><div class="winner-row"><span class="wk">Phone</span><span class="wv">${w.bidders?.phone||"&mdash;"}</span></div><div class="winner-row"><span class="wk">Email</span><span class="wv">${w.bidders?.email||"&mdash;"}</span></div><div class="winner-row"><span class="wk">Winning bid</span><span class="wv">${fmt(top)}</span></div>${p.winner_paid?'<div class="winner-row"><span class="wk">Payment</span><span class="wv" style="color:var(--green)">&#10003; Paid</span></div>':""} </div>`:"";
+    const binAlert=p.bin_pending?`<div class="bin-alert">&#128276; Buy It Now request from <strong>${p.bin_buyer_name}</strong> (${p.bin_buyer_phone}) &mdash; speak with them to complete purchase.</div>`:"";
     return`<div class="acard${p.closed?" closed":""}${isMet&&!p.closed?" res-met":""}">
-      <div class="acard-top">
-        <div><div class="acard-title">${p.title}</div><div class="acard-meta">${[p.medium,p.dimensions].filter(Boolean).join(" &middot; ")}</div></div>
-        ${timer?`<div class="acard-timer${!((new Date(p.ends_at)-Date.now())<900000)?" safe":""}" id="dt-${p.id}">${timer}</div>`:`<div style="font-size:11px;color:var(--muted)">${p.closed?"Closed":p.format==="open"?"Open":"Fixed end"}</div>`}
-      </div>
-      <div class="badges">
-        <span class="bdg ${p.closed?"bdg-closed":"bdg-live"}">${p.closed?"CLOSED":"LIVE"}</span>
-        <span class="bdg ${p.format==="timed"?"bdg-timed":"bdg-open"}">${p.format.toUpperCase()}</span>
-        <span class="bdg ${isMet?"bdg-met":"bdg-notmet"}">${isMet?"RESERVE MET":"NOT MET"}</span>
-        ${p.winner_paid?'<span class="bdg bdg-paid">PAID</span>':""}
-      </div>
-      <div class="acard-grid">
-        <div class="astat"><div class="astat-lbl">Current bid</div><div class="astat-val" style="color:var(--purple)">${fmt(top)}</div></div>
-        <div class="astat"><div class="astat-lbl">Bids</div><div class="astat-val">${p.bid_count||0}</div></div>
-        <div class="astat"><div class="astat-lbl">Reserve</div><div class="astat-val" style="color:var(--green)">${isPct}%</div></div>
-      </div>
+      <div class="acard-top"><div><div class="acard-title">${p.title}</div><div class="acard-meta">${[p.medium,p.dimensions].filter(Boolean).join(" &middot; ")}</div></div>${timer?`<div class="acard-timer${!((new Date(p.ends_at)-Date.now())<900000)?" safe":""}" id="dt-${p.id}">${timer}</div>`:`<div style="font-size:11px;color:var(--text3)">${p.closed?"Closed":p.format==="open"?"Open":"Fixed end"}</div>`}</div>
+      <div class="badges"><span class="bdg ${p.closed?"bdg-closed":"bdg-live"}">${p.closed?"CLOSED":"LIVE"}</span><span class="bdg ${p.format==="timed"?"bdg-timed":"bdg-open"}">${p.format.toUpperCase()}</span><span class="bdg ${isMet?"bdg-met":"bdg-notmet"}">${isMet?"RESERVE MET":"NOT MET"}</span>${p.winner_paid?'<span class="bdg bdg-paid">PAID</span>':""}</div>
+      <div class="acard-grid"><div class="astat"><div class="astat-lbl">Current bid</div><div class="astat-val" style="color:var(--purple2)">${fmt(top)}</div></div><div class="astat"><div class="astat-lbl">Bids</div><div class="astat-val">${p.bid_count||0}</div></div><div class="astat"><div class="astat-lbl">Reserve</div><div class="astat-val" style="color:var(--green)">${isPct}%</div></div></div>
       <div class="rbar" style="margin-bottom:8px"><div class="rfill ${isMet?"rfill-met":"rfill-part"}" style="width:${isPct}%"></div></div>
-      ${bids.length?`<div class="feed-mini">${feedRows}</div>`:""}
-      ${binPending}
-      ${winnerBox}
+      ${bids.length?`<div class="mini-feed">${feedRows}</div>`:""}
+      ${binAlert}${winnerBox}
       <div class="card-actions">
         ${!p.closed?`<button class="btn btn-sm btn-red" onclick="closeAuction('${p.id}')">Close</button>`:`<button class="btn btn-sm btn-green" onclick="openAuction('${p.id}')">Reopen</button>`}
         ${p.closed&&w&&!p.winner_paid?`<button class="btn btn-sm btn-gold" onclick="markPaid('${p.id}')">Mark paid</button>`:""}
         ${p.closed&&w?`<button class="btn btn-sm btn-purple" onclick="openAnnounce(${JSON.stringify(p).replace(/"/g,"&quot;")})">Announce winner</button>`:""}
         <button class="btn btn-sm" onclick="openEdit(${JSON.stringify(p).replace(/"/g,"&quot;")})">Edit</button>
-        <button class="btn btn-sm" style="color:var(--red)" onclick="deletePiece('${p.id}')">Delete</button>
+        <button class="btn btn-sm btn-red" onclick="deletePiece('${p.id}')">Delete</button>
       </div>
     </div>`;
   }).join("");
   const guidesTab=`<div class="guide-wrap">
-    <div class="gcard-g"><div class="gcard-ttl">Collector Guide</div><div class="gcard-sub">How to participate &mdash; in person or virtually</div>
-      <div class="gstep"><div class="gnum">1</div><div><div class="gstep-ttl">Find a piece you love</div><div class="gstep-desc">Walk the show and discover the artwork. Each piece has a placard with a QR code. Or browse all pieces at hykeemg.com from anywhere in the world.</div></div></div>
-      <div class="gstep"><div class="gnum">2</div><div><div class="gstep-ttl">Scan the QR code or visit the link</div><div class="gstep-desc">Open your phone camera and point it at the QR code. Tap the link that appears. No app download needed &mdash; it opens instantly in your browser.</div></div></div>
-      <div class="gstep"><div class="gnum">3</div><div><div class="gstep-ttl">Enter your details</div><div class="gstep-desc">Fill in your first and last name, phone number (10 digits), and email. Check the box to receive a text if you get outbid.</div></div></div>
-      <div class="gstep"><div class="gnum">4</div><div><div class="gstep-ttl">Place your bid</div><div class="gstep-desc">Enter any amount at least $5 above the current highest bid. Tap "Place bid." Your initials appear in the live bid feed instantly.</div></div></div>
-      <div class="gstep"><div class="gnum">5</div><div><div class="gstep-ttl">Watch and rebid</div><div class="gstep-desc">If someone outbids you and you opted in, you'll receive a text. Tap the link in the text to return and bid again anytime.</div></div></div>
-      <div class="gstep"><div class="gnum">6</div><div><div class="gstep-ttl">If you win</div><div class="gstep-desc">You'll receive a text and email with payment instructions. Pay online via secure link, in person at the show, or via Square invoice. Payment plans available &mdash; ask the artist.</div></div></div>
-      <div class="gnote">Questions the night of the show? Find Hykeem or any member of the Every Day. Art Exhibition team &mdash; we're here all evening.</div>
+    <div class="gcard-g"><div class="gcard-ttl">Collector Guide</div><div class="gcard-sub">How to participate &mdash; in person or from anywhere</div>
+      <div class="gstep"><div class="gnum">1</div><div><div class="gstep-ttl">Find a piece you love</div><div class="gstep-desc">Walk the show and discover the artwork. Each piece has a placard with a QR code. Or browse all at hykeemg.com from anywhere in the world.</div></div></div>
+      <div class="gstep"><div class="gnum">2</div><div><div class="gstep-ttl">Scan the QR code or visit the link</div><div class="gstep-desc">Open your camera app and point at the QR code. Tap the link. No app download needed &mdash; opens instantly in your browser.</div></div></div>
+      <div class="gstep"><div class="gnum">3</div><div><div class="gstep-ttl">Enter your details</div><div class="gstep-desc">Fill in your name, phone number, and email. Check the box to get a text if you're outbid.</div></div></div>
+      <div class="gstep"><div class="gnum">4</div><div><div class="gstep-ttl">Place your bid</div><div class="gstep-desc">Enter any amount at least $5 above the current highest bid. Tap "Place bid." Your initials appear in the live feed instantly.</div></div></div>
+      <div class="gstep"><div class="gnum">5</div><div><div class="gstep-ttl">Stay in it</div><div class="gstep-desc">If outbid and opted in, you'll get a text. Tap the link to return and bid again anytime from anywhere.</div></div></div>
+      <div class="gstep"><div class="gnum">6</div><div><div class="gstep-ttl">If you win</div><div class="gstep-desc">You'll receive a text and email with payment instructions. Pay online, in person, or via Square invoice. Payment plans available &mdash; speak with Hykeem.</div></div></div>
+      <div class="gnote">Questions? Find Hykeem or any member of the Every Day. Art Exhibition team &mdash; we're here all evening.</div>
     </div>
     <div class="gcard-g"><div class="gcard-ttl">Auctioneer Guide</div><div class="gcard-sub">Running the auction &mdash; night of show checklist</div>
-      <div class="gstep"><div class="gnum">1</div><div><div class="gstep-ttl">Before the show &mdash; add all pieces (by June 18th)</div><div class="gstep-desc">Go to the Auctions tab, tap "+ Add Piece" for each artwork. Set title, medium, dimensions, starting bid, reserve, Buy It Now price, auction format, and start/end times. Pieces start in closed state until you open them.</div></div></div>
-      <div class="gstep"><div class="gnum">2</div><div><div class="gstep-ttl">Print QR codes for each piece</div><div class="gstep-desc">Go to qr-code-generator.com. Create a QR linking to: hykeem-auction.vercel.app?piece=PIECE_ID&amp;source=qr &mdash; print and place on each placard before doors open.</div></div></div>
-      <div class="gstep"><div class="gnum">3</div><div><div class="gstep-ttl">Open the dashboard on your iPad</div><div class="gstep-desc">Go to hykeem-auction.vercel.app/?dashboard and enter PIN 2225. Share the URL with helpers &mdash; everyone can view simultaneously on their own device.</div></div></div>
-      <div class="gstep"><div class="gnum">4</div><div><div class="gstep-ttl">Open auctions as the night progresses</div><div class="gstep-desc">Tap "Open" on each piece card when ready. For timed auctions the countdown starts immediately. Stagger openings every 20&ndash;30 minutes to create excitement peaks.</div></div></div>
-      <div class="gstep"><div class="gnum">5</div><div><div class="gstep-ttl">Monitor and announce throughout the night</div><div class="gstep-desc">Watch bid counts, reserve bars, and timers live. Green border means reserve met. Announce high bids over the mic to drive floor energy. Buy It Now requests appear immediately in the dashboard.</div></div></div>
-      <div class="gstep"><div class="gnum">6</div><div><div class="gstep-ttl">Close auctions and handle winners</div><div class="gstep-desc">Tap "Close" per piece or "Close all" at end of night. Tap "Announce winner" to see full contact info. Tap "Mark paid" once payment is received.</div></div></div>
-      <div class="gnote">Keep the dashboard open on your iPad all night. Everything updates live &mdash; you never need to refresh.</div>
+      <div class="gstep"><div class="gnum">1</div><div><div class="gstep-ttl">Add all pieces before June 18th</div><div class="gstep-desc">Auctions tab &rarr; "+ Add Piece." Set title, medium, dimensions, artist statement, starting bid, reserve, Buy It Now, format, and start/end times. Pieces are saved in closed state.</div></div></div>
+      <div class="gstep"><div class="gnum">2</div><div><div class="gstep-ttl">Print QR codes for each piece</div><div class="gstep-desc">Go to qr-code-generator.com. Create a QR linking to: hykeem-auction.vercel.app?piece=PIECE_ID&amp;source=qr &mdash; print and place on placards before doors open.</div></div></div>
+      <div class="gstep"><div class="gnum">3</div><div><div class="gstep-ttl">Open dashboard on your iPad</div><div class="gstep-desc">Go to hykeem-auction.vercel.app/?dashboard and enter PIN 2225. Share URL with helpers &mdash; everyone views simultaneously on their own device.</div></div></div>
+      <div class="gstep"><div class="gnum">4</div><div><div class="gstep-ttl">Open auctions as the night progresses</div><div class="gstep-desc">Tap "Open" on each piece when ready. Stagger openings every 20&ndash;30 min to create excitement peaks throughout the night.</div></div></div>
+      <div class="gstep"><div class="gnum">5</div><div><div class="gstep-ttl">Monitor live</div><div class="gstep-desc">Watch bids, reserve bars, and timers in real time. Green border = reserve met. Buy It Now requests appear immediately. Announce high bids on the mic to drive energy.</div></div></div>
+      <div class="gstep"><div class="gnum">6</div><div><div class="gstep-ttl">Close and announce winners</div><div class="gstep-desc">Tap "Close" per piece or "Close all" at end of night. Tap "Announce winner" for full contact info. Tap "Mark paid" once received.</div></div></div>
+      <div class="gnote">Keep dashboard open all night &mdash; everything updates live, never refresh.</div>
     </div>
-    <div class="gcard-g"><div class="gcard-ttl">Auction Rules</div><div class="gcard-sub">Posted rules for all participants</div>
+    <div class="gcard-g"><div class="gcard-ttl">Auction Rules</div><div class="gcard-sub">Official rules for all participants</div>
       <div class="grule"><span class="grule-num">1.</span>All bids are final and binding. By placing a bid you agree to purchase the piece if you win.</div>
-      <div class="grule"><span class="grule-num">2.</span>Minimum bid increment is $5 above the current highest bid. Bids below this amount will not be accepted.</div>
-      <div class="grule"><span class="grule-num">3.</span>A reserve price is set for each piece. If the reserve is not met, the artist reserves the right to decline the sale.</div>
-      <div class="grule"><span class="grule-num">4.</span>Buy It Now ends the auction immediately for that piece at the listed price. Buyer must speak directly with Hykeem or the Every Day. team to complete the purchase.</div>
-      <div class="grule"><span class="grule-num">5.</span>Payment is due within 48 hours of auction close. Accepted methods: online payment (Stripe), Square, cash, or Venmo at the show. Payment plans available for original works &mdash; 30% deposit required to secure the piece.</div>
-      <div class="grule"><span class="grule-num">6.</span>Each original work includes a signed Certificate of Authenticity. The artist's signature will also appear on the back of the canvas.</div>
+      <div class="grule"><span class="grule-num">2.</span>Minimum bid increment is $5 above the current highest bid. Lower bids will not be accepted.</div>
+      <div class="grule"><span class="grule-num">3.</span>A reserve price is set for each piece. If reserve is not met, the artist may decline the sale.</div>
+      <div class="grule"><span class="grule-num">4.</span>Buy It Now ends bidding immediately at the listed price. Buyer must speak with Hykeem or the Every Day. team to complete the purchase.</div>
+      <div class="grule"><span class="grule-num">5.</span>Payment due within 48 hours of auction close. Accepted: online (Stripe), Square, cash, or Venmo. Payment plans available &mdash; 30% deposit secures the piece, balance over 6 months.</div>
+      <div class="grule"><span class="grule-num">6.</span>Each original work includes a signed Certificate of Authenticity and the artist's signature on the back of the canvas.</div>
       <div class="grule"><span class="grule-num">7.</span>The artist reserves the right to close or extend any auction at their discretion.</div>
-      <div class="grule"><span class="grule-num">8.</span>Shipping for remote buyers is available at the buyer's expense. Local Las Vegas pickup/delivery available at no additional charge.</div>
+      <div class="grule"><span class="grule-num">8.</span>Shipping available for remote buyers at buyer's expense. Local Las Vegas pickup/delivery at no additional charge.</div>
       <div class="grule"><span class="grule-num">9.</span>All sales are final. No refunds.</div>
       <div class="grule"><span class="grule-num">10.</span>By participating you agree to receive one confirmation text/email. Outbid alerts are opt-in only.</div>
     </div>
@@ -794,62 +765,65 @@ function rDash(){
   const modal=S.dmodal?rModal():"";
   const announce=S.announcing?rAnnounce():"";
   const drill=S.drillType?rDrill():"";
-  return`<nav class="topnav"><span class="nav-logo">Dashboard &middot; Hykeem G's <span>Art</span></span><div style="display:flex;align-items:center;gap:8px"><span class="nav-badge">LIVE</span><button class="nav-lock" onclick="S.mode='pin';S.pin='';renderPin()">Lock</button></div></nav>
-  <div class="tabbar"><button class="tabbtn${S.dtab==="auctions"?" on":""}" onclick="S.dtab='auctions';renderDashOnly()">Auctions</button><button class="tabbtn${S.dtab==="guides"?" on":""}" onclick="S.dtab='guides';renderDashOnly()">Guides & Rules</button></div>
-  ${S.dtab==="auctions"?stats+src+`<div class="cards-wrap"><div class="cards-tb"><div style="font-size:13px;font-weight:600">${S.pieces.length} piece${S.pieces.length!==1?"s":""}</div><div style="display:flex;gap:6px"><button class="btn btn-sm btn-purple" onclick="openAdd()">+ Add piece</button><button class="btn btn-sm btn-red" onclick="closeAll()">Close all</button></div></div>${cards}</div>`:guidesTab}
-  ${modal}${announce}${drill}`;
+  return`${headerHTML({lock:true,badge:true})}
+    <div class="tabbar"><button class="tabbtn${S.dtab==="auctions"?" on":""}" onclick="S.dtab='auctions';renderDash()">Auctions</button><button class="tabbtn${S.dtab==="guides"?" on":""}" onclick="S.dtab='guides';renderDash()">Guides & Rules</button></div>
+    ${S.dtab==="auctions"?stats+src+`<div class="cards-wrap"><div class="cards-tb"><div style="font-size:13px;font-weight:600;color:var(--text)">${S.pieces.length} piece${S.pieces.length!==1?"s":""}</div><div style="display:flex;gap:6px"><button class="btn btn-sm btn-purple" onclick="openAdd()">+ Add piece</button><button class="btn btn-sm btn-red" onclick="closeAll()">Close all</button></div></div>${cards}</div>`:guidesTab}
+    ${modal}${announce}${drill}`;
 }
 
 function rDrill(){
   const type=S.drillType;
   const items=type==="active"?S.pieces.filter(p=>!p.closed):S.pieces.filter(p=>p.closed);
-  const title=type==="active"?"Active Auctions":"Closed Auctions";
   const rows=items.length===0?`<div class="empty">None yet.</div>`:items.map(p=>{
     const bids=S.dbids[p.id]||[];const w=bids[0];const top=p.current_bid||p.starting_bid;
-    const reason=p.closed?(w?"Won by "+ini(w.bidders?.name||"??")+" at "+fmt(top):"Expired — no winner"):"Live";
-    const badgeBg=p.closed?(w?"var(--gl)":"var(--redl)"):"var(--gl)";
-    const badgeC=p.closed?(w?"var(--green)":"var(--red)"):"var(--green)";
-    return`<div class="drill-item"><div class="drill-item-top"><div class="drill-item-title">${p.title}</div><span class="drill-item-badge" style="background:${badgeBg};color:${badgeC}">${reason}</span></div><div class="drill-item-meta">${p.medium||""}${p.dimensions?" &middot; "+p.dimensions:""}</div></div>`;
+    const reason=p.closed?(w?`Won by ${ini(w.bidders?.name||"??")} &middot; ${fmt(top)}`:"Expired &mdash; no winner"):"Live &middot; "+fmt(top);
+    const bg=p.closed?(w?"var(--greend)":"var(--redd)"):"var(--purpled)";
+    const col=p.closed?(w?"var(--green)":"var(--red)"):"var(--purple2)";
+    const bd=p.closed?(w?"var(--greenb)":"rgba(226,75,74,.3)"):"var(--purpleb)";
+    return`<div class="drill-item"><div class="drill-item-top"><div class="drill-item-title">${p.title}</div><span style="font-size:10px;font-weight:600;padding:2px 8px;border-radius:var(--rp);background:${bg};color:${col};border:1px solid ${bd}">${reason}</span></div><div class="drill-item-meta">${[p.medium,p.dimensions].filter(Boolean).join(" &middot; ")}</div></div>`;
   }).join("");
-  return`<div class="drill-modal" onclick="if(event.target===this)closeDrill()"><div class="drill-inner"><div class="drill-hd"><div class="drill-ttl">${title}</div><button class="drill-x" onclick="closeDrill()">&#10005;</button></div>${rows}</div></div>`;
+  return`<div class="drill-overlay" onclick="if(event.target===this)closeDrill()"><div class="drill-inner"><div class="drill-hd"><div class="drill-ttl">${type==="active"?"Active Auctions":"Closed Auctions"}</div><button class="drill-x" onclick="closeDrill()">&#10005;</button></div>${rows}</div></div>`;
 }
 
 function rModal(){
   const isEdit=S.dmodal==="edit";const p=S.editP;
-  const v=k=>p?.(k)??isEdit?String(p[k]||""):"";
-  const photoPreviews=S.uploadedPhotos.length?`<div class="photos-preview">${S.uploadedPhotos.map((url,i)=>`<div style="position:relative"><img class="photo-thumb" src="${url}"><button onclick="removePhoto(${i})" style="position:absolute;top:-6px;right:-6px;width:20px;height:20px;border-radius:50%;background:var(--red);color:#fff;border:none;font-size:12px;cursor:pointer;display:flex;align-items:center;justify-content:center">&#10005;</button></div>`).join("")}</div>`:"";
+  const v=k=>isEdit&&p?.(k)!=null?String(p[k]):"";
+  const photoGrid=`<div id="photo-grid" class="photo-grid">${S.uploadedPhotos.map((url,i)=>`<div class="photo-item"><img class="photo-thumb" src="${url}"><button class="photo-rm" onclick="removePhoto(${i})">&#10005;</button></div>`).join("")}</div>`;
   return`<div class="overlay" onclick="if(event.target===this)closeModal()"><div class="modal">
     <div class="modal-hd"><div class="modal-ttl">${isEdit?"Edit piece":"Add new piece"}</div><button class="modal-x" onclick="closeModal()">&#10005;</button></div>
-    <div class="mfsec">Artwork details</div>
-    <div class="mfield"><label class="mfl">Title *</label><input class="mfi" id="mf-title" type="text" placeholder="e.g. Crimson Horizon No. 3" value="${isEdit?p.title||"":""}"></div>
+    <div class="mfsec" style="border-top:none;padding-top:0">Artwork details</div>
+    <div class="mf"><label class="mfl">Title *</label><input class="mfi" id="mf-title" type="text" placeholder="e.g. Crimson Horizon No. 3" value="${v("title")}"></div>
     <div class="mf2">
-      <div class="mfield"><label class="mfl">Medium</label><input class="mfi" id="mf-medium" type="text" placeholder="Oil on canvas" value="${isEdit?p.medium||"":""}"></div>
-      <div class="mfield"><label class="mfl">Dimensions</label><input class="mfi" id="mf-dims" type="text" placeholder="48 x 60 in" value="${isEdit?p.dimensions||"":""}"></div>
+      <div class="mf"><label class="mfl">Medium</label><input class="mfi" id="mf-medium" type="text" placeholder="Oil on canvas" value="${v("medium")}"></div>
+      <div class="mf"><label class="mfl">Dimensions</label><input class="mfi" id="mf-dims" type="text" placeholder="48 x 60 in" value="${v("dimensions")}"></div>
     </div>
-    <div class="mfield"><label class="mfl">Year</label><input class="mfi" id="mf-year" type="number" value="${isEdit?p.year||new Date().getFullYear():new Date().getFullYear()}"></div>
-    <div class="mfield"><label class="mfl">Artist statement</label><textarea class="mfi" id="mf-desc" rows="3" placeholder="What is this piece about?">${isEdit?p.description||"":""}</textarea></div>
-    <div class="mfield"><label class="mfl">Artwork photos (up to 3)</label>
-      <input type="file" accept="image/*" multiple onchange="uploadPhotos(Array.from(this.files).slice(0,3-S.uploadedPhotos.length))" style="font-size:13px;color:var(--sec)">
-      ${S.uploadingPhotos?`<div style="font-size:12px;color:var(--muted);margin-top:6px">Uploading...</div>`:""}
-      ${photoPreviews}
+    <div class="mf"><label class="mfl">Year</label><input class="mfi" id="mf-year" type="number" value="${isEdit?v("year"):new Date().getFullYear()}"></div>
+    <div class="mf"><label class="mfl">Artist statement</label><textarea class="mfi" id="mf-desc" rows="3" placeholder="What is this piece about?">${isEdit?p.description||"":""}</textarea></div>
+    <div class="mf">
+      <label class="mfl">Artwork photos (up to 3)</label>
+      <div class="upload-area" onclick="document.getElementById('photo-input').click()">
+        <div class="upload-lbl">Tap to upload photos</div>
+        <div class="upload-sub" id="upload-status">${S.uploadingPhotos?"Uploading...":S.uploadedPhotos.length+"/3 photos"}</div>
+      </div>
+      <input type="file" id="photo-input" accept="image/*" multiple style="display:none" onchange="uploadPhotos(Array.from(this.files))">
+      ${photoGrid}
       <div class="mfi-note">First photo shown as main image on listings</div>
     </div>
     <div class="mfsec">Pricing</div>
     <div class="mf2">
-      <div class="mfield"><label class="mfl">Starting bid *</label><input class="mfi" id="mf-start-bid" type="number" placeholder="3500" value="${isEdit?p.starting_bid||"":""}"></div>
-      <div class="mfield"><label class="mfl">Reserve price *</label><input class="mfi" id="mf-reserve" type="number" placeholder="5500" value="${isEdit?p.reserve_price||"":""}"></div>
+      <div class="mf"><label class="mfl">Starting bid *</label><input class="mfi" id="mf-sbid" type="number" placeholder="3500" value="${v("starting_bid")}"></div>
+      <div class="mf"><label class="mfl">Reserve price *</label><input class="mfi" id="mf-res" type="number" placeholder="5500" value="${v("reserve_price")}"></div>
     </div>
-    <div class="mfield"><label class="mfl">Buy It Now price (optional)</label><input class="mfi" id="mf-bin" type="number" placeholder="12000" value="${isEdit?p.buy_it_now_price||"":""}"></div>
-    <div class="mfsec">Auction format & timing</div>
-    <div class="mfield"><label class="mfl">Format</label>
-      <select class="mfi" id="mf-format" onchange="renderModal()">
-        <option value="timed" ${(!isEdit||p.format==="timed")?"selected":""}>Timed &mdash; countdown clock</option>
+    <div class="mf"><label class="mfl">Buy It Now price (optional)</label><input class="mfi" id="mf-bin" type="number" placeholder="12000" value="${v("buy_it_now_price")}"></div>
+    <div class="mfsec">Format & timing</div>
+    <div class="mf"><label class="mfl">Auction format</label>
+      <select class="mfi" id="mf-fmt">
+        <option value="timed" ${!isEdit||p.format==="timed"?"selected":""}>Timed &mdash; countdown clock</option>
         <option value="open" ${isEdit&&p.format==="open"?"selected":""}>Open &mdash; you close manually</option>
-        <option value="fixed" ${isEdit&&p.format==="fixed"?"selected":""}>Fixed end &mdash; closes at specific time</option>
+        <option value="fixed" ${isEdit&&p.format==="fixed"?"selected":""}>Fixed end &mdash; closes at set time</option>
       </select>
     </div>
-    <div class="mfsec" style="border-top:none;padding-top:0">Timezone</div>
-    <div class="mfield">
+    <div class="mf"><label class="mfl">Timezone</label>
       <select class="mfi" id="mf-tz">
         <option value="-07:00" selected>Pacific Time (PT) &mdash; Las Vegas</option>
         <option value="-06:00">Mountain Time (MT)</option>
@@ -858,14 +832,14 @@ function rModal(){
       </select>
     </div>
     <div class="mf2">
-      <div class="mfield"><label class="mfl">Start date</label><input class="mfi" id="mf-start-dt" type="date" value="${isEdit&&p.starts_at?p.starts_at.slice(0,10):""}"></div>
-      <div class="mfield"><label class="mfl">Start time</label><input class="mfi" id="mf-start-tm" type="time" value="${isEdit&&p.starts_at?p.starts_at.slice(11,16):""}"></div>
+      <div class="mf"><label class="mfl">Start date</label><input class="mfi" id="mf-sdt" type="date" value="${isEdit&&p.starts_at?p.starts_at.slice(0,10):""}"></div>
+      <div class="mf"><label class="mfl">Start time</label><input class="mfi" id="mf-stm" type="time" value="${isEdit&&p.starts_at?p.starts_at.slice(11,16):""}"></div>
     </div>
     <div class="mf2">
-      <div class="mfield"><label class="mfl">End date</label><input class="mfi" id="mf-end-dt" type="date" value="${isEdit&&p.ends_at?p.ends_at.slice(0,10):""}"></div>
-      <div class="mfield"><label class="mfl">End time</label><input class="mfi" id="mf-end-tm" type="time" value="${isEdit&&p.ends_at?p.ends_at.slice(11,16):""}"></div>
+      <div class="mf"><label class="mfl">End date</label><input class="mfi" id="mf-edt" type="date" value="${isEdit&&p.ends_at?p.ends_at.slice(0,10):""}"></div>
+      <div class="mf"><label class="mfl">End time</label><input class="mfi" id="mf-etm" type="time" value="${isEdit&&p.ends_at?p.ends_at.slice(11,16):""}"></div>
     </div>
-    <div class="mfield"><label class="mfl">OR: Duration in minutes (timed only)</label><input class="mfi" id="mf-dur" type="number" placeholder="e.g. 90 (starts when you tap Open)" value="${isEdit?p.duration_minutes||"":""}"><div class="mfi-note">If both end date/time and duration are set, end date/time takes priority</div></div>
+    <div class="mf"><label class="mfl">Or: duration in minutes (starts when you tap Open)</label><input class="mfi" id="mf-dur" type="number" placeholder="e.g. 90" value="${v("duration_minutes")}"></div>
     <div style="display:flex;gap:8px;margin-top:18px">
       <button class="btn btn-purple btn-full" onclick="saveP()">${isEdit?"Save changes":"Add piece"}</button>
       <button class="btn btn-full" style="max-width:100px" onclick="closeModal()">Cancel</button>
@@ -875,16 +849,16 @@ function rModal(){
 
 function rAnnounce(){
   const p=S.announcing;const bids=S.dbids[p.id]||[];const w=bids[0];if(!w)return"";
-  return`<div class="overlay" onclick="if(event.target===this)closeAnnounce()"><div class="modal">
-    <div class="modal-hd"><div class="modal-ttl">Announce winner</div><button class="modal-x" onclick="closeAnnounce()">&#10005;</button></div>
+  return`<div class="drill-overlay" onclick="if(event.target===this)closeAnnounce()"><div class="drill-inner">
+    <div class="drill-hd"><div class="drill-ttl">Announce winner</div><button class="drill-x" onclick="closeAnnounce()">&#10005;</button></div>
     <div class="ann-box"><div class="ann-icon">&#127942;</div><div class="ann-title">${p.title}</div><div class="ann-body">Winning bid of <strong>${fmt(w.amount)}</strong></div></div>
     <div class="winner-box"><div class="winner-ttl">Winner details</div>
-      <div class="winner-row"><span class="wk">Name</span><span class="wv">${w.bidders?.name||"—"}</span></div>
-      <div class="winner-row"><span class="wk">Phone</span><span class="wv">${w.bidders?.phone||"—"}</span></div>
-      <div class="winner-row"><span class="wk">Email</span><span class="wv">${w.bidders?.email||"—"}</span></div>
+      <div class="winner-row"><span class="wk">Name</span><span class="wv">${w.bidders?.name||"&mdash;"}</span></div>
+      <div class="winner-row"><span class="wk">Phone</span><span class="wv">${w.bidders?.phone||"&mdash;"}</span></div>
+      <div class="winner-row"><span class="wk">Email</span><span class="wv">${w.bidders?.email||"&mdash;"}</span></div>
       <div class="winner-row"><span class="wk">Winning bid</span><span class="wv">${fmt(w.amount)}</span></div>
     </div>
-    <div style="font-size:13px;color:var(--sec);line-height:1.6;margin-bottom:14px">Contact this person to arrange payment and delivery. Mark as paid once received.</div>
+    <div style="font-size:13px;color:var(--text3);line-height:1.6;margin-bottom:14px">Contact this person to arrange payment and delivery. Mark paid once received.</div>
     <div style="display:flex;gap:8px">
       <button class="btn btn-gold btn-full" onclick="markPaid('${p.id}');closeAnnounce()">Mark as paid</button>
       <button class="btn btn-full" style="max-width:100px" onclick="closeAnnounce()">Close</button>
@@ -892,32 +866,22 @@ function rAnnounce(){
   </div></div>`;
 }
 
-// TARGETED RE-RENDERS (no full re-render for inputs)
-function renderPieceOnly(){document.getElementById("app").innerHTML=rPiece();startTick();}
-function renderDashOnly(){document.getElementById("app").innerHTML=rDash();startTick();}
-function renderModal(){
-  // re-render only if modal is open
-  if(S.dmodal){
-    document.getElementById("app").innerHTML=rDash();
-    startTick();
-  }
-}
-
 function render(){
   const app=document.getElementById("app");
-  if(S.mode==="pin")app.innerHTML=rPin();
-  else if(S.mode==="gallery")app.innerHTML=rGallery();
-  else if(S.mode==="piece"||S.mode==="success")app.innerHTML=rPiece();
-  else if(S.mode==="dashboard")app.innerHTML=rDash();
-  startTick();
+  if(S.mode==="pin"){app.innerHTML=rPin();return;}
+  if(S.mode==="gallery"){app.innerHTML=rGallery();startTick();return;}
+  if(S.mode==="piece"||S.mode==="success"){renderPiece();return;}
+  if(S.mode==="dashboard"){renderDash();return;}
 }
 
 function startTick(){
   clearInterval(S._tick);
   S._tick=setInterval(()=>{
-    if(S.mode==="piece"&&S.current?.ends_at){
-      const el=document.getElementById("cd");if(el)el.textContent=cd(S.current.ends_at);
-      const el2=document.getElementById("ps-timer");if(el2&&S.current.ends_at)el2.textContent=cd(S.current.ends_at);
+    if(S.mode==="piece"||S.mode==="success"){
+      if(S.current?.ends_at){
+        const el=document.getElementById("cd");if(el)el.textContent=cd(S.current.ends_at);
+        const el2=document.getElementById("ps-timer");if(el2)el2.textContent=cd(S.current.ends_at);
+      }
     }
     if(S.mode==="dashboard"){
       S.pieces.forEach(p=>{if(p.ends_at&&!p.closed){const el=document.getElementById("dt-"+p.id);if(el)el.textContent=cd(p.ends_at);}});
@@ -925,21 +889,17 @@ function startTick(){
   },1000);
 }
 
-// INIT
 async function init(){
   document.getElementById("app").innerHTML=`<div class="loading"><div class="spinner"></div><div class="loading-txt">Loading...</div></div>`;
   if(!IS_DASH){
     const src=new URLSearchParams(window.location.search).get("source")||"direct";
     trackVisit(src);
-    await loadPieces();
-    await loadAllDBids();
+    await loadPieces();await loadAllDBids();
     const pid=new URLSearchParams(window.location.search).get("piece");
     if(pid){const p=S.pieces.find(x=>x.id===pid);if(p){await goToPiece(p);return;}}
     render();
-    setInterval(()=>{if(S.mode==="gallery")loadPieces().then(render);},30000);
-  }else{
-    render();
-  }
+    setInterval(()=>{if(S.mode==="gallery")loadPieces().then(()=>loadAllDBids()).then(render);},30000);
+  }else{render();}
 }
 init();
 </script>
