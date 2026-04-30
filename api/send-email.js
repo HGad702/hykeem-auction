@@ -1,9 +1,9 @@
 // api/send-email.js
 // Vercel serverless function — handles all email sending for the auction
 
-const RESEND_API_KEY = 're_TyW7iHTu_DPRFR1esRVA4bEdvzixJdi6Y';
+const RESEND_API_KEY = process.env.RESEND_API_KEY;
 const FROM_EMAIL = 'auction@hykeemg.com';
-const ARTIST_EMAIL = 'hykeemngad@yahoo.com';
+const ARTIST_EMAIL = process.env.ARTIST_EMAIL || 'hykeemngad@yahoo.com';
 const APP_URL = 'https://hykeem-auction.vercel.app';
 
 export default async function handler(req, res) {
