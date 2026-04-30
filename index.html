@@ -8,9 +8,9 @@
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <style>
 :root{
-  --bg:#06060A;--bg2:#0D0D1A;--bg3:#111122;--bg4:#161628;
-  --border:rgba(255,255,255,.07);--border2:rgba(255,255,255,.12);
-  --text:#FFFFFF;--text2:rgba(255,255,255,.7);--text3:rgba(255,255,255,.35);--text4:rgba(255,255,255,.15);
+  --bg:#0C0C14;--bg2:#13132A;--bg3:#1A1A35;--bg4:#20203E;
+  --border:rgba(255,255,255,.1);--border2:rgba(255,255,255,.18);
+  --text:#FFFFFF;--text2:rgba(255,255,255,.7);--text3:rgba(255,255,255,.55);--text4:rgba(255,255,255,.3);
   --purple:#7B5FE8;--purple2:#9B85F0;--purpled:rgba(123,95,232,.2);--purpleb:rgba(123,95,232,.4);
   --coral:#E8522A;--corald:rgba(232,82,42,.15);--coralb:rgba(232,82,42,.3);
   --gold:#D4AF7A;--goldd:rgba(212,175,122,.12);--goldb:rgba(212,175,122,.3);
@@ -29,12 +29,12 @@ button{font-family:'DM Sans',sans-serif;cursor:pointer}
 input,select,textarea{font-family:'DM Sans',sans-serif}
 
 /* ── TOP HEADER ── */
-.site-header{background:var(--bg2);border-bottom:1px solid var(--border);padding:12px 16px 10px;text-align:center;position:sticky;top:0;z-index:100}
-.header-brand{font-size:22px;font-weight:700;letter-spacing:.04em;line-height:1}
+.site-header{background:var(--bg2);border-bottom:1px solid var(--border);padding:12px 16px 10px;text-align:left;position:sticky;top:0;z-index:100}
+.header-brand{font-size:26px;font-weight:700;letter-spacing:.04em;line-height:1}
 .header-brand .red{color:var(--edred)}
 .header-brand .dot{color:var(--edblue)}
-.header-sub{font-size:11px;color:var(--text3);margin-top:3px;letter-spacing:.02em}
-.header-date{font-size:10px;color:var(--text4);margin-top:2px;letter-spacing:.04em}
+.header-sub{font-size:13px;color:rgba(255,255,255,.65);margin-top:4px;letter-spacing:.02em}
+.header-date{font-size:12px;color:rgba(255,255,255,.5);margin-top:2px;letter-spacing:.04em}
 .header-back{position:absolute;left:14px;top:50%;transform:translateY(-50%);font-size:12px;color:var(--text3);background:none;border:none;cursor:pointer;display:flex;align-items:center;gap:4px}
 .header-back:hover{color:var(--text2)}
 .header-logo{position:absolute;right:14px;top:50%;transform:translateY(-50%);height:28px;width:auto;object-fit:contain}
@@ -333,8 +333,8 @@ input,select,textarea{font-family:'DM Sans',sans-serif}
 .toast.show{transform:translateX(-50%) translateY(0)}
 .toast-success{background:var(--greend);color:var(--green);border-color:var(--greenb)}
 .toast-error{background:var(--redd);color:var(--red);border-color:rgba(226,75,74,.3)}
-@media(min-width:520px){.piece-page,.gallery-body{max-width:520px;margin:0 auto}}
-@media(min-width:768px){.dash-stats{grid-template-columns:repeat(3,1fr);padding:16px 20px 0}.cards-wrap,.gallery-body{padding:14px 20px}.src-wrap{margin:10px 20px 0}}
+@media(min-width:520px){.piece-page,.gallery-body{max-width:680px;margin:0 auto}}.site-header{max-width:100%}
+@media(min-width:768px){.dash-stats{grid-template-columns:repeat(3,1fr);padding:16px 24px 0}.cards-wrap,.gallery-body{padding:14px 24px;max-width:900px;margin:0 auto}.src-wrap{margin:10px 24px 0}.piece-page,.gallery-body{max-width:760px;margin:0 auto}}
 </style>
 </head>
 <body>
@@ -347,6 +347,7 @@ const PIN="2225";
 const LOGO="data:image/png;base64,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";
 const sb=supabase.createClient(SURL,SKEY);
 const IS_DASH=window.location.search.includes("dashboard");
+const APP_URL="https://hykeem-auction.vercel.app";
 
 let S={
   mode:IS_DASH?"pin":"gallery",
@@ -371,16 +372,26 @@ const minBid=p=>(p.current_bid||p.starting_bid)+5;
 const gv=id=>document.getElementById(id)?.value||"";
 const toast=(m,t="")=>{const el=document.getElementById("toast");el.textContent=m;el.className="toast show"+(t?" toast-"+t:"");setTimeout(()=>el.className="toast",3000);};
 
+async function sendEmail(type,data){
+  try{
+    const r=await fetch("/api/send-email",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({type,data})});
+    const j=await r.json();
+    if(!r.ok)console.error("Email error:",j);
+    return j;
+  }catch(e){console.error("Email send failed:",e);}
+}
+
+function makeToken(){return Math.random().toString(36).slice(2)+Date.now().toString(36);}
+
 function headerHTML(opts={}){
-  const{back,lock,badge,logo}=opts;
+  const{back,lock,badge,logo,dash}=opts;
   return`<div class="site-header">
     ${back?`<button class="header-back" onclick="goGallery()">&#8592; All</button>`:""}
     ${lock?`<button class="header-lock" onclick="S.mode='pin';S.pin='';renderPin()">Lock</button>`:""}
     ${badge?`<span class="header-badge">LIVE</span>`:""}
     <div>
       <div class="header-brand"><span class="red">EVERY DAY</span><span class="dot">.</span></div>
-      <div class="header-sub">An Art Exhibition from the mind of Hykeem G</div>
-      <div class="header-date">June 19th &middot; Las Vegas</div>
+      ${dash?`<div class="header-sub" style="font-size:14px;color:rgba(255,255,255,.7)">Art Auction Dashboard</div><div class="header-date">June 19th &middot; Las Vegas</div>`:`<div class="header-sub">An Art Exhibition from the mind of Hykeem G</div><div class="header-date">June 19th &middot; Las Vegas</div>`}
     </div>
     ${logo?`<img class="header-logo" src="${LOGO}" alt="EVERY DAY.">`:""}
   </div>`;
@@ -471,8 +482,17 @@ async function submitBid(){
     const{error:bidErr}=await sb.from("bids").insert({piece_id:p.id,bidder_id:bid,amount:num});
     if(bidErr)throw bidErr;
     S.lastBidAmt=num;S.lastBidSms=sms;
-    toast(fmt(num)+" bid placed!","success");
+    toast("Bid submitted!","success");
+    const prevTop=S.abids?.[0];
     await loadPiece(p.id);await loadABids(p.id);
+    // Send bid confirmation email
+    const token=makeToken();
+    await sb.from("bidders").update({confirm_token:token,token_expires:new Date(Date.now()+15*60*1000).toISOString(),email_verified:false}).eq("id",bid);
+    sendEmail("bid_confirm",{name:name.trim(),email:email.trim(),pieceTitle:p.title,bidAmount:fmt(num),confirmToken:token,pieceId:p.id});
+    // Send outbid alert to previous top bidder
+    if(prevTop&&prevTop.bidder_id!==bid&&prevTop.bidders?.email){
+      sendEmail("outbid",{name:prevTop.bidders.name,email:prevTop.bidders.email,pieceTitle:p.title,newBidAmount:fmt(num),pieceId:p.id});
+    }
     S.mode="success";renderPiece();
   }catch(e){
     console.error(e);toast("Something went wrong. Try again.","error");
@@ -486,6 +506,11 @@ async function submitBIN(){
   const p=S.current;
   await sb.from("pieces").update({bin_pending:true,bin_buyer_name:name.trim(),bin_buyer_email:email.trim(),bin_buyer_phone:phone.trim()}).eq("id",p.id);
   await loadPiece(p.id);
+  // Alert artist immediately
+  sendEmail("bin_alert",{
+    buyerName:name.trim(),buyerEmail:email.trim(),buyerPhone:phone.trim(),
+    pieceTitle:p.title,binPrice:fmt(p.buy_it_now_price)
+  });
   toast("Request received! Please find Hykeem or the Every Day. team","success");
 }
 
@@ -514,7 +539,20 @@ async function openAuction(id){
 async function closeAuction(id){
   const{error}=await sb.from("pieces").update({closed:true}).eq("id",id);
   if(error){toast("Error: "+error.message,"error");return;}
-  toast("Closed.");await loadPieces();await loadAllDBids();renderDash();
+  // Send winner email if there's a top bidder
+  const bids=S.dbids[id]||[];
+  const winner=bids[0];
+  const piece=S.pieces.find(x=>x.id===id);
+  if(winner&&winner.bidders&&piece){
+    sendEmail("winner",{
+      name:winner.bidders.name,email:winner.bidders.email,
+      pieceTitle:piece.title,winAmount:fmt(winner.amount),pieceId:id
+    });
+    toast("Closed — winner notification sent to "+winner.bidders.name.split(" ")[0]);
+  }else{
+    toast("Closed.");
+  }
+  await loadPieces();await loadAllDBids();renderDash();
 }
 async function closeAll(){
   if(!confirm("Close ALL active auctions?"))return;
@@ -618,8 +656,9 @@ function rGallery(){
   <div class="hero">
     <div class="hero-glow1"></div><div class="hero-glow2"></div>
     <div class="hero-inner">
-      <div class="hero-ttl">Live Auctions</div>
+      <div class="hero-ttl">Bid on your favorite piece</div>
       <div class="hero-sub">Bid in person or from anywhere in the world</div>
+      <button onclick="showRules()" style="margin-top:12px;background:rgba(123,95,232,.25);border:1px solid rgba(123,95,232,.5);border-radius:20px;padding:7px 16px;font-size:12px;font-weight:600;color:var(--purple2);cursor:pointer;font-family:var(--font-sans,'DM Sans',sans-serif);letter-spacing:.04em">Auction Rules &#8250;</button>
       <div class="hero-stats"><div class="hero-stat"><span>${live.length}</span> live</div><div class="hero-stat"><span>${S.pieces.reduce((a,p)=>a+(p.bid_count||0),0)}</span> bids placed</div></div>
     </div>
   </div>
@@ -638,7 +677,7 @@ function rPiece(){
   const topBid=S.dbids[p.id]?.[0];
   const feedRows=S.abids.length===0?`<div class="fi-empty">No bids yet &mdash; be the first!</div>`:S.abids.map((b,i)=>`<div class="fi${i===0?" fi-top":""}"><div style="display:flex;align-items:center;gap:7px"><span class="${i===0?"fi-tag-top":"fi-tag-past"}">${b.bidders?ini(b.bidders.name):"??"}</span><span class="fi-time">${ago(b.created_at)}</span></div><span class="${i===0?"fi-top-amt":"fi-past-amt"}">${fmt(b.amount)}</span></div>`).join("");
   const formContent=S.mode==="success"
-    ?`<div class="success-card"><div class="success-icon">&#127881;</div><div class="success-ttl">Bid placed!</div><div class="success-body">Your bid of <strong>${fmt(S.lastBidAmt)}</strong> is live.${S.lastBidSms?" We'll text you if you're outbid.":" Check back to stay in the lead."}</div><button class="success-rebid" onclick="S.mode='piece';renderPiece()">Bid again</button></div>`
+    ?`<div class="success-card"><div class="success-icon">&#127881;</div><div class="success-ttl">Congrats on submitting a bid!</div><div class="success-body">Best of luck winning this art!</div><button class="success-rebid" onclick="S.mode='piece';renderPiece()">Bid again</button></div>`
     :`${!p.closed?`
       <div class="bid-stat-bar">
         <div><div class="bsb-lbl">Current bid</div><div class="bsb-val">${fmt(top)}</div></div>
@@ -649,7 +688,7 @@ function rPiece(){
       <div class="fld"><label class="fld-lbl">Phone number</label><input class="fld-inp" id="b-phone" type="tel" placeholder="10-digit number" autocomplete="tel" inputmode="numeric"><div class="fld-err" id="err-phone"></div></div>
       <div class="fld"><label class="fld-lbl">Email</label><input class="fld-inp" id="b-email" type="email" placeholder="you@email.com" autocomplete="email"><div class="fld-err" id="err-email"></div></div>
       <div class="fld"><label class="fld-lbl">Your bid</label><input class="fld-inp fld-inp-bid" id="b-amount" type="number" inputmode="decimal" placeholder="${minBid(p)}"><div class="fld-note">Min ${fmt(minBid(p))} &middot; must be $5 above current bid</div><div class="fld-err" id="err-amount"></div></div>
-      <div class="sms-row ck" id="sms-row" onclick="toggleSMSCheck()"><div class="sms-chk ck" id="sms-chk"><span class="sms-chk-mark">&#10003;</span></div><div class="sms-lbl">Text me if I'm outbid &mdash; I want to stay in it</div></div>
+      <div class="sms-row ck" id="sms-row" onclick="toggleSMSCheck()"><div class="sms-chk ck" id="sms-chk"><span class="sms-chk-mark">&#10003;</span></div><div class="sms-lbl">Text me if outbid, I need this art</div></div>
       ${p.buy_it_now_price?`<div class="bin-btn" onclick="submitBIN()"><div class="bin-btn-top">Buy it now &mdash; skip the auction</div><div class="bin-btn-val">${fmt(p.buy_it_now_price)}</div><div class="bin-btn-sub">Speak with Hykeem or the Every Day. team to complete</div></div>`:""}
       <button class="place-btn" id="place-btn" onclick="submitBid()"><div class="place-btn-txt">Place bid &rarr;</div></button>
       <div class="form-foot">Your info is securely stored for auction victory and purchase verification purposes only.</div>
@@ -712,7 +751,8 @@ function rDash(){
     const timer=!p.closed&&p.format==="timed"&&p.ends_at?cd(p.ends_at):null;
     const w=bids[0];
     const feedRows=bids.slice(0,3).map((b,i)=>`<div class="mfrow"><div style="display:flex;align-items:center;gap:5px"><span class="${i===0?"mftag":"mftag-p"}">${b.bidders?ini(b.bidders.name):"??"}</span><span class="mft">${ago(b.created_at)}</span></div><span class="${i===0?"mfamt":"mfamt-p"}">${fmt(b.amount)}</span></div>`).join("");
-    const winnerBox=p.closed&&w?`<div class="winner-box"><div class="winner-ttl">&#127942; Winner</div><div class="winner-row"><span class="wk">Name</span><span class="wv">${w.bidders?.name||"&mdash;"}</span></div><div class="winner-row"><span class="wk">Phone</span><span class="wv">${w.bidders?.phone||"&mdash;"}</span></div><div class="winner-row"><span class="wk">Email</span><span class="wv">${w.bidders?.email||"&mdash;"}</span></div><div class="winner-row"><span class="wk">Winning bid</span><span class="wv">${fmt(top)}</span></div>${p.winner_paid?'<div class="winner-row"><span class="wk">Payment</span><span class="wv" style="color:var(--green)">&#10003; Paid</span></div>':""} </div>`:"";
+    const verified=w?.bidders?.email_verified;
+    const winnerBox=p.closed&&w?`<div class="winner-box"><div class="winner-ttl">&#127942; Winner ${verified===false?'<span style="background:rgba(232,82,42,.2);color:#E8522A;border-radius:20px;padding:1px 7px;font-size:10px;font-weight:600;margin-left:6px">&#9888; Unverified</span>':verified?'<span style="background:rgba(45,158,107,.2);color:#2D9E6B;border-radius:20px;padding:1px 7px;font-size:10px;font-weight:600;margin-left:6px">&#10003; Verified</span>':''}</div><div class="winner-row"><span class="wk">Name</span><span class="wv">${w.bidders?.name||"&mdash;"}</span></div><div class="winner-row"><span class="wk">Phone</span><span class="wv">${w.bidders?.phone||"&mdash;"}</span></div><div class="winner-row"><span class="wk">Email</span><span class="wv">${w.bidders?.email||"&mdash;"}</span></div><div class="winner-row"><span class="wk">Winning bid</span><span class="wv">${fmt(top)}</span></div>${p.winner_paid?'<div class="winner-row"><span class="wk">Payment</span><span class="wv" style="color:var(--green)">&#10003; Paid</span></div>':""} </div>`:"";
     const binAlert=p.bin_pending?`<div class="bin-alert">&#128276; Buy It Now request from <strong>${p.bin_buyer_name}</strong> (${p.bin_buyer_phone}) &mdash; speak with them to complete purchase.</div>`:"";
     return`<div class="acard${p.closed?" closed":""}${isMet&&!p.closed?" res-met":""}">
       <div class="acard-top"><div><div class="acard-title">${p.title}</div><div class="acard-meta">${[p.medium,p.dimensions].filter(Boolean).join(" &middot; ")}</div></div>${timer?`<div class="acard-timer${!((new Date(p.ends_at)-Date.now())<900000)?" safe":""}" id="dt-${p.id}">${timer}</div>`:`<div style="font-size:11px;color:var(--text3)">${p.closed?"Closed":p.format==="open"?"Open":"Fixed end"}</div>`}</div>
@@ -765,7 +805,7 @@ function rDash(){
   const modal=S.dmodal?rModal():"";
   const announce=S.announcing?rAnnounce():"";
   const drill=S.drillType?rDrill():"";
-  return`${headerHTML({lock:true,badge:true})}
+  return`${headerHTML({lock:true,badge:true,dash:true})}
     <div class="tabbar"><button class="tabbtn${S.dtab==="auctions"?" on":""}" onclick="S.dtab='auctions';renderDash()">Auctions</button><button class="tabbtn${S.dtab==="guides"?" on":""}" onclick="S.dtab='guides';renderDash()">Guides & Rules</button></div>
     ${S.dtab==="auctions"?stats+src+`<div class="cards-wrap"><div class="cards-tb"><div style="font-size:13px;font-weight:600;color:var(--text)">${S.pieces.length} piece${S.pieces.length!==1?"s":""}</div><div style="display:flex;gap:6px"><button class="btn btn-sm btn-purple" onclick="openAdd()">+ Add piece</button><button class="btn btn-sm btn-red" onclick="closeAll()">Close all</button></div></div>${cards}</div>`:guidesTab}
     ${modal}${announce}${drill}`;
@@ -889,8 +929,54 @@ function startTick(){
   },1000);
 }
 
+
+function showRules(){
+  const overlay=document.createElement('div');
+  overlay.style.cssText='position:fixed;inset:0;background:rgba(0,0,0,.8);z-index:500;display:flex;align-items:flex-end;justify-content:center';
+  overlay.onclick=e=>{if(e.target===overlay)document.body.removeChild(overlay);};
+  overlay.innerHTML=`<div style="background:var(--bg2);border-radius:20px 20px 0 0;border-top:1px solid var(--border2);padding:20px 16px;width:100%;max-width:680px;max-height:80vh;overflow-y:auto">
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:16px">
+      <div style="font-family:Playfair Display,serif;font-size:20px;font-weight:600;color:var(--text)">Auction Rules</div>
+      <button onclick="this.closest('[style*=fixed]').remove()" style="background:var(--bg3);border:1px solid var(--border2);border-radius:50%;width:30px;height:30px;color:var(--text3);cursor:pointer;font-size:14px;display:flex;align-items:center;justify-content:center">&#10005;</button>
+    </div>
+    <div style="display:flex;flex-direction:column;gap:8px">
+      ${{[
+        ["1.","All bids are final and binding. By placing a bid you agree to purchase the piece if you win."],
+        ["2.","Minimum bid increment is $5 above the current highest bid. Lower bids will not be accepted."],
+        ["3.","A reserve price is set for each piece. If the reserve is not met, the artist may decline the sale."],
+        ["4.","Buy It Now ends bidding immediately at the listed price. Buyer must speak with Hykeem or the Every Day. team to complete the purchase."],
+        ["5.","Payment due within 48 hours of auction close. Accepted: online (Stripe), Square, cash, or Venmo. Payment plans available — 30% deposit secures the piece, balance over 6 months."],
+        ["6.","Each original work includes a signed Certificate of Authenticity and the artist's signature on the back of the canvas."],
+        ["7.","The artist reserves the right to close or extend any auction at their discretion."],
+        ["8.","Shipping available for remote buyers at buyer's expense. Local Las Vegas pickup/delivery at no additional charge."],
+        ["9.","All sales are final. No refunds."],
+        ["10.","By participating you agree to receive one confirmation text/email. Outbid alerts are opt-in only."]
+      ].map(([n,t])=>`<div style="background:var(--bg3);border:1px solid var(--border);border-radius:8px;padding:9px 12px;font-size:13px;color:var(--text2);line-height:1.5;display:flex;gap:8px"><span style="font-weight:600;color:var(--purple2);flex-shrink:0;min-width:24px">${{n}}</span><span>${{t}}</span></div>`).join('')}}
+    </div>
+  </div>`;
+  document.body.appendChild(overlay);
+}
+
 async function init(){
   document.getElementById("app").innerHTML=`<div class="loading"><div class="spinner"></div><div class="loading-txt">Loading...</div></div>`;
+  // Handle email confirmation link
+  const params=new URLSearchParams(window.location.search);
+  const confirmToken=params.get("confirm");
+  const confirmEmail=params.get("bidder");
+  if(confirmToken&&confirmEmail){
+    const{data:bidder}=await sb.from("bidders").select("id,name,confirm_token,token_expires").eq("email",decodeURIComponent(confirmEmail)).maybeSingle();
+    if(bidder&&bidder.confirm_token===confirmToken){
+      const expired=new Date(bidder.token_expires)<new Date();
+      if(!expired){
+        await sb.from("bidders").update({email_verified:true,confirm_token:null,token_expires:null}).eq("id",bidder.id);
+        document.getElementById("app").innerHTML=`<div class="loading"><div style="font-size:40px;margin-bottom:12px">&#10003;</div><div class="loading-txt" style="color:#2D9E6B;font-size:16px">Email confirmed! Your bid is verified.</div><div style="margin-top:16px"><a href="${APP_URL||'/'}" style="color:#7B5FE8;font-size:14px">Return to auction &rarr;</a></div></div>`;
+        return;
+      }else{
+        document.getElementById("app").innerHTML=`<div class="loading"><div style="font-size:40px;margin-bottom:12px">&#9203;</div><div class="loading-txt" style="color:#E8522A;font-size:16px">This confirmation link has expired.</div><div style="font-size:13px;color:rgba(255,255,255,.5);margin-top:8px">Place a new bid to receive a fresh confirmation email.</div><div style="margin-top:16px"><a href="${APP_URL||'/'}" style="color:#7B5FE8;font-size:14px">Return to auction &rarr;</a></div></div>`;
+        return;
+      }
+    }
+  }
   if(!IS_DASH){
     const src=new URLSearchParams(window.location.search).get("source")||"direct";
     trackVisit(src);
